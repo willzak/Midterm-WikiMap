@@ -3,7 +3,7 @@
 -- VALUES (obj.name, obj.email, obj.password, obj.profile_photo, obj.username);
 
 -- Create new map
--- INSERT INTO maps (name, public_edits)
+-- INSERT INTO maps (name, city, description, public_edits)
 -- VALUES (obj.name, obj.public_edits);
 
 -- Create new point
@@ -22,14 +22,14 @@ INSERT INTO users (name, email. password, profile_photo, username)
 VALUES ('Ian', 'ian@gmail.com', 'password', 'https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg', 'ian123');
 
 -- Map Starter Data
-INSERT INTO maps (name, public_edits)
-VALUES ('Best Places To Get Coffee', true);
+INSERT INTO maps (name, city, description, public_edits)
+VALUES ('Best Places To Get Coffee', 'Vancouver', 'A map of cool and trendy cafes in Vancouver', true);
 
-INSERT INTO maps (name, public_edits)
-VALUES ('Coolest Viewpoints in Vancouver', false);
+INSERT INTO maps (name, city, description, public_edits)
+VALUES ('Coolest Viewpoints in Victoria', 'Victoria', 'Best hikes with views around Victoria', false);
 
-INSERT INTO maps (name, public_edits)
-VALUES ('Cheapest Happy Hours in the City!', true);
+INSERT INTO maps (name, city, description, public_edits)
+VALUES ('Cheapest Happy Hours in the City!', 'Toronto', 'Best bars in the city for some happy hour specials!', true);
 
 -- Points Starter Data
 INSERT INTO points (map_id, creator_id, title, description, image, longitude, latitude)
