@@ -7,3 +7,108 @@ body {
     color: #244751;
   }
 }
+
+
+// <nav>
+//   <div class='nav_links'>
+//     <span class='logo'>WikiMap</span>
+//     <a class='logged_in' href="/map_list/">My Maps</a>
+//     <a class='logged_in' href="/favourites/">Favourites</a>
+//   </div>
+//   <div class="nav_user">
+//     <button class='logged_out'><b>Login</button>
+//     <button class='logged_out'><b>Sign Up</button>
+//     <a class='logged_in' href="/profile/">Profile</a>
+//     <button class='logged_in'>Logout</button>
+//   </div>
+// </nav>
+
+$fontColor: #FFFFFF;
+nav {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+
+  height: 120px;
+  width: 100vw;
+  max-width:100%;
+  padding: 0.5em;
+
+  background-color: #4056A1;
+  color: $fontColor;
+  border-radius: 10px;
+
+  a {
+    color: $fontColor;
+  }
+  .nav_links {
+    flex-direction: column;
+  }
+  .logo {
+    font-family: 'Bungee', cursive;
+    font-size: 35px;
+    text-shadow: 6px 6px 9px #1d284b;
+  }
+  button {
+    color: $fontColor;
+    background-color: Transparent;
+    border: 2px solid $fontColor;
+    border-radius: 10px;
+  }
+}
+.logged_out {
+  display: none;
+}
+
+@media only screen and (min-width: 650px) {
+  nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 1.5em;
+  }
+}
+
+
+// <section class='login'>
+//   <h3>Login</h3>
+//   <span class='error'>Error Here</span>
+//   <form action="/login" method="POST">
+//     <div>
+//       <label for="email">E-Mail Address</label>
+//       <input type="email" name="email" placeholder="E-Mail Address">
+//       <label for="password">Password</label>
+//       <input type="password" name="password" placeholder="Password">
+//       <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+//     </div>
+//   </form>
+// </section>
+//Login View
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 125px;
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    & > * {
+      margin: 0.25em;
+    }
+  }
+  .error {
+    display: none;
+  }
+}
+
+// @media only screen and (min-width: 650px) {
+//   .login {
+
+//   }
+// }
