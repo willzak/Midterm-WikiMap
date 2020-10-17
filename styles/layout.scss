@@ -1,30 +1,18 @@
 // See: https://sass-lang.com/
 
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #EEE;
-
-  h1 {
-    color: #244751;
-  }
+  padding-top: 122px;
 }
 
 
-// <nav>
-//   <div class='nav_links'>
-//     <span class='logo'>WikiMap</span>
-//     <a class='logged_in' href="/map_list/">My Maps</a>
-//     <a class='logged_in' href="/favourites/">Favourites</a>
-//   </div>
-//   <div class="nav_user">
-//     <button class='logged_out'><b>Login</button>
-//     <button class='logged_out'><b>Sign Up</button>
-//     <a class='logged_in' href="/profile/">Profile</a>
-//     <button class='logged_in'>Logout</button>
-//   </div>
-// </nav>
-
-$fontColor: #FFFFFF;
+//nav bar properties
+$navFontColor: #FFFFFF;
 nav {
+  //display properties
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
@@ -32,18 +20,18 @@ nav {
   position: fixed;
   top: 0;
   z-index: 1;
-
+  //sizing properties
   height: 120px;
   width: 100vw;
   max-width:100%;
-  padding: 0.5em;
-
-  background-color: #4056A1;
-  color: $fontColor;
+  padding: 0.5rem;
   border-radius: 10px;
-
+  //colour properties
+  background-color: #4056A1;
+  color: $navFontColor;
+  //children
   a {
-    color: $fontColor;
+    color: $navFontColor;
   }
   .nav_links {
     flex-direction: column;
@@ -54,15 +42,15 @@ nav {
     text-shadow: 6px 6px 9px #1d284b;
   }
   button {
-    color: $fontColor;
+    color: $navFontColor;
     background-color: Transparent;
-    border: 2px solid $fontColor;
+    border: 2px solid $navFontColor;
     border-radius: 10px;
   }
 }
-.logged_out {
-  display: none;
-}
+// .logged_in {
+//   display: none;
+// }
 
 @media only screen and (min-width: 650px) {
   nav {
@@ -70,45 +58,141 @@ nav {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 1.5em;
+    padding: 1.5rem;
   }
 }
 
-
-// <section class='login'>
-//   <h3>Login</h3>
-//   <span class='error'>Error Here</span>
-//   <form action="/login" method="POST">
-//     <div>
-//       <label for="email">E-Mail Address</label>
-//       <input type="email" name="email" placeholder="E-Mail Address">
-//       <label for="password">Password</label>
-//       <input type="password" name="password" placeholder="Password">
-//       <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-//     </div>
-//   </form>
-// </section>
-//Login View
-.login {
-  display: flex;
+// login/registration view
+.login_reg {
+  //display properties
+  display: none;
   flex-direction: column;
   align-items: center;
-  margin-top: 125px;
+  width: 100%;
+  max-width: 60rem;
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  border: 2px solid #000000;
+  h3 {
+    align-self: center;
+  }
   div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     & > * {
-      margin: 0.25em;
+      margin: 0.25rem;
     }
   }
   .error {
     display: none;
   }
+  .divider {
+    width: 10rem;
+    margin: 1rem;
+    border-bottom: 2px solid #000000;
+  }
+  button {
+    align-self: center;
+  }
 }
 
-// @media only screen and (min-width: 650px) {
-//   .login {
+@media only screen and (min-width: 650px) {
+  .login_reg {
+    flex-direction: row;
+    justify-content: space-evenly;
+    .divider {
+      width: initial;
+      height: 20rem;
 
-//   }
-// }
+      margin: 1rem;
+      border-left: 2px solid #000000;
+      border-bottom: none;
+    }
+  }
+}
+
+
+// <section class='profile'>
+//   <div class="profile_title">
+//         <img src='/images/sloth.png'>
+//         <h2>Your Name</h2>
+//   </div>
+//   <div class="profile_update">
+//     <h3>Edit Your Profile</h3>
+//     <span class='error'>Error Here</span>
+//     <form action="/profile_update" method="POST">
+//       <div>
+//         <label for="Name">User Name<b>*</b></label>
+//         <input type="text" name="Name" placeholder="Your Name">
+//         <label for="email">E-Mail Address<b>*</b></label>
+//         <input type="email" name="email" placeholder="Your E-Mail Address">
+//         <label for="photo">Profile Photo</label>
+//         <input type="text" name="photo" placeholder="Your Image URL">
+//         <label for="password">Password<b>*</b></label>
+//         <input type="password" name="password" placeholder="Password">
+//         <label for="password">Confirm Password<b>*</b></label>
+//         <input type="password" name="confirm_password" placeholder="Password">
+//         <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+//       </div>
+//     </form>
+//   </div>
+// </section>
+.profile {
+  width: 100%;
+  max-width:30rem;
+  display: flex;
+  flex-direction: column;
+  .profile_title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 15rem;
+    width: 100%;
+    max-width: 30rem;
+    border-radius: 10px;
+    margin-bottom: 3px;
+    background-color: #da9334;
+    img {
+      max-width:12rem;
+      max-height:12rem;
+      width: auto;
+      height: auto;
+    }
+  }
+  .profile_update {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 30rem;
+    background-color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      & > * {
+        margin: 0.25rem;
+      }
+    }
+    .error {
+      display: none;
+    }
+    button {
+      align-self: center;
+    }
+  }
+}
+@media only screen and (min-width: 650px) {
+  .profile {
+    width: 100%;
+    max-width:60rem;
+    flex-direction: row;
+    justify-content: space-evenly;
+    .profile_title {
+      margin-right: 3px;
+    }
+  }
+}

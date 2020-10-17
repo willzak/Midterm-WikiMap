@@ -1,13 +1,35 @@
-<section class='login'>
-  <h3>Login</h3>
-  <span class='error'>Error Here</span>
-  <form action="/login" method="POST">
-    <div>
-      <label for="email">E-Mail Address</label>
-      <input type="email" name="email" placeholder="E-Mail Address">
-      <label for="password">Password</label>
-      <input type="password" name="password" placeholder="Password">
-      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-    </div>
-  </form>
+<section class='login_reg'>
+  <div class="login">
+    <h3>Login</h3>
+    <span class='error'>Error Here</span>
+    <form action="/login" method="POST">
+      <div>
+        <label for="email">E-Mail Address</label>
+        <input type="email" name="email" placeholder="E-Mail Address">
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div class="divider"></div>
+  <div class="register">
+    <h3>Become A Member</h3>
+    <span class='error'>Error Here</span>
+    <form action="/register" method="POST">
+      <div>
+        <label for="Name">User Name<b>*</b></label>
+        <input type="text" name="Name" placeholder="User Name">
+        <label for="email">E-Mail Address<b>*</b></label>
+        <input type="email" name="email" placeholder="E-Mail Address">
+        <label for="photo">Profile Photo</label>
+        <input type="text" name="photo" placeholder="Image URL">
+        <label for="password">Password<b>*</b></label>
+        <input type="password" name="password" placeholder="Password">
+        <label for="password">Confirm Password<b>*</b></label>
+        <input type="password" name="confirm_password" placeholder="Password">
+        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      </div>
+    </form>
+  </div>
 </section>
