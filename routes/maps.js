@@ -7,8 +7,11 @@
 
 const express = require('express');
 const router  = express.Router();
+//Database helpers
 
-module.exports = (db) => {
+
+
+module.exports = (db, database) => {
   router.get("/", (req, res) => {
     let query = `SELECT * FROM maps;`;
     console.log(query);
