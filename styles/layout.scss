@@ -48,9 +48,9 @@ nav {
     border-radius: 10px;
   }
 }
-// .logged_in {
-//   display: none;
-// }
+.logged_in {
+  display: none;
+}
 
 @media only screen and (min-width: 650px) {
   nav {
@@ -65,7 +65,7 @@ nav {
 // login/registration view
 .login_reg {
   //display properties
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -141,7 +141,7 @@ nav {
 .profile {
   width: 100%;
   max-width:30rem;
-  display: flex;
+  display: none;
   flex-direction: column;
   .profile_title {
     display: flex;
