@@ -39,4 +39,4 @@ INSERT INTO points (map_id, creator_id, title, description, image, longitude, la
 VALUES (2, 2, 'Mount Douglas Park', 'Nice hike with a beautiful view!', 'https://i2.wp.com/victoriahype.com/wp-content/uploads/2017/11/mount_douglas_viewpoint.jpg?resize=1024%2C683&ssl=1', 48.492504, -123.345783);
 
 INSERT INTO points (map_id, creator_id, title, description, image, longitude, latitude)
-VALUES (3, 3, 'Wide Open', 'Great place for drinks and it is open early until late!', 'https://s3-media0.fl.yelpcdn.com/bphoto/3UuyyuOunVyifyAlmUT49w/o.jpg', 43.647744, -79.395610);
+VALUES (2, 3, 'Mount Tolmie Park', 'Great place for families', 'https://i2.wp.com/victoriahype.com/wp-content/uploads/2017/11/mount_tolmie_park_viewpoint.jpg?resize=1024%2C681&ssl=1', 48.457504, -123.325652);
