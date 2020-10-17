@@ -1,0 +1,19 @@
+<nav>
+  <div class='nav_links'></div>
+    <span class='logo'>WikiMap</span>
+  <% if (!uName) { %>
+    </div>
+    <div class="nav_user">
+      <button class='login'><b>Login</button>
+      <button class='login'><b>Sign Up</button>
+    </div>
+  <% } else { %>
+      <a href="/">My Maps</a>
+      <a href="/">Favourites</a>
+    </div>
+    <div class="nav_user">
+      <a href="/">Favourites</a>
+      <button class='logout'>Logout</button>
+    </div>
+  <% } %>
+</nav>
