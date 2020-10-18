@@ -30,13 +30,10 @@ module.exports = (db, database) => {
 
   router.get("/:id", (req, res) => {
     const id = req.params.id;
-    let query = `SELECT * FROM maps
-    WHERE id = ${id};`;
-    console.log(query);
-    db.query(query)
+    database.getMapByID(id, db)
       .then(data => {
-        const map = data.rows;
-        res.json({ map });
+        //const map = data.rows;
+        res.json({ data });
       })
       .catch(err => {
         res
@@ -46,28 +43,51 @@ module.exports = (db, database) => {
   });
 
   router.post("/:id", (req, res) => {
-    const owner_id = req.session.userId;
-    console.log(req.body);
-    const map = {
-      id: req.body.map_id,
-      name: req.body.name,
-      description: req.body.description,
-      zoom: req.body.zoom,
-      center: req.body.center
-    };
 
 
-    const points = req.body.points;
+
+    const point = req.body.point;
     console.log("MAP: ", map);
-    if(!map.id){
+    if(!req.body.map_id){
+      const owner_id = req.session.userId;
+      console.log(req.body);
+      const map = {
+        id: null,
+        owner_id: owner_id,
+        name: req.body.name,
+        description: req.body.description,
+        zoom: req.body.zoom,
+        center: req.body.center
+      };
+
+
       database.addMap(map,db)
         .then((map_id)=> {
           console.log("HERE: ", map_id);
-          database.addOwner(map_id, owner_id, db);
-          database.addPoints(points,db);
+
+
         });
     } else {
+      const map = {
+        id: req.body.map_id,
+
+        name: req.body.name,
+        description: req.body.description,
+        zoom: req.body.zoom,
+        center: req.body.center
+      };
+
+      const point = {
+        creator_id: req.session.userId,
+        map_id: req.body.map_id,
+        title: req.body.point_title,
+        description: req.body.point_description,
+        image: req.body.point_image,
+        longitude: req.body.point_lng,
+        latitude: req.body.point_lat
+      }
       database.editMap(map,db);
+      database.addPoint(point, db);
     }
 
 

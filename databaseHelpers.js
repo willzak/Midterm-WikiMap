@@ -6,7 +6,7 @@ const pool = new Pool({
   user: 'vagrant',
   password: '123',
   host: 'localhost',
-  database: 'wikimap'
+  database: 'midterm'
 });
 
 /**
@@ -56,13 +56,27 @@ const addUser =  function(user, pool) {
 };
 exports.addUser = addUser;
 
+/**
+ *
+ * @param {
+      id: req.body.map_id,
+      owner_id: owner_id,
+      name: req.body.name,
+      description: req.body.description,
+      zoom: req.body.zoom,
+      center: req.body.center
+    } map
+ * @param {*} pool
+ */
+
+
 const addMap = function(map, pool) {
   return pool.query( `
-  INSERT INTO maps (name, description, public_edits)
-  VALUES($1, $2, 'true');
+  INSERT INTO maps (owner_id, name, description, public_edits, longitude, latitude, zoom)
+  VALUES($1, $2, $3, 'true', $4, $5, $6);
 
 
-  `,[map.name, map.description])
+  `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
   .then(res =>
     pool.query(`
     SELECT currval('maps_id_seq');`)
@@ -78,18 +92,70 @@ const addMap = function(map, pool) {
 
 exports.addMap = addMap;
 
-const addOwner = function(map_id, owner_id, pool) {
+
+/**
+ *
+ * @param {
+  id: req.body.map_id,
+  owner_id: owner_id,
+  name: req.body.name,
+  description: req.body.description,
+  zoom: req.body.zoom,
+  center: req.body.center
+} map
+* @param {*} pool
+*/
+
+
+const editMap = function(map, pool) {
+return pool.query( `
+UPDATE maps
+SET name = $1,
+    description = $2,
+    longitude = $3,
+    latitude = $4,
+    zoom = $5
+WHERE id = $6
+
+
+`,[map.name, map.description, map.center.lng, map.center.lat, map.zoom, map.id])
+.then(res =>
+pool.query(`
+SELECT currval('maps_id_seq');`)
+.then(res2 => {
+  //console.log("MAP ID: ", res2.rows[0].currval);
+  return res2.rows[0].currval;
+
+
+
+;}))
+.catch(err => console.log(err));
+}
+
+exports.editMap = editMap;
+
+const addPoint = function(point, pool) {
   return pool.query( `
-  INSERT INTO owner (owner_id, , map_id)
-  VALUES($1, $2);
+  INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
+  VALUES($1, $2, $3, $4, $5, $6, $7);
 
 
-  `,[owner_id, map_id])
-  .then(res => res.row )
+  `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
+  .then(res =>
+    pool.query(`
+    SELECT currval('maps_id_seq');`)
+    .then(res2 => {
+      //console.log("MAP ID: ", res2.rows[0].currval);
+      return res2.rows[0].currval;
+
+
+
+  ;}))
   .catch(err => console.log(err));
 }
 
-exports.addOwner = addOwner;
+exports.addPoint = addPoint;
+
 
 // FUNCTIONS FOR MAP VIEWS
 
@@ -99,7 +165,7 @@ exports.addOwner = addOwner;
  * @return {Promise<{}>} A promise to the user
  */
 
- const getMapByID = function(id) {
+ const getMapByID = function(id, pool) {
   const queryString = `
   SELECT * FROM maps
   WHERE id = $1;
