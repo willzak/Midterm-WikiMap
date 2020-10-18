@@ -19,7 +19,9 @@ CREATE TABLE maps (
 	name VARCHAR(255) NOT NULL,
 
   description TEXT,
-	public_edits BOOLEAN NOT NULL DEFAULT true
+	public_edits BOOLEAN NOT NULL DEFAULT true,
+  center INTEGER,
+  zoom INTEGER
 );
 
 CREATE TABLE owners (
