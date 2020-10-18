@@ -63,9 +63,9 @@ nav {
 }
 
 // login/registration view
-.login_reg {
+.login_reg_view {
   //display properties
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -98,7 +98,7 @@ nav {
 }
 
 @media only screen and (min-width: 650px) {
-  .login_reg {
+  .login_reg_view {
     flex-direction: row;
     justify-content: space-evenly;
     .divider {
@@ -113,35 +113,11 @@ nav {
 }
 
 
-// <section class='profile'>
-//   <div class="profile_title">
-//         <img src='/images/sloth.png'>
-//         <h2>Your Name</h2>
-//   </div>
-//   <div class="profile_update">
-//     <h3>Edit Your Profile</h3>
-//     <span class='error'>Error Here</span>
-//     <form action="/profile_update" method="POST">
-//       <div>
-//         <label for="Name">User Name<b>*</b></label>
-//         <input type="text" name="Name" placeholder="Your Name">
-//         <label for="email">E-Mail Address<b>*</b></label>
-//         <input type="email" name="email" placeholder="Your E-Mail Address">
-//         <label for="photo">Profile Photo</label>
-//         <input type="text" name="photo" placeholder="Your Image URL">
-//         <label for="password">Password<b>*</b></label>
-//         <input type="password" name="password" placeholder="Password">
-//         <label for="password">Confirm Password<b>*</b></label>
-//         <input type="password" name="confirm_password" placeholder="Password">
-//         <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-//       </div>
-//     </form>
-//   </div>
-// </section>
-.profile {
+//profile view
+.profile_view {
+  display: none;
   width: 100%;
   max-width:30rem;
-  display: none;
   flex-direction: column;
   .profile_title {
     display: flex;
@@ -186,13 +162,163 @@ nav {
   }
 }
 @media only screen and (min-width: 650px) {
-  .profile {
+  .profile_view {
     width: 100%;
     max-width:60rem;
     flex-direction: row;
     justify-content: space-evenly;
     .profile_title {
       margin-right: 3px;
+    }
+  }
+}
+
+// <section class="map_view">
+//   <div id="map_intro">
+//     <h2>New Map</h2>
+//     <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
+//     <h6>Created By USER</h6>
+//     <button class="edit_map">Edit</button>
+//   </div>
+//   <div>
+//     <div class='bar'>
+//       <!-- directions hidden when in add_point form -->
+//       <h5 class="add_point">Click on the map to add a new point of interest</h5>
+//       <!-- save button only displayed when map center moved, or zoom changed -->
+//       <button class="save">Save</button>
+//     </div>
+//     <!-- add_point - displays when map is clicked -->
+//     <div class="add_point">
+//       <form action="/add_point" method="POST">
+//         <div class="add_point">
+//           <span>
+//             <label for="Title">Title<b>*</b></label>
+//             <input type="text" name="Title" placeholder="Title">
+//           </span>
+//           <span>
+//             <label for='description'>Description</label>
+//             <textarea name='text' id='description'></textarea>
+//           </span>
+//           <span>
+//             <label for="photo">Image URL</label>
+//             <input type="text" name="image" placeholder="Image URL">
+//           </span>
+//           <button type="submit" class="submit">Save</button>
+//         </div>
+//       </form>
+//     </div>
+//     <!-- edit_map - displays when edit button clicked in map_intro -->
+//     <div class="edit_map">
+//       <form action="/edit_map" method="POST">
+//         <div>
+//           <span>
+//             <label for="Title">Title<b>*</b></label>
+//             <input type="text" name="Title" placeholder="Title">
+//           </span>
+//           <span>
+//             <label for='description'>Description</label>
+//             <textarea name='description'></textarea>
+//           </span>
+//           <button type="submit" class="submit">Save</button>
+//         </div>
+//       </form>
+//     </div>
+//   </div>
+//   <div class="map_container">
+//     <!-- Map Goes HERE -->
+//   </div>
+// </section>
+
+.map_view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .map_intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 10rem;
+    max-width: 120rem;
+    background-color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    p {
+      text-align: center;
+      word-wrap: normal;
+      margin: 0.5rem;
+    }
+    div {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1rem;
+    }
+    h6 {
+      margin: 0;
+    }
+  }
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #000000;
+    background-color: #4056A1;
+    padding: 0.5rem;
+    margin-top: 2px;
+    h5 {
+      margin: 0;
+    }
+  }
+  .padding {
+    padding: 0px 10px 0 10px
+  }
+  div.add_point, div.edit_map {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 0 2px 2px 2px;
+    border-radius: 0 0 10px 10px;
+    background-color: #FFFFFF;
+    * {
+      margin: 0.25rem;
+    }
+  }
+  div.edit_map {
+    display: none;
+  }
+  .form_div {
+    display: flex;
+    flex-direction: column;
+    span {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .map_container {
+    margin-top: 2px;
+    width: 100%;
+    height: 500px;
+    background-color: green;
+    border-radius: 10px;
+  }
+  button.submit {
+    align-self: center;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .map_view {
+    flex-direction: row;
+    justify-content: space-evenly;
+    & > div {
+      flex: 1;
     }
   }
 }
