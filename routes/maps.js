@@ -13,6 +13,7 @@ const router  = express.Router();
 
 
 module.exports = (db, database) => {
+  //loads all maps
   router.get("/", (req, res) => {
     let query = `SELECT * FROM maps;`;
     console.log(query);
@@ -27,7 +28,7 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
-
+  //loads map by map_id
   router.get("/:id", (req, res) => {
     const id = req.params.id;
     database.getMapByID(id, db)
@@ -41,7 +42,7 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
-
+  //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
 
 
