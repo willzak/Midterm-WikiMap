@@ -16,17 +16,14 @@ CREATE TABLE users (
 
 CREATE TABLE maps (
 	id SERIAL PRIMARY KEY NOT NULL,
+  owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 	name VARCHAR(255) NOT NULL,
 
   description TEXT,
 	public_edits BOOLEAN NOT NULL DEFAULT true,
-  center INTEGER,
-  zoom INTEGER
-);
-
-CREATE TABLE owners (
-	owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	map_id INTEGER REFERENCES maps(id) ON DELETE CASCADE
+  latitude SMALLINT NOT NULL,
+  longitude SMALLINT NOT NULL,
+  zoom SMALLINT NOT NULL
 );
 
 CREATE TABLE favourites (
