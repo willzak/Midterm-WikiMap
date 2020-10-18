@@ -96,7 +96,7 @@ const getMapByName = function(name) {
 
  /**
   * Get points that belong to a certain map
-  * @param
+  * @param {{creator_id: integer, map_id: integer, title: string, description: string, image: string, longitude: integer, latitude: integer}}
   * @return {Promise<{}>} A promise to the user
   */
 
