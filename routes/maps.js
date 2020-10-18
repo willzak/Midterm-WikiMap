@@ -44,6 +44,68 @@ module.exports = (db, database) => {
       });
   });
 
+  router.post("/:id", (req, res) => {
+    //const userId = req.session.userId;
+    console.log(req.body);
+    const map = {
+
+      name: req.body.name,
+      description: req.body.description,
+      zoom: req.body.zoom,
+      center: req.body.center
+    };
+
+
+    const points = req.body.points;
+    console.log("MAP: ", map);
+    database.addMap(map,db)
+    .then((map_id)=> {
+      console.log("HERE: ", map_id);
+      //database.addPoints(points,db)
+    });
+
+  });
+
 
   return router;
 };
+/*
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"name":"new map","description":"this is new"}' \
+  http://localhost:8080/api/maps/4
+
+  */
+// router.get("/:id", (req, res) => {
+//   const id = req.params.id;
+//   let query = `SELECT * FROM maps
+//   WHERE id = ${id};`;
+//   console.log(query);
+//   db.query(query)
+//     .then(data => {
+//       const map = data.rows;
+//       res.json({ map });
+//     })
+//     .catch(err => {
+//       res
+//         .status(500)
+//         .json({ error: err.message });
+//     });
+// });
+
+// router.post("/:id", (req, res) => {
+//   const id = req.params.id;
+//   let query = `SELECT * FROM maps
+//   WHERE id = ${id};`;
+//   console.log(query);
+//   db.query(query)
+//     .then(data => {
+//       const map = data.rows;
+//       res.json({ map });
+//     })
+//     .catch(err => {
+//       res
+//         .status(500)
+//         .json({ error: err.message });
+//     });
+// });

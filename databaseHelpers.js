@@ -46,3 +46,26 @@ const addUser =  function(user, pool) {
     .catch(err => console.log(err));
 };
 exports.addUser = addUser;
+
+const addMap = function(map, pool) {
+  return pool.query( `
+  INSERT INTO maps (name, description, public_edits)
+  VALUES($1, $2, 'true');
+
+
+  `,[map.name, map.description])
+  .then(res =>
+    pool.query(`
+    SELECT currval('maps_id_seq');`)
+    .then(res2 => {
+      //console.log("MAP ID: ", res2.rows[0].currval);
+      return res2.rows[0].currval;
+
+
+
+  ;}))
+  .catch(err => console.log(err));
+}
+
+exports.addMap = addMap;
+
