@@ -62,7 +62,7 @@ exports.addUser = addUser;
 
 /**
  * Get a specific map using id
- * @param {{id: integer, name: string, city: string, description: string, public_edits: boolean}}
+ * @param {String} id
  * @return {Promise<{}>} A promise to the user
  */
 
@@ -79,7 +79,7 @@ exports.addUser = addUser;
 
  /**
  * Get a specific map using map name
- * @param {{id: integer, name: string, city: string, description: string, public_edits: boolean}}
+ * @param {String} name
  * @return {Promise<{}>} A promise to the user
  */
 
@@ -96,7 +96,7 @@ const getMapByName = function(name) {
 
  /**
   * Get points that belong to a certain map
-  * @param {{creator_id: integer, map_id: integer, title: string, description: string, image: string, longitude: integer, latitude: integer}}
+  * @param {Integer} map_id
   * @return {Promise<{}>} A promise to the user
   */
 
@@ -110,3 +110,26 @@ const getMapByName = function(name) {
     .then(res => res.rows)
   };
   exports.getPointsByMap = getPointsByMap;
+
+  /**
+   * Get the center object for a map
+   * @param {id: integer, owner_id: integer, name: string, city: string, description: string, public_edits: boolean, latitude: integer, longitude: integer, zoom: integer}
+   * @return {Promise<{}>}
+   */
+
+   const getCenterOfMap = function(map_id) {
+     const queryString = `
+     SELECT latitude, longitude
+     FROM maps
+     WHERE id = $1;
+     `;
+
+     return pool.query(queryString, [map_id])
+     .then(res => {
+       const center = {};
+       center[lat] = res.rows[0].longitude;
+       center[lng] = res.rows[0].latitude;
+       return center;
+     });
+   };
+   exports.getCenterOfMap = getCenterOfMap;
