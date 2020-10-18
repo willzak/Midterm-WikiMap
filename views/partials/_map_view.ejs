@@ -1,0 +1,61 @@
+<section class="map_view">
+  <div>
+    <div class="map_intro">
+      <h2>New Map</h2>
+      <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
+      <div>
+        <h6>Created By USER</h6>
+        <button class="edit_map">Edit</button>
+      </div>
+    </div>
+    <div class="median">
+      <div class="bar">
+        <!-- directions hidden when in add_point form -->
+        <h5 class="add_point">Click on the map to add a new point of interest</h5>
+        <!-- save button only displayed when map center moved, or zoom changed -->
+        <button class="save">Save</button>
+      </div>
+      <!-- add_point - displays when map is clicked -->
+      <div class="padding">
+        <div class="add_point">
+          <form action="/add_point" method="POST">
+            <div class="form_div">
+              <span>
+                <label for="Title">Title<b>*</b></label>
+                <input type="text" name="Title" placeholder="Title">
+              </span>
+              <span>
+                <label for='description'>Description</label>
+                <textarea name='text' id='description'></textarea>
+              </span>
+              <span>
+                <label for="photo">Image URL</label>
+                <input type="text" name="image" placeholder="Image URL">
+              </span>
+              <button type="submit" class="submit">Save</button>
+            </div>
+          </form>
+        </div>
+        <!-- edit_map - displays when edit button clicked in map_intro -->
+        <div class="edit_map">
+          <form action="/edit_map" method="POST">
+            <div class="form_div">
+              <span>
+                <label for="Title">Title<b>*</b></label>
+                <input type="text" name="Title" placeholder="Title">
+              </span>
+              <span>
+                <label for='description'>Description</label>
+                <textarea name='description'></textarea>
+              </span>
+              <button type="submit" class="submit">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="map_container">
+    <!-- Map Goes HERE -->
+  </div>
+</section>
