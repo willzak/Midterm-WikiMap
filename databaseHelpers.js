@@ -6,7 +6,7 @@ const pool = new Pool({
   user: 'vagrant',
   password: '123',
   host: 'localhost',
-  database: 'wikimap'
+  database: 'midterm'
 });
 
 /**
@@ -56,17 +56,116 @@ const addUser =  function(user, pool) {
 };
 exports.addUser = addUser;
 
+/**
+ *
+ * @param {
+      id: req.body.map_id,
+      owner_id: owner_id,
+      name: req.body.name,
+      description: req.body.description,
+      zoom: req.body.zoom,
+      center: req.body.center
+    } map
+ * @param {*} pool
+ */
+
+
+const addMap = function(map, pool) {
+  return pool.query( `
+  INSERT INTO maps (owner_id, name, description, public_edits, longitude, latitude, zoom)
+  VALUES($1, $2, $3, 'true', $4, $5, $6);
+
+
+  `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
+  .then(res =>
+    pool.query(`
+    SELECT currval('maps_id_seq');`)
+    .then(res2 => {
+      //console.log("MAP ID: ", res2.rows[0].currval);
+      return res2.rows[0].currval;
+
+
+
+  ;}))
+  .catch(err => console.log(err));
+}
+
+exports.addMap = addMap;
+
+
+/**
+ *
+ * @param {
+  id: req.body.map_id,
+  owner_id: owner_id,
+  name: req.body.name,
+  description: req.body.description,
+  zoom: req.body.zoom,
+  center: req.body.center
+} map
+* @param {*} pool
+*/
+
+
+const editMap = function(map, pool) {
+return pool.query( `
+UPDATE maps
+SET name = $1,
+    description = $2,
+    longitude = $3,
+    latitude = $4,
+    zoom = $5
+WHERE id = $6
+
+
+`,[map.name, map.description, map.center.lng, map.center.lat, map.zoom, map.id])
+.then(res =>
+pool.query(`
+SELECT currval('maps_id_seq');`)
+.then(res2 => {
+  //console.log("MAP ID: ", res2.rows[0].currval);
+  return res2.rows[0].currval;
+
+
+
+;}))
+.catch(err => console.log(err));
+}
+
+exports.editMap = editMap;
+
+const addPoint = function(point, pool) {
+  return pool.query( `
+  INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
+  VALUES($1, $2, $3, $4, $5, $6, $7);
+
+
+  `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
+  .then(res =>
+    pool.query(`
+    SELECT currval('maps_id_seq');`)
+    .then(res2 => {
+      //console.log("MAP ID: ", res2.rows[0].currval);
+      return res2.rows[0].currval;
+
+
+
+  ;}))
+  .catch(err => console.log(err));
+}
+
+exports.addPoint = addPoint;
 
 
 // FUNCTIONS FOR MAP VIEWS
 
 /**
  * Get a specific map using id
- * @param {{id: integer, name: string, city: string, description: string, public_edits: boolean}}
+ * @param {String} id
  * @return {Promise<{}>} A promise to the user
  */
 
- const getMapByID = function(id) {
+ const getMapByID = function(id, pool) {
   const queryString = `
   SELECT * FROM maps
   WHERE id = $1;
@@ -79,7 +178,7 @@ exports.addUser = addUser;
 
  /**
  * Get a specific map using map name
- * @param {{id: integer, name: string, city: string, description: string, public_edits: boolean}}
+ * @param {String} name
  * @return {Promise<{}>} A promise to the user
  */
 
@@ -96,7 +195,7 @@ const getMapByName = function(name) {
 
  /**
   * Get points that belong to a certain map
-  * @param {{creator_id: integer, map_id: integer, title: string, description: string, image: string, longitude: integer, latitude: integer}}
+  * @param {Integer} map_id
   * @return {Promise<{}>} A promise to the user
   */
 
@@ -110,3 +209,26 @@ const getMapByName = function(name) {
     .then(res => res.rows)
   };
   exports.getPointsByMap = getPointsByMap;
+
+  /**
+   * Get the center object for a map
+   * @param {id: integer, owner_id: integer, name: string, city: string, description: string, public_edits: boolean, latitude: integer, longitude: integer, zoom: integer}
+   * @return {Promise<{}>}
+   */
+
+   const getCenterOfMap = function(map_id) {
+     const queryString = `
+     SELECT latitude, longitude
+     FROM maps
+     WHERE id = $1;
+     `;
+
+     return pool.query(queryString, [map_id])
+     .then(res => {
+       const center = {};
+       center[lat] = res.rows[0].longitude;
+       center[lng] = res.rows[0].latitude;
+       return center;
+     });
+   };
+   exports.getCenterOfMap = getCenterOfMap;
