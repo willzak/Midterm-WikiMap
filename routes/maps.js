@@ -5,6 +5,7 @@
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
+const e = require('express');
 const express = require('express');
 const router  = express.Router();
 //Database helpers
@@ -45,10 +46,10 @@ module.exports = (db, database) => {
   });
 
   router.post("/:id", (req, res) => {
-    //const userId = req.session.userId;
+    const owner_id = req.session.userId;
     console.log(req.body);
     const map = {
-
+      id: req.body.map_id,
       name: req.body.name,
       description: req.body.description,
       zoom: req.body.zoom,
@@ -58,11 +59,17 @@ module.exports = (db, database) => {
 
     const points = req.body.points;
     console.log("MAP: ", map);
-    database.addMap(map,db)
-    .then((map_id)=> {
-      console.log("HERE: ", map_id);
-      //database.addPoints(points,db)
-    });
+    if(!map.id){
+      database.addMap(map,db)
+        .then((map_id)=> {
+          console.log("HERE: ", map_id);
+          database.addOwner(map_id, owner_id, db);
+          database.addPoints(points,db);
+        });
+    } else {
+      database.editMap(map,db);
+    }
+
 
   });
 

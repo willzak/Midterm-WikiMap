@@ -78,7 +78,18 @@ const addMap = function(map, pool) {
 
 exports.addMap = addMap;
 
+const addOwner = function(map_id, owner_id, pool) {
+  return pool.query( `
+  INSERT INTO owner (owner_id, , map_id)
+  VALUES($1, $2);
 
+
+  `,[owner_id, map_id])
+  .then(res => res.row )
+  .catch(err => console.log(err));
+}
+
+exports.addOwner = addOwner;
 
 // FUNCTIONS FOR MAP VIEWS
 
