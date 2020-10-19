@@ -18,7 +18,7 @@ const initMap = function() {
     $('.form_div input[name=lat]').val(e.latLng.lat);
     $('.form_div  input[name=lng]').val(e.latLng.lng);
     //disabling click until submission
-    $('.map_container').click(false);
+    $('.map_container').slideUp();
 
     $('#point-form')
     .submit(event => {
@@ -42,7 +42,7 @@ const initMap = function() {
           console.log("error ", errorThrown);
       }
       }).then((response) => {
-
+        $('#point-form')[0].reset();
       }).catch((err) => {
         console.log('err: ', err);
       });
@@ -67,6 +67,7 @@ const initMap = function() {
     //         /* implementation goes here */
     //     }
     // });
+    $('.map_container').slideDown();
 
       hideEditForm(true);
     })
