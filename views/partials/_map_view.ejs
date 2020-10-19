@@ -10,6 +10,27 @@
       </div>
     </div>
     <div class="median">
+      <div class="padding">
+        <!-- edit_map - displays when edit button clicked in map_intro -->
+        <div class="edit_map">
+          <form action="/edit_map" method="POST">
+            <div class="form_div">
+              <span>
+                <label for="Title">Title<b>*</b></label>
+                <input type="text" name="Title" placeholder="Title">
+              </span>
+              <span>
+                <label for='description'>Description</label>
+                <textarea name='description'></textarea>
+              </span>
+              <span>
+                <button type="submit" class="submit">Save</button>
+                <button id="cancel_edit_map">Cancel</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
       <div class="bar">
         <!-- directions hidden when in add_point form -->
         <h5 class="add_point">Click on the map to add a new point of interest</h5>
@@ -33,23 +54,10 @@
                 <label for="photo">Image URL</label>
                 <input type="text" name="image" placeholder="Image URL">
               </span>
-              <button type="submit" class="submit">Save</button>
-            </div>
-          </form>
-        </div>
-        <!-- edit_map - displays when edit button clicked in map_intro -->
-        <div class="edit_map">
-          <form action="/edit_map" method="POST">
-            <div class="form_div">
               <span>
-                <label for="Title">Title<b>*</b></label>
-                <input type="text" name="Title" placeholder="Title">
+                <button type="submit" class="submit">Save</button>
+                <button id="cancel_add_point">Cancel</button>
               </span>
-              <span>
-                <label for='description'>Description</label>
-                <textarea name='description'></textarea>
-              </span>
-              <button type="submit" class="submit">Save</button>
             </div>
           </form>
         </div>
