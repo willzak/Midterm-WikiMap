@@ -88,7 +88,7 @@ module.exports = (db, database) => {
         latitude: req.body.point_lat
       };
       database.editMap(map,db);
-      database.addPoint(point, db);
+      //database.addPoint(point, db);
     }
   });
 

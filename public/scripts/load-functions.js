@@ -1,3 +1,4 @@
+
 const initMap = function() {
   $('#map_script').attr('src', `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`);
   map = new google.maps.Map(document.getElementById("test_map"), {
@@ -5,28 +6,33 @@ const initMap = function() {
     zoom: 3,
   });
   console.log('center: ', map.getCenter());
+  let marker = new google.maps.Marker({map: null});
 
   map.addListener("click", (e) => {
     console.log("CLICKED! ", e.latLng);
-    new google.maps.Marker({
+    marker.setMap(null);
+    marker = new google.maps.Marker({
       position: e.latLng,
       map: map,
     });
     $('.form_div input[name=lat]').val(e.latLng.lat);
     $('.form_div  input[name=lng]').val(e.latLng.lng);
+    //disabling click until submission
+    $('.map_container').click(false);
 
     $('#point-form')
     .submit(event => {
       event.preventDefault();
       let $inputs = $('#point-form :input');
-      let values = {map_id: currentMapId};
-      console.log('this: ', $inputs);
+      let values = {map_id: currentMap.id};
       $inputs.each(function() {
         values[this.name] = $(this).val();
       });
 
-      //values['map_id'] = currentMapId;
-      console.log("form values: ",values);
+      //prevents double submission of the form
+      $(this).find(':submit').attr( 'disabled','disabled' );
+
+
       $.ajax({
         method: "POST",
         url: "/api/maps/add_point",
@@ -36,7 +42,6 @@ const initMap = function() {
           console.log("error ", errorThrown);
       }
       }).then((response) => {
-        console.log('result point: ',response);
 
       }).catch((err) => {
         console.log('err: ', err);
@@ -107,3 +112,5 @@ const loadMap = function(mapData) {
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
 };
+
+
