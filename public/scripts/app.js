@@ -16,7 +16,7 @@ let map;
 
 $(document).ready(function() {
   //Initial setup hides all but the first view in views
-  const views = ['login_reg', 'profile', 'map'];
+  const views = ['login_reg', 'profile', 'map', 'list'];
   currentView = setDefaultUI(views);
 
   /**********************************
@@ -40,6 +40,10 @@ $(document).ready(function() {
   $('#logout_btn').click(function() {
     currentView = setDefaultUI(views);
   });
+  $('#home_btn').click(function() {
+    console.log('been clicked***********************');
+    currentView = setView('list', currentView);
+  })
   //END nav bar listeners
 
   //Log in listener
