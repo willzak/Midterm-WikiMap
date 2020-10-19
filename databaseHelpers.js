@@ -73,24 +73,21 @@ exports.addUser = addUser;
 
 
 const addMap = function(map, pool) {
-  return pool.query( `
-  INSERT INTO maps (owner_id, name, description, public_edits, longitude, latitude, zoom)
+  console.log('*****************', map);
+  let queryString = `
+  INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
   VALUES($1, $2, $3, 'true', $4, $5, $6);
-
-
-  `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
-  .then(res =>
-    pool.query(`
-    SELECT currval('maps_id_seq');`)
-    .then(res2 => {
-      //console.log("MAP ID: ", res2.rows[0].currval);
-      return res2.rows[0].currval;
-
-
-
-  ;}))
-  .catch(err => console.log(err));
-}
+  `;
+  let values = [map.name, map.owner_id, map.description, map.latitude, map.longitude, map.zoom];
+  return pool.query(queryString, values)
+    .then(res =>
+      pool.query(`SELECT currval('maps_id_seq');`)
+        .then(res2 => {
+          //console.log("MAP ID: ", res2.rows[0].currval);
+          return res2.rows[0].currval;
+        }))
+    .catch(err => console.log(err));
+};
 
 exports.addMap = addMap;
 

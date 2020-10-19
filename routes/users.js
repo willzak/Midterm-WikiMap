@@ -79,11 +79,10 @@ module.exports = (db, database) => {
 
   const login =  function(email, password) {
     return database.getUserWithEmail(email) //Change
-    .then(user => {
-      console.log('login: ',user);
-
-      return user;
-    });
+      .then(user => {
+        console.log('login: ',user);
+        return user;
+      });
   };
 
   router.post('/login', (req, res) => {

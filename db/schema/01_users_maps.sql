@@ -21,8 +21,8 @@ CREATE TABLE maps (
 
   description TEXT,
 	public_edits BOOLEAN NOT NULL DEFAULT true,
-  latitude SMALLINT NOT NULL,
-  longitude SMALLINT NOT NULL,
+  latitude NUMERIC(21,18) NOT NULL,
+  longitude NUMERIC(21,18) NOT NULL,
   zoom SMALLINT NOT NULL
 );
 
@@ -37,6 +37,6 @@ CREATE TABLE points (
 	title VARCHAR(255) NOT NULL,
 	description TEXT NOT NULL,
 	image VARCHAR(255) NOT NULL,
-	longitude SMALLINT NOT NULL,
-	latitude SMALLINT NOT NULL
+	longitude NUMERIC(21,18) NOT NULL,
+	latitude NUMERIC(21,18) NOT NULL
 );
