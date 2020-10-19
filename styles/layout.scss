@@ -337,8 +337,13 @@ nav {
   padding: 5vh;
   border-radius: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-content: center;
+  justify-content: space-between;
+}
+
+.map-container:hover {
+  border-color: coral;
 }
 
 .profile-pic {
@@ -347,6 +352,6 @@ nav {
 }
 
 .map-profile-img {
-  width: 90vh;
+  width: 20vw;
   height: width;
 }
