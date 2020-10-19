@@ -22,14 +22,14 @@ INSERT INTO users (name, email, password, profile_photo, username)
 VALUES ('Ian', 'ian@gmail.com', 'password', 'https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg', 'ian123');
 
 -- Map Starter Data
-INSERT INTO maps (name, owner_id, city, description, public_edits, latitude, longitude, zoom)
-VALUES ('Best Places To Get Coffee', 2, 'Vancouver', 'A map of cool and trendy cafes in Vancouver', true, 49.276, -123.121, 8 );
+INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
+VALUES ('Best Places To Get Coffee', 2, 'A map of cool and trendy cafes in Vancouver', true, 49.276, -123.121, 8 );
 
-INSERT INTO maps (name, owner_id, city, description, public_edits, latitude, longitude, zoom)
-VALUES ('Coolest Viewpoints in Victoria', 3, 'Victoria', 'Best hikes with views around Victoria', false, 48.492, -123.345, 9 );
+INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
+VALUES ('Coolest Viewpoints in Victoria', 3, 'Best hikes with views around Victoria', false, 48.492, -123.345, 9 );
 
-INSERT INTO maps (name, owner_id, city, description, public_edits, latitude, longitude, zoom)
-VALUES ('Cheapest Happy Hours in the City!', 1, 'Toronto', 'Best bars in the city for some happy hour specials!', true, 43.654, -79.386, 8);
+INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
+VALUES ('Cheapest Happy Hours in the City!', 1, 'Best bars in the city for some happy hour specials!', true, 43.654, -79.386, 8);
 
 -- Points Starter Data
 INSERT INTO points (map_id, creator_id, title, description, image, longitude, latitude)
