@@ -29,7 +29,6 @@ $(document).ready(function() {
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-    console.log(values);
 
     $.ajax({
       method: "POST",
@@ -53,6 +52,12 @@ $(document).ready(function() {
   });
   $('div.edit_map > form').submit(event => {
     event.preventDefault();
+    let $inputs = $('div.edit_map > form :input');
+    let values = {};
+    $inputs.each(function() {
+      values[this.name] = $(this).val();
+    });
+    console.log(values);
     hideEditForm(true);
   });
   //  add_point
@@ -64,6 +69,12 @@ $(document).ready(function() {
   });
   $('div.add_point > form').submit(event => {
     event.preventDefault();
+    let $inputs = $('div.add_point > form :input');
+    let values = {};
+    $inputs.each(function() {
+      values[this.name] = $(this).val();
+    });
+    console.log(values);
     hidePointForm(true);
   });
   // save map position
