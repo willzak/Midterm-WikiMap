@@ -59,36 +59,23 @@ module.exports = (db, database) => {
   //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
     const point = req.body.point;
-
-    if (!req.body.map_id) {
+    const id = parseInt(req.params.id);
+    if (id === 0) {
       const map = req.body;
-      console.log("MAP: ", map);
+      console.log("creating new map");
       database.addMap(map,db)
         .then((mapId)=> {
           console.log("HERE: ", mapId);
           res.send({mapId});
         });
     } else {
-      const map = {
-        id: req.body.map_id,
-
-        name: req.body.name,
-        description: req.body.description,
-        zoom: req.body.zoom,
-        center: req.body.center
-      };
-
-      const point = {
-        creator_id: req.session.userId,
-        map_id: req.body.map_id,
-        title: req.body.point_title,
-        description: req.body.point_description,
-        image: req.body.point_image,
-        longitude: req.body.point_lng,
-        latitude: req.body.point_lat
-      };
-      database.editMap(map,db);
-      //database.addPoint(point, db);
+      console.log("editing map");
+      const map = req.body;
+      database.editMap(map,db)
+        .then((mapId)=> {
+          console.log("HERE: ", mapId);
+          res.send({mapId});
+        });
     }
   });
 

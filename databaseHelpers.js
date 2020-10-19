@@ -73,7 +73,7 @@ exports.addUser = addUser;
 
 
 const addMap = function(map, pool) {
-  console.log('*****************', map);
+  console.log('**************add', map);
   let queryString = `
   INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
   VALUES($1, $2, $3, 'true', $4, $5, $6);
@@ -83,7 +83,6 @@ const addMap = function(map, pool) {
     .then(res =>
       pool.query(`SELECT currval('maps_id_seq');`)
         .then(res2 => {
-          //console.log("MAP ID: ", res2.rows[0].currval);
           return res2.rows[0].currval;
         }))
     .catch(err => console.log(err));
@@ -107,29 +106,23 @@ exports.addMap = addMap;
 
 
 const editMap = function(map, pool) {
-return pool.query( `
-UPDATE maps
-SET name = $1,
-    description = $2,
-    longitude = $3,
-    latitude = $4,
-    zoom = $5
-WHERE id = $6
-
-
-`,[map.name, map.description, map.center.lng, map.center.lat, map.zoom, map.id])
-.then(res =>
-pool.query(`
-SELECT currval('maps_id_seq');`)
-.then(res2 => {
-  //console.log("MAP ID: ", res2.rows[0].currval);
-  return res2.rows[0].currval;
-
-
-
-;}))
-.catch(err => console.log(err));
-}
+  console.log('**************edit', map);
+  let queryString = `
+  UPDATE maps
+  SET name = $1,
+      description = $2,
+      longitude = $3,
+      latitude = $4,
+      zoom = $5
+  WHERE id = $6
+  `;
+  return pool.query(queryString ,[map.name, map.description, map.longitude, map.latitude, map.zoom, map.id])
+    .then(res => pool.query(`SELECT currval('maps_id_seq');`)
+      .then(res2 => {
+        return res2.rows[0].currval;
+      }))
+    .catch(err => console.log(err));
+};
 
 exports.editMap = editMap;
 
