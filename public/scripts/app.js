@@ -10,6 +10,7 @@ $(document).ready(function() {
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
+    hideEditForm(false);
     currentView = setView('map', currentView);
   });
   $('#profile_btn').click(function() {
