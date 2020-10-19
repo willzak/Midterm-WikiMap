@@ -32,6 +32,10 @@ nav {
   //children
   a {
     color: $navFontColor;
+    &:hover {
+      text-shadow: 2px 7px 4px #1d284b;
+      font-weight: bold;
+    }
   }
   .nav_links {
     flex-direction: column;
@@ -39,13 +43,18 @@ nav {
   .logo {
     font-family: 'Bungee', cursive;
     font-size: 35px;
-    text-shadow: 6px 6px 9px #1d284b;
+    text-shadow: 4px 4px 6px #1d284b;
   }
   button {
     color: $navFontColor;
     background-color: Transparent;
     border: 2px solid $navFontColor;
     border-radius: 10px;
+    &:hover {
+      box-shadow: 0px 9px 4px -4px #1d284b;
+      font-weight: bold;
+      border: 3px solid $navFontColor;
+    }
   }
 }
 
@@ -153,8 +162,10 @@ nav {
     .error {
       display: none;
     }
-    button {
-      align-self: center;
+    span {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
     }
   }
 }

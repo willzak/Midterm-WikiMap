@@ -19,7 +19,7 @@ INSERT INTO users (name, email, password, profile_photo, username)
 VALUES ('Paul', 'paul@gmail.com', 'password', 'https://image.shutterstock.com/image-vector/male-silhouette-avatar-profile-picture-260nw-199246382.jpg', 'itspaul');
 
 INSERT INTO users (name, email, password, profile_photo, username)
-VALUES ('Ian', 'ian@gmail.com', 'password', 'https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg', 'ian123');
+VALUES ('Ian', 'ian@gmail.com', 'password', 'https://cdn.iconscout.com/icon/free/png-512/sloth-1400398-1185970.png', 'ian123');
 
 -- Map Starter Data
 INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)

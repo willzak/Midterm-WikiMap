@@ -16,6 +16,7 @@
  * $(document).ready function.
  */
 const setView = function(newView, currentView) {
+  console.log(newView, currentView);
   $('.' + currentView + '_view').fadeOut(() => {
     $('.' + newView + '_view').fadeIn();
   });
