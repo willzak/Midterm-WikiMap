@@ -1,7 +1,3 @@
-const defaultMap = {id: 0, name: 'New Map', description: 'Please enter a title and description for your new map bellow.  When you are done, hit save to continue.', latitude: 52.627849747795025, longitude: -4416.512126890331, zoom: 3};
-let currentMapId = 0;
-let map;
-
 const initMap = function() {
   $('#map_script').attr('src', `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`);
   map = new google.maps.Map(document.getElementById("test_map"), {
@@ -90,12 +86,21 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+  /**********************************
+   * Dev demo code
+   **********************************/
+  loadMap(defaultMap);
+  hideEditForm(false);
+  currentView = setView('map', currentView);
+  /**********************************
+   * end dev demo
+   **********************************/
   console.log('MAP READY');
 };
 
 const loadMap = function(mapData) {
-  console.log("loadMap ", map);
-
+  console.log("loadMap ", mapData);
+  currentMap = mapData;
   $('.map_intro h2').text(mapData.name);
   $('.map_intro p').text(mapData.description);
   $('.map_intro h6').text('Created by ' + user.name);

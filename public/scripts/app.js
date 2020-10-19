@@ -1,12 +1,33 @@
+//START Client side global variables
 let user = {};
 let mapKey = 0;
 let currentView;
+const defaultMap = {
+  id: 0,
+  name: 'New Map',
+  description: 'Please enter a title and description for your new map bellow.  When you are done, hit save to continue.',
+  latitude: 52.627849747795025,
+  longitude: -4416.512126890331,
+  zoom: 3
+};
+let currentMap = defaultMap;
+let map;
+//END Client side global variables
 
 $(document).ready(function() {
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map'];
   currentView = setDefaultUI(views);
 
+  /**********************************
+   * Dev demo code
+   **********************************/
+  // loadMap(defaultMap);
+  // hideEditForm(false);
+  // currentView = setView('map', currentView);
+  /**********************************
+   * end dev demo
+   **********************************/
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
@@ -57,7 +78,24 @@ $(document).ready(function() {
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-    console.log(values);
+//name, owner_id, description, public_edits, latitude, longitude, zoom
+    let saveMap = {
+      id: currentMap.id,
+      name: values.name,
+      owner_id: user.id,
+      description: values.description,
+      latitude: map.getCenter().lat(),
+      longitude: map.getCenter().lng(),
+      zoom: map.getZoom()
+    };
+    $.ajax({
+      method: "POST",
+      url: `/api/maps/${currentMap.id}`,
+      data: saveMap
+    }).then((response) => {
+      console.log('result id: ',response);
+      currentMap.id = response.id;
+    });
     hideEditForm(true);
   });
   //  add_point
