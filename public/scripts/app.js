@@ -1,14 +1,5 @@
-$(() => {
-  $.ajax({
-    method: "GET",
-    url: "/api/users"
-  }).done((users) => {
-    console.log(users);
-    for(user in users) {
-      $("<div>").text(user.name).appendTo($("body"));
-    }
-  });;
-});
+const user;
+const map_key = 0;
 
 $(document).ready(function() {
   //Initial setup hides all but the first view in views
@@ -33,6 +24,30 @@ $(document).ready(function() {
     currentView = setDefaultUI(views);
   });
   //END nav bar listeners
+
+  //Log in listener
+  $('#login').submit(event => {
+    event.preventDefault();
+    //console.log(event);
+    const text = $(this).serialize();
+
+    const out = {
+      email: 'will@gmail.com',
+      password: 'heywill'
+
+    }
+    $.ajax({
+      method: "POST",
+      url: "/api/users/login",
+      data: out
+    }).then((response) => {
+      console.log('result user: ',response);
+      user = response.user;
+      map_key = repsonse.map;
+
+    });;
+  })
+
   //START map_view listeners
   //  edit_map
   $('button.edit_map').click(function() {

@@ -4,9 +4,19 @@
  *   these routes are mounted onto /users
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
+// load .env data into process.env
+require('dotenv').config();
+
+
 
 const express = require('express');
 const router  = express.Router();
+
+const cookieSession = require('cookie-session');
+const bodyParser = require("body-parser");
+
+
+// app.use(bodyParser.urlencoded({extended: true}));
 
 
 module.exports = (db, database) => {
@@ -65,27 +75,30 @@ module.exports = (db, database) => {
   const login =  function(email, password) {
     return database.getUserWithEmail(email) //Change
     .then(user => {
-      if (bcrypt.compareSync(password, user.password)) {
+      console.log('login: ',user);
 
-        return user;
-      }
-
-      return null;
+      return user;
     });
   };
 
   router.post('/login', (req, res) => {
+    console.log('HERE:', req.body);
     const {email, password} = req.body;
     login(email, password)
       .then(user => {
-        if (!user) {
-          res.send({error: "error"});
-          return;
-        }
+
+        // if (!user) {
+        //   res.send({error: "error"});
+        //   return;
+        // }
         req.session.userId = user.id;
-        res.send({user: {name: user.name, email: user.email, id: user.id}});
+        console.log('map key: ', process.env.MAP_API_KEY);
+
+        res.send({user, map: process.env.MAP_API_KEY});
       })
-      .catch(e => res.send(e));
+      .catch(e => {
+        console.log('ERROR: ', e);
+        res.send(e)});
   });
 
   router.post('/logout', (req, res) => {

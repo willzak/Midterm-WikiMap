@@ -1,5 +1,7 @@
 /// Users
 
+
+
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -14,7 +16,7 @@ const pool = new Pool({
  * @param {String} email The email of the user.
  * @return {Promise<{}>} A promise to the user.
  */
-const getUserWithEmail = function(email, pool) {
+const getUserWithEmail = function(email) {
   return pool.query(`
   SELECT * FROM users
   WHERE email = $1
