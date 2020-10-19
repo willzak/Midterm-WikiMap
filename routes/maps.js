@@ -42,6 +42,20 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
+
+  //route to add point
+  router.post("/add_point", (req, res) => {
+    //console.log("POINT ROUTE: ", req.body);
+    point = req.body;
+    point.user_id = req.session.userId;
+    console.log("POINT ROUTE: ", point);
+    //res.send('done');
+    database.addPoint(point);
+    res.json(point);
+  });
+
+
+
   //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
 
@@ -95,8 +109,14 @@ module.exports = (db, database) => {
   });
 
 
+
+
+
   return router;
 };
+
+
+
 /*
 curl --header "Content-Type: application/json" \
   --request POST \

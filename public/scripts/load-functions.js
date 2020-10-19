@@ -9,6 +9,67 @@ const initMap = function() {
     zoom: 3,
   });
   console.log('center: ', map.getCenter());
+
+  map.addListener("click", (e) => {
+    console.log("CLICKED! ", e.latLng);
+    new google.maps.Marker({
+      position: e.latLng,
+      map: map,
+    });
+    $('.form_div input[name=lat]').val(e.latLng.lat);
+    $('.form_div  input[name=lng]').val(e.latLng.lng);
+
+    $('#point-form')
+    .submit(event => {
+      event.preventDefault();
+      let $inputs = $('#point-form :input');
+      let values = {map_id: currentMapId};
+      console.log('this: ', $inputs);
+      $inputs.each(function() {
+        values[this.name] = $(this).val();
+      });
+
+      //values['map_id'] = currentMapId;
+      console.log("form values: ",values);
+      $.ajax({
+        method: "POST",
+        url: "/api/maps/add_point",
+        data: values
+
+      , error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error ", errorThrown);
+      }
+      }).then((response) => {
+        console.log('result point: ',response);
+
+      }).catch((err) => {
+        console.log('err: ', err);
+      });
+      // $.ajax({
+      //   method: "POST",
+      //   url: "/api/users/login",
+      //   data: values
+      // }).then((response) => {
+      //   console.log('result user: ',response);
+      //   user = response.user;
+      //   mapKey = response.map;
+      //   login(user);
+      // });
+    //   $.ajax({
+    //     url: '/resource_url_goes_here',
+    //     type : 'POST',
+    //     data: sendJson,
+    //     success: function(data){
+    //         /* implementation goes here */
+    //     },
+    //     error: function(jqXHR, textStatus, errorThrown) {
+    //         /* implementation goes here */
+    //     }
+    // });
+
+      hideEditForm(true);
+    })
+  })
 };
 
 const loadProfile = function(user) {
