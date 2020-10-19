@@ -73,12 +73,13 @@ $(document).ready(function() {
   });
   $('div.edit_map > form').submit(event => {
     event.preventDefault();
+    // get the form data
     let $inputs = $('div.edit_map > form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-//name, owner_id, description, public_edits, latitude, longitude, zoom
+    // format the data for transfer to server
     let saveMap = {
       id: currentMap.id,
       name: values.name,
@@ -88,16 +89,23 @@ $(document).ready(function() {
       longitude: map.getCenter().lng(),
       zoom: map.getZoom()
     };
+    console.log('**********************', saveMap);
+    //make the POST to the server
     $.ajax({
       method: "POST",
       url: `/api/maps/${currentMap.id}`,
       data: saveMap
     }).then((response) => {
       console.log('result id: ',response);
+      if (currentMap.id === response.id) {
+        console.log("Successful Edit");
+      }
       currentMap.id = response.id;
     });
+    //hide the form
     hideEditForm(true);
   });
+
   //  add_point
   $('div.map_container').click(function() {
     hidePointForm(false);
