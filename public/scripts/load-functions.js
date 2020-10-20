@@ -1,3 +1,4 @@
+
 const initMap = function() {
   $('#map_script').attr('src', `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`);
   map = new google.maps.Map(document.getElementById("test_map"), {
@@ -5,6 +6,86 @@ const initMap = function() {
     zoom: 3,
   });
   console.log('center: ', map.getCenter());
+  let marker = new google.maps.Marker({map: null});
+  $('.save').hide();
+  //listner for zoom change
+  map.addListener('zoom_changed', function() {
+
+    $('.save').show();
+  });
+  //listner for center change
+  map.addListener('center_changed', function() {
+
+    $('.save').show();
+  });
+
+
+
+  //Listener for clicks to add markers
+  map.addListener("click", (e) => {
+    console.log("CLICKED! ", e.latLng);
+    marker.setMap(null);
+    marker = new google.maps.Marker({
+      position: e.latLng,
+      map: map,
+    });
+    $('.form_div input[name=lat]').val(e.latLng.lat);
+    $('.form_div  input[name=lng]').val(e.latLng.lng);
+    //disabling click until submission
+    $('.map_container').slideUp();
+
+    $('#point-form')
+      .submit(event => {
+        event.preventDefault();
+        let $inputs = $('#point-form :input');
+        let values = {map_id: currentMap.id};
+        $inputs.each(function() {
+          values[this.name] = $(this).val();
+        });
+
+        //prevents double submission of the form
+        $(this).find(':submit').attr('disabled','disabled');
+
+
+        $.ajax({
+          method: "POST",
+          url: "/api/maps/add_point",
+          data: values
+
+          , error: function(jqXHR, textStatus, errorThrown) {
+            console.log("error ", errorThrown);
+          }
+        }).then((response) => {
+          $('#point-form')[0].reset();
+        }).catch((err) => {
+          console.log('err: ', err);
+        });
+        // $.ajax({
+        //   method: "POST",
+        //   url: "/api/users/login",
+        //   data: values
+        // }).then((response) => {
+        //   console.log('result user: ',response);
+        //   user = response.user;
+        //   mapKey = response.map;
+        //   login(user);
+        // });
+        //   $.ajax({
+        //     url: '/resource_url_goes_here',
+        //     type : 'POST',
+        //     data: sendJson,
+        //     success: function(data){
+        //         /* implementation goes here */
+        //     },
+        //     error: function(jqXHR, textStatus, errorThrown) {
+        //         /* implementation goes here */
+        //     }
+        // });
+        $('.map_container').slideDown();
+
+        hideEditForm(true);
+      });
+  });
 };
 
 const loadProfile = function(user) {
@@ -25,6 +106,18 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
+=======
+  /**********************************
+   * Dev demo code
+   **********************************/
+  // loadMap(defaultMap);
+  // hideEditForm(false);
+  // currentView = setView('map', currentView);
+  /**********************************
+   * end dev demo
+   **********************************/
+>>>>>>> 256943f454fec162907e70246f232e3cc711da60
   console.log('MAP READY');
 };
 
@@ -35,4 +128,7 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
+  $('.save').hide();
 };
+
+

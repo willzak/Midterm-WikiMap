@@ -1,5 +1,5 @@
 /// Users
-
+const cookieSession = require('cookie-session');
 
 
 const { Pool } = require('pg');
@@ -147,10 +147,12 @@ const editMap = function(map, pool) {
 
 exports.editMap = editMap;
 
-const addPoint = function(point, pool) {
+const addPoint = function(point) {
+
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
   VALUES($1, $2, $3, $4, $5, $6, $7);
+<<<<<<< HEAD
   `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
     .then(res =>pool.query(`SELECT currval('maps_id_seq');`)
       .then(res2 => {
@@ -158,6 +160,17 @@ const addPoint = function(point, pool) {
       }))
     .catch(err => console.log(err));
 };
+=======
+
+
+  `,[point.user_id, point.map_id, point.title, point.text, point.image, point.lng, point.lat])
+  .then(res =>
+
+    console.log('res: ', res)
+    )
+  .catch(err => console.log(err));
+}
+>>>>>>> 256943f454fec162907e70246f232e3cc711da60
 
 exports.addPoint = addPoint;
 

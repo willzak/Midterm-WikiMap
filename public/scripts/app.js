@@ -173,16 +173,16 @@ $(document).ready(function() {
   $('#cancel_add_point').click(function() {
     hidePointsForm(true);
   });
-  $('div.add_point > form').submit(event => {
-    event.preventDefault();
-    let $inputs = $('div.add_point > form :input');
-    let values = {};
-    $inputs.each(function() {
-      values[this.name] = $(this).val();
-    });
-    console.log(values);
-    hidePointForm(true);
-  });
+  // $('div.add_point > form').submit(event => {
+  //   event.preventDefault();
+  //   let $inputs = $('div.add_point > form :input');
+  //   let values = {};
+  //   $inputs.each(function() {
+  //     values[this.name] = $(this).val();
+  //   });
+  //   console.log(values);
+  //   hidePointForm(true);
+  // });
   // save map position
   $('.bar button.save').click(function() {
     let center = map.getCenter();
