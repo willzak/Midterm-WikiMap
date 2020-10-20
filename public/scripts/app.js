@@ -43,10 +43,10 @@ $(document).ready(function() {
   $('#home_btn').click(function() {
     console.log('been clicked***********************');
     currentView = setView('list', currentView);
-  })
+  });
   //END nav bar listeners
 
-  //Log in listener
+  //START login_reg_view listeners
   $('#login').submit(event => {
     event.preventDefault();
     let $inputs = $('#login :input');
@@ -67,6 +67,62 @@ $(document).ready(function() {
     });
   });
 
+  $('div.register > form').submit(event => {
+    event.preventDefault();
+    let $inputs = $('div.register > form :input');
+    let values = {};
+    $inputs.each(function() {
+      values[this.name] = $(this).val();
+    });
+    for (const value in values) {
+      if (user[value] === values[value]) {
+        delete values[value];
+      }
+    }
+
+    $.ajax({
+      method: "POST",
+      url: "/api/users/login",
+      data: values
+    }).then((response) => {
+      console.log('result user: ',response);
+      user = response.user;
+      mapKey = response.map;
+      login(user);
+    });
+  });
+  //END login_reg_view listeners
+  //START profile_view listeners
+  $('div.profile_update form').submit(event => {
+    event.preventDefault();
+    console.log('************In');
+    let $inputs = $('div.profile_update form :input');
+    let values = {};
+    $inputs.each(function() {
+      values[this.name] = $(this).val();
+    });
+    console.log(user, '===', values);
+    for (const value in values) {
+      console.log(`(${user[value]})`, '===', `(${values[value]})`);
+      if (user[value] === values[value]) {
+        delete values[value];
+      }
+    }
+    delete values.confirm_password;
+    values.id = user.id;
+    console.log('*********values', values);
+    $.ajax({
+      method: "POST",
+      url: "/api/users/profile",
+      data: values
+    }).then((response) => {
+      console.log('result user: ',response);
+      user = response.user;
+      mapKey = response.map;
+      login(user);
+    });
+  });
+  //END profile_reg_view listeners
   //START map_view listeners
   //  edit_map
   $('button.edit_map').click(function() {
@@ -93,7 +149,7 @@ $(document).ready(function() {
       longitude: map.getCenter().lng(),
       zoom: map.getZoom()
     };
-    console.log('**********************', saveMap);
+    currentMap = saveMap;
     //make the POST to the server
     $.ajax({
       method: "POST",
@@ -104,7 +160,7 @@ $(document).ready(function() {
       if (currentMap.id === response.id) {
         console.log("Successful Edit");
       }
-      currentMap.id = response.id;
+      loadMap(currentMap);
     });
     //hide the form
     hideEditForm(true);

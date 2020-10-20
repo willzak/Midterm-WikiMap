@@ -58,6 +58,29 @@ const addUser =  function(user, pool) {
 };
 exports.addUser = addUser;
 
+const editUser = function(newData) {
+  let changes = '';
+  let values = [];
+  for (const property in newData) {
+    if (property !== 'id') {
+      values.push(newData[property]);
+      if (values.length > 1) changes += ', ';
+      changes += `${property} = $${values.length}`;
+    }
+  }
+  let queryString = `
+  UPDATE users
+  SET ${changes}
+  WHERE id = ${newData.id}
+  `;
+  return pool.query(queryString, values)
+    .then(res => {
+      return;
+    })
+    .catch(err => console.log(err));
+};
+exports.editUser = editUser;
+
 /**
  *
  * @param {
@@ -73,7 +96,6 @@ exports.addUser = addUser;
 
 
 const addMap = function(map, pool) {
-  console.log('**************add', map);
   let queryString = `
   INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
   VALUES($1, $2, $3, 'true', $4, $5, $6);
@@ -106,7 +128,6 @@ exports.addMap = addMap;
 
 
 const editMap = function(map, pool) {
-  console.log('**************edit', map);
   let queryString = `
   UPDATE maps
   SET name = $1,
@@ -130,21 +151,13 @@ const addPoint = function(point, pool) {
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
   VALUES($1, $2, $3, $4, $5, $6, $7);
-
-
   `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
-  .then(res =>
-    pool.query(`
-    SELECT currval('maps_id_seq');`)
-    .then(res2 => {
-      //console.log("MAP ID: ", res2.rows[0].currval);
-      return res2.rows[0].currval;
-
-
-
-  ;}))
-  .catch(err => console.log(err));
-}
+    .then(res =>pool.query(`SELECT currval('maps_id_seq');`)
+      .then(res2 => {
+        return res2.rows[0].currval;
+      }))
+    .catch(err => console.log(err));
+};
 
 exports.addPoint = addPoint;
 
