@@ -47,13 +47,27 @@ exports.getUserWithId = getUserWithId;
  * @param {{name: string, password: string, email: string}} user
  * @return {Promise<{}>} A promise to the user.
  */
-const addUser =  function(user, pool) {
-  return pool.query(`
-  INSERT INTO users (name, email, password)
-  VALUES($1, $2, $3)
+const addUser =  function(newData) {
+  let properties = '';
+  let references = '';
+  let values = [];
+  for (const property in newData) {
+    values.push(newData[property]);
+    if (values.length > 1) {
+      properties += ', ';
+      references += ', ';
+    }
+    properties += `${property}`;
+    references += `$${values.length}`;
+  }
+  let queryString = `
+  INSERT INTO users (${properties})
+  VALUES(${references})
   RETURNING *;
-  `, [user.name, user.email, user.password])
-    .then(res => res.rows)
+  `;
+  console.log('8**************addUser', queryString, values);
+  return pool.query(queryString, values)
+    .then(res => res.rows[0])
     .catch(err => console.log(err));
 };
 exports.addUser = addUser;
