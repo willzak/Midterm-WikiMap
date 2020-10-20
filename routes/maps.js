@@ -79,13 +79,10 @@ module.exports = (db, database) => {
     }
   });
 
-<<<<<<< HEAD
-=======
 
 
 
 
->>>>>>> 256943f454fec162907e70246f232e3cc711da60
   return router;
 };
 

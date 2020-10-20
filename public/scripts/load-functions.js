@@ -106,8 +106,6 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-<<<<<<< HEAD
-=======
   /**********************************
    * Dev demo code
    **********************************/
@@ -117,7 +115,6 @@ const login = function(user) {
   /**********************************
    * end dev demo
    **********************************/
->>>>>>> 256943f454fec162907e70246f232e3cc711da60
   console.log('MAP READY');
 };
 
@@ -128,6 +125,7 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
+
   $('.save').hide();
 };
 
