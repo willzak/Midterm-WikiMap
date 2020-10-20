@@ -206,6 +206,7 @@ const getMapByName = function(name) {
   */
 
   const getPointsByMap = function(map_id) {
+    console.log('MAP_ID: ', map_id);
     const queryString = `
     SELECT * FROM points
     WHERE map_id = $1;
