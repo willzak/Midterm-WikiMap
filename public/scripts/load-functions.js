@@ -106,18 +106,6 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-<<<<<<< HEAD
-=======
-  /**********************************
-   * Dev demo code
-   **********************************/
-  // loadMap(defaultMap);
-  // hideEditForm(false);
-  // currentView = setView('map', currentView);
-  /**********************************
-   * end dev demo
-   **********************************/
->>>>>>> 256943f454fec162907e70246f232e3cc711da60
   console.log('MAP READY');
 };
 
