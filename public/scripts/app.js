@@ -190,6 +190,7 @@ $(document).ready(function() {
     console.log('center: Lat', center.lat());
     console.log('center: Long', center.lng());
     console.log('center: zoom', zoom);
+    $(this).hide();
   });
   //END map_view listeners
 });
