@@ -89,17 +89,17 @@ module.exports = (db, database) => {
       const map = req.body;
       console.log("creating new map");
       database.addMap(map,db)
-        .then((mapId)=> {
-          console.log("HERE: ", mapId);
-          res.send({mapId});
+        .then((id)=> {
+          console.log("HERE: ", id);
+          res.send({id});
         });
     } else {
       console.log("editing map");
       const map = req.body;
       database.editMap(map,db)
-        .then((mapId)=> {
-          console.log("HERE: ", mapId);
-          res.send({mapId});
+        .then((id)=> {
+          console.log("HERE: ", id);
+          res.send({id});
         });
     }
   });

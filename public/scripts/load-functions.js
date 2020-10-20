@@ -83,6 +83,7 @@ const initMap = function() {
         //     }
         // });
         $('.map_container').slideDown();
+        console.log('current IDIDIDIDID: ', currentMap);
         loadPoints(currentMap.id);
         hideEditForm(true);
       });
@@ -127,14 +128,15 @@ const loadMap = function(mapData) {
       changed = true;
     }
   }
-  //if (!changed) return;
+  if (!changed) return;
   currentMap = mapData;
   $('.map_intro h2').text(mapData.name);
   $('.map_intro p').text(mapData.description);
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
-  loadPoints(mapData.id);
+  console.log('this is mapData: ',mapData)
+  loadPoints(currentMap.id);
   $('.save').hide();
 };
 
@@ -150,6 +152,7 @@ const loadPoints = function(id) {
 
   }).then((response) => {
     let changed = false;
+
     for(let index in currentMap.points){
       for(let key in currentMap.points[index]){
         if(currentMap.points[index][key] !== response[index][key]){
@@ -157,9 +160,9 @@ const loadPoints = function(id) {
         }
       }
     }
-    if(!changed){
-      return;
-    }
+    // if(!changed){
+    //   return;
+    // }
 
     currentMap.points = response;
     currentMap.markers = [];
