@@ -67,31 +67,50 @@ $(document).ready(function() {
       user = response.user;
       mapKey = response.map;
       login(user);
+      $inputs.each(function() {
+        $(this).val('');
+      });
     });
   });
 
   $('div.register > form').submit(event => {
     event.preventDefault();
+    //retrieve the values from the form
     let $inputs = $('div.register > form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-    for (const value in values) {
-      if (user[value] === values[value]) {
-        delete values[value];
-      }
+    //verify the values
+    if (values.name === '' || values.email === '' || values.password === '') {
+      $('div.register span.error').text("Fill in required (*) fields");
+      $('div.register span.error').fadeIn();
+      return;
     }
-
+    if (values.password !== values.confirm_password) {
+      $('div.register span.error').text("Password fields don't match");
+      $('div.register span.error').fadeIn();
+      return;
+    }
+    //purge un-needed values
+    if (values.profile_photo === '') delete values.profile_photo;
+    delete values.confirm_password;
+    //hide the error if one was presented
+    $('div.register span.error').fadeOut();
+    //send the post request
     $.ajax({
       method: "POST",
-      url: "/api/users/login",
+      url: "/api/users/register",
       data: values
     }).then((response) => {
-      console.log('result user: ',response);
+      //log the user in
       user = response.user;
       mapKey = response.map;
       login(user);
+      //clear the form
+      $inputs.each(function() {
+        $(this).val('');
+      });
     });
   });
   //END login_reg_view listeners
@@ -99,13 +118,29 @@ $(document).ready(function() {
   //START profile_view listeners
   $('div.profile_update form').submit(event => {
     event.preventDefault();
-    console.log('************In');
+    //retrieve values from the form
     let $inputs = $('div.profile_update form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-    console.log(user, '===', values);
+    //verify the values
+    if (values.name === '' || values.email === '' || values.password === '') {
+      $('div.profile_update p.error').text("Fill in required (*) fields");
+      $('div.profile_update p.error').fadeIn();
+      return;
+    }
+    if (values.password !== values.confirm_password) {
+      $('div.profile_update p.error').text("Password fields don't match");
+      $('div.profile_update p.error').fadeIn();
+      return;
+    }
+    //hide the error if one was presented
+    $('div.profile_update p.error').fadeOut();
+    //purge un-needed values
+    if (values.profile_photo === '') delete values.profile_photo;
+    delete values.confirm_password;
+    //keep only changed values
     for (const value in values) {
       console.log(`(${user[value]})`, '===', `(${values[value]})`);
       if (user[value] === values[value]) {
@@ -114,16 +149,13 @@ $(document).ready(function() {
     }
     delete values.confirm_password;
     values.id = user.id;
-    console.log('*********values', values);
+    //make the server request
     $.ajax({
       method: "POST",
       url: "/api/users/profile",
       data: values
     }).then((response) => {
-      console.log('result user: ',response);
       user = response.user;
-      mapKey = response.map;
-      login(user);
     });
   });
   //END profile_reg_view listeners

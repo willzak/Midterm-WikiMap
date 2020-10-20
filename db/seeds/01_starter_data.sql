@@ -12,14 +12,14 @@
 
 -- Users Starter Data
 
-INSERT INTO users (name, email, password, profile_photo, username)
-VALUES ('Will', 'will@gmail.com', 'password', 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png', 'heywill');
+INSERT INTO users (name, email, password, profile_photo)
+VALUES ('Will', 'will@gmail.com', 'password', 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png');
 
-INSERT INTO users (name, email, password, profile_photo, username)
-VALUES ('Paul', 'paul@gmail.com', 'password', 'https://image.shutterstock.com/image-vector/male-silhouette-avatar-profile-picture-260nw-199246382.jpg', 'itspaul');
+INSERT INTO users (name, email, password, profile_photo)
+VALUES ('Paul', 'paul@gmail.com', 'password', 'https://image.shutterstock.com/image-vector/male-silhouette-avatar-profile-picture-260nw-199246382.jpg');
 
-INSERT INTO users (name, email, password, profile_photo, username)
-VALUES ('Ian', 'ian@gmail.com', 'password', 'https://cdn.iconscout.com/icon/free/png-512/sloth-1400398-1185970.png', 'ian123');
+INSERT INTO users (name, email, password, profile_photo)
+VALUES ('Ian', 'ian@gmail.com', 'password', 'https://cdn.iconscout.com/icon/free/png-512/sloth-1400398-1185970.png');
 
 -- Map Starter Data
 INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)

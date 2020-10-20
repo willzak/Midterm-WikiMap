@@ -107,6 +107,8 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
+=======
   /**********************************
    * Dev demo code
    **********************************/
@@ -116,6 +118,7 @@ const login = function(user) {
   /**********************************
    * end dev demo
    **********************************/
+>>>>>>> bf49ec8b6dad150f2a37d32292a3bfe66487e4b2
   console.log('MAP READY');
 };
 
