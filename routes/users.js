@@ -92,7 +92,23 @@ module.exports = (db, database) => {
       })
       .catch(e => {
         console.log('ERROR: ', e);
-        res.send(e)});
+        res.send(e);
+      });
+  });
+
+  router.post('/register', (req, res) => {
+    const newUser = req.body;
+    console.log('***************************reg route receive ', newUser);
+    database.addUser(newUser)
+      .then(user => {
+        req.session.userId = user.id;
+        console.log('***************************reg route return ', user);
+        res.send({user, map: process.env.MAP_API_KEY});
+      })
+      .catch(e => {
+        console.log('ERROR: ', e);
+        res.send(e);
+      });
   });
 
   router.post("/profile", (req, res) => {
