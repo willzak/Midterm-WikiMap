@@ -111,7 +111,7 @@ const login = function(user) {
 
 const loadMap = function(mapData) {
   let changed = false;
-  for (const key of mapData) {
+  for (const key in mapData) {
     if (currentMap[key] !== mapData[key]) {
       changed = true;
     }

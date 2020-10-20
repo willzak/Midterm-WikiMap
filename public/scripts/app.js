@@ -20,15 +20,6 @@ $(document).ready(function() {
   const views = ['login_reg', 'profile', 'map', 'list'];
   currentView = setDefaultUI(views);
 
-  /**********************************
-   * Dev demo code
-   **********************************/
-  // loadMap(defaultMap);
-  // hideEditForm(false);
-  // currentView = setView('map', currentView);
-  /**********************************
-   * end dev demo
-   **********************************/
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
@@ -199,7 +190,7 @@ $(document).ready(function() {
       longitude: map.getCenter().lng(),
       zoom: map.getZoom()
     };
-    currentMap = saveMap;
+    loadMap(saveMap);
     //make the POST to the server
     $.ajax({
       method: "POST",
@@ -209,8 +200,9 @@ $(document).ready(function() {
       console.log('result id: ',response);
       if (currentMap.id === response.id) {
         console.log("Successful Edit");
+        return;
       }
-      loadMap(currentMap);
+      currentMap.id = response.id;
     });
     //hide the form
     hideEditForm(true);

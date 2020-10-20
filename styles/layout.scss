@@ -26,6 +26,7 @@ nav {
   max-width:100%;
   padding: 0.5rem;
   border-radius: 10px;
+  border: 2px solid #000000;
   //colour properties
   background-color: #4056A1;
   color: $navFontColor;
@@ -188,7 +189,6 @@ nav {
   display: flex;
   flex-direction: column;
   width: 100%;
-
   .map_intro {
     display: flex;
     flex-direction: column;
@@ -245,7 +245,6 @@ nav {
       margin: 0.25rem;
     }
   }
-
   .form_div {
     display: flex;
     flex-direction: column;
@@ -260,6 +259,7 @@ nav {
     height: 500px;
     background-color: green;
     border-radius: 10px;
+    border: 2px solid #000000;
   }
   button.submit {
     align-self: center;
@@ -272,6 +272,9 @@ nav {
     justify-content: space-evenly;
     & > div {
       flex: 1;
+    }
+    .map-container {
+      margin-left: 2px;
     }
   }
 }
