@@ -157,8 +157,8 @@ $(document).ready(function() {
       $.ajax('http://localhost:8080/api/maps', { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
-        console.log('maps obj: ', res)
-        renderMaps(res.maps)
+        console.log('maps obj: ', res);
+        renderMaps(res.maps);
       })
     })
   }

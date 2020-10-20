@@ -195,6 +195,7 @@ const loadPoints = function(id) {
     console.log('err: ', err);
   });
 
+};
 
 //On list view - to load an indvidual map card
 const createMapCard = function(mapInfo) {
@@ -221,21 +222,4 @@ const renderMaps = function(data) {
     let output = createMapCard(mapInfo);
     $('.map-list').append(output);
   }
-};
-
-let fakeMaps = [
-  {
-    id: 1,
-    name: 'Map1',
-    description: 'This is map 1 description',
-    owner_name: 'Map 1 owner'
-  },
-  {
-    id: 2,
-    name: 'Map2',
-    description: 'This is map 2 description',
-    owner_name: 'Map 2 owner'
-  }
-];
-
 };
