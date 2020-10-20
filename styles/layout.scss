@@ -275,40 +275,36 @@ nav {
 }
 
 
-//list view
+//LIST VIEW
+
 .list_view {
-  display: flex;
-  width: 95%;
+  width: 90vw;
   margin: 0;
-  justify-content: space-around;
-  align-items: flex-start;
-  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
 }
 
 .profile-bar {
   display: flex;
-  width: 30%;
-  height: 75vh;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ccccccc0;
+  background-color: #cccccc;
   border-radius: 10px;
-  padding: 10vh;
-  margin: 5vh;
+  margin-top: 15px;
 }
 
-.map-list {
+.profile-container {
+  display: none;
+}
+
+.selections-container {
   display: flex;
-  flex-direction: column;
-  width: 70%;
-  margin: 5vh;
+  justify-content: space-evenly;
 }
 
 .selection-box {
-  padding: 5vh;
-  margin: 5vh;
-  border: 3px solid black;
+  padding: 4vh;
+  margin: 4vh;
+  border: 2px solid black;
   border-radius: 10px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.15);
   transition: all 0.3s ease-in-out;
@@ -331,27 +327,88 @@ nav {
   opacity: 1;
 }
 
+.map-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .map-container {
   border: 2px solid black;
-  margin: 5px;
-  padding: 5vh;
   border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: space-between;
+  padding: 20px;
+  margin-top: 20px;
 }
 
 .map-container:hover {
   border-color: coral;
 }
 
-.profile-pic {
-  width: 10vw;
-  height: width;
+.map-profile-img {
+  display: none;
 }
 
-.map-profile-img {
-  width: 20vw;
-  height: width;
+@media only screen and (min-width: 1024px) {
+  .list_view {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+
+  .profile-bar {
+    display: flex;
+    width: 30%;
+    height: 75vh;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #ccccccc0;
+    border-radius: 10px;
+    padding: 10vh;
+    margin: 0;
+  }
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .selections-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .selection-box {
+    margin: 1vw;
+  }
+
+  .map-list {
+    width: 70%;
+    margin-left: 20px;
+  }
+
+  .map-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .profile-pic {
+    width: 10vw;
+    height: width;
+  }
+
+  .map-profile-img {
+    display: flex;
+    width: 20vw;
+    height: width;
+  }
 }
