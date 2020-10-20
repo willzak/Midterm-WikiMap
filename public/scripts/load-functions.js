@@ -34,7 +34,10 @@ const initMap = function() {
     //disabling click until submission
     $('.map_container').slideUp();
 
-    $('#point-form')
+
+  });
+
+  $('#point-form')
       .submit(event => {
         event.preventDefault();
         let $inputs = $('#point-form :input');
@@ -83,9 +86,8 @@ const initMap = function() {
         // });
         $('.map_container').slideDown();
         loadPoints(currentMap.id);
-        hideEditForm(true);
+        hidePointForm(true);
       });
-  });
 };
 
 const loadProfile = function(user) {
@@ -171,6 +173,20 @@ const loadPoints = function(id) {
       currentMap.markers.push(marker);
       const currentPoint = currentMap.points[point];
       currentMap.markers[point].addListener("click", () => {
+
+        //Make request to get creators name
+        $.ajax({
+          method: "GET",
+          url: `/api/users/${currentPoint.creator_id}`,
+          data: values,
+          dataType: "json"
+
+
+        }).then(response => {
+          console.log('name response: ', response);
+        })
+
+
 
         const contentString =
         `<div id="content">

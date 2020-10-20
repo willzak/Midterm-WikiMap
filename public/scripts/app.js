@@ -215,7 +215,8 @@ $(document).ready(function() {
     hidePointForm(false);
   });
   $('#cancel_add_point').click(function() {
-    hidePointsForm(true);
+    $('.map_container').slideDown();
+    hidePointForm(true);
   });
   // $('div.add_point > form').submit(event => {
   //   event.preventDefault();
