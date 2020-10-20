@@ -106,6 +106,18 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
+=======
+  /**********************************
+   * Dev demo code
+   **********************************/
+  // loadMap(defaultMap);
+  // hideEditForm(false);
+  // currentView = setView('map', currentView);
+  /**********************************
+   * end dev demo
+   **********************************/
+>>>>>>> 69dd5c4b93eeac7eaded92e2298914643b99db5c
   console.log('MAP READY');
 };
 
@@ -123,6 +135,7 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
+
   $('.save').hide();
 };
 
