@@ -103,10 +103,11 @@ const loadProfile = function(user) {
 
 const login = function(user) {
   loadProfile(user);
-  currentView = setView('profile', currentView);
+  currentView = setView('list', currentView);
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
   /**********************************
    * Dev demo code
    **********************************/
@@ -116,6 +117,8 @@ const login = function(user) {
   /**********************************
    * end dev demo
    **********************************/
+=======
+>>>>>>> 2fc3ed631ecbaa8de4c74effd81974665371276a
   console.log('MAP READY');
 };
 
@@ -203,17 +206,16 @@ const createMapCard = function(mapInfo) {
     </div>
     <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
   </div>
-  `)
+  `);
   return $map;
 };
 
 //Load each map card from an array of data (can be changed to obj of data)
 const renderMaps = function(data) {
   //organize by creation date
-  data.sort(function(x, y){
+  data.sort(function(x, y) {
     return y.id - x.id;
   });
-
   for (let mapInfo of data) {
     let output = createMapCard(mapInfo);
     $('.map-list').append(output);
