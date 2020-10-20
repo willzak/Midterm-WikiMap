@@ -7,7 +7,21 @@ const initMap = function() {
   });
   console.log('center: ', map.getCenter());
   let marker = new google.maps.Marker({map: null});
+  $('.save').hide();
+  //listner for zoom change
+  map.addListener('zoom_changed', function() {
 
+    $('.save').show();
+  });
+  //listner for center change
+  map.addListener('center_changed', function() {
+
+    $('.save').show();
+  });
+
+
+
+  //Listener for clicks to add markers
   map.addListener("click", (e) => {
     console.log("CLICKED! ", e.latLng);
     marker.setMap(null);
@@ -21,57 +35,57 @@ const initMap = function() {
     $('.map_container').slideUp();
 
     $('#point-form')
-    .submit(event => {
-      event.preventDefault();
-      let $inputs = $('#point-form :input');
-      let values = {map_id: currentMap.id};
-      $inputs.each(function() {
-        values[this.name] = $(this).val();
+      .submit(event => {
+        event.preventDefault();
+        let $inputs = $('#point-form :input');
+        let values = {map_id: currentMap.id};
+        $inputs.each(function() {
+          values[this.name] = $(this).val();
+        });
+
+        //prevents double submission of the form
+        $(this).find(':submit').attr('disabled','disabled');
+
+
+        $.ajax({
+          method: "POST",
+          url: "/api/maps/add_point",
+          data: values
+
+          , error: function(jqXHR, textStatus, errorThrown) {
+            console.log("error ", errorThrown);
+          }
+        }).then((response) => {
+          $('#point-form')[0].reset();
+        }).catch((err) => {
+          console.log('err: ', err);
+        });
+        // $.ajax({
+        //   method: "POST",
+        //   url: "/api/users/login",
+        //   data: values
+        // }).then((response) => {
+        //   console.log('result user: ',response);
+        //   user = response.user;
+        //   mapKey = response.map;
+        //   login(user);
+        // });
+        //   $.ajax({
+        //     url: '/resource_url_goes_here',
+        //     type : 'POST',
+        //     data: sendJson,
+        //     success: function(data){
+        //         /* implementation goes here */
+        //     },
+        //     error: function(jqXHR, textStatus, errorThrown) {
+        //         /* implementation goes here */
+        //     }
+        // });
+        $('.map_container').slideDown();
+
+        hideEditForm(true);
       });
-
-      //prevents double submission of the form
-      $(this).find(':submit').attr( 'disabled','disabled' );
-
-
-      $.ajax({
-        method: "POST",
-        url: "/api/maps/add_point",
-        data: values
-
-      , error: function(jqXHR, textStatus, errorThrown) {
-          console.log("error ", errorThrown);
-      }
-      }).then((response) => {
-        $('#point-form')[0].reset();
-      }).catch((err) => {
-        console.log('err: ', err);
-      });
-      // $.ajax({
-      //   method: "POST",
-      //   url: "/api/users/login",
-      //   data: values
-      // }).then((response) => {
-      //   console.log('result user: ',response);
-      //   user = response.user;
-      //   mapKey = response.map;
-      //   login(user);
-      // });
-    //   $.ajax({
-    //     url: '/resource_url_goes_here',
-    //     type : 'POST',
-    //     data: sendJson,
-    //     success: function(data){
-    //         /* implementation goes here */
-    //     },
-    //     error: function(jqXHR, textStatus, errorThrown) {
-    //         /* implementation goes here */
-    //     }
-    // });
-    $('.map_container').slideDown();
-
-      hideEditForm(true);
-    })
-  })
+  });
 };
 
 const loadProfile = function(user) {
@@ -95,9 +109,9 @@ const login = function(user) {
   /**********************************
    * Dev demo code
    **********************************/
-  loadMap(defaultMap);
-  hideEditForm(false);
-  currentView = setView('map', currentView);
+  // loadMap(defaultMap);
+  // hideEditForm(false);
+  // currentView = setView('map', currentView);
   /**********************************
    * end dev demo
    **********************************/
@@ -112,6 +126,7 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
+  $('.save').hide();
 };
 
 
