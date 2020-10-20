@@ -152,7 +152,6 @@ const addPoint = function(point) {
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
   VALUES($1, $2, $3, $4, $5, $6, $7);
-<<<<<<< HEAD
   `,[map.owner_id, map.name, map.description, map.center.lng, map.center.lat, map.zoom])
     .then(res =>pool.query(`SELECT currval('maps_id_seq');`)
       .then(res2 => {
@@ -160,17 +159,6 @@ const addPoint = function(point) {
       }))
     .catch(err => console.log(err));
 };
-=======
-
-
-  `,[point.user_id, point.map_id, point.title, point.text, point.image, point.lng, point.lat])
-  .then(res =>
-
-    console.log('res: ', res)
-    )
-  .catch(err => console.log(err));
-}
->>>>>>> 69dd5c4b93eeac7eaded92e2298914643b99db5c
 
 exports.addPoint = addPoint;
 
