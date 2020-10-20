@@ -129,9 +129,12 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function() {
     $(function() {
-      //NEED TO RETRIEVE DATA HERE
-      $('.map-list').empty();
-      renderMaps(fakeMaps)
+      $.ajax('http://localhost:8080/api/maps', { method: 'GET' })
+      .then (function(res) {
+        $('.map-list').empty();
+        console.log('maps obj: ', res)
+        renderMaps(res.maps)
+      })
     })
   }
 
