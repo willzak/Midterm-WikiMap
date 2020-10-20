@@ -56,7 +56,6 @@ const initMap = function() {
             console.log("error ", errorThrown);
           }
         }).then((response) => {
-          console.log('point for res: ',response);
           $('#point-form')[0].reset();
         }).catch((err) => {
           console.log('err: ', err);
@@ -83,7 +82,6 @@ const initMap = function() {
         //     }
         // });
         $('.map_container').slideDown();
-        console.log('current IDIDIDIDID: ', currentMap);
         loadPoints(currentMap.id);
         hideEditForm(true);
       });
@@ -135,14 +133,12 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
-  console.log('this is mapData: ',mapData)
   loadPoints(currentMap.id);
   $('.save').hide();
 };
 
 const loadPoints = function(id) {
   const values = {id};
-  console.log('values: ', values);
   $.ajax({
     method: "GET",
     url: "/api/maps/points",
