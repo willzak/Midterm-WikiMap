@@ -107,7 +107,6 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-<<<<<<< HEAD
   /**********************************
    * Dev demo code
    **********************************/
@@ -117,21 +116,22 @@ const login = function(user) {
   /**********************************
    * end dev demo
    **********************************/
-=======
->>>>>>> 2fc3ed631ecbaa8de4c74effd81974665371276a
   console.log('MAP READY');
 };
 
 const loadMap = function(mapData) {
   let changed = false;
-  console.log(mapData);
+  //console.log(mapData);
+  console.log('current: ', currentMap);
+    console.log('new map: ', mapData);
   for (const key in mapData) {
+
     if (currentMap[key] !== mapData[key]) {
 
       changed = true;
     }
   }
-  if (!changed) return;
+  //if (!changed) return;
   currentMap = mapData;
   $('.map_intro h2').text(mapData.name);
   $('.map_intro p').text(mapData.description);
@@ -153,14 +153,22 @@ const loadPoints = function(id) {
 
 
   }).then((response) => {
-    console.log('POINTS RESULTS: ',response);
+    let changed = false;
+    for(let index in currentMap.points){
+      for(let key in currentMap.points[index]){
+        if(currentMap.points[index][key] !== response[index][key]){
+          changed = true;
+        }
+      }
+    }
+    if(!changed){
+      return;
+    }
+
     currentMap.points = response;
-    console.log("currentMap: ", currentMap);
     currentMap.markers = [];
     for (let point in response) {
-      console.log('POINT: ',point);
       const latLng = { lat: parseFloat(response[point].latitude), lng: parseFloat(response[point].longitude)};
-      console.log('latlng: ', latLng);
       const marker = new google.maps.Marker({
         position: latLng,
         map: map,
@@ -168,7 +176,6 @@ const loadPoints = function(id) {
       currentMap.markers.push(marker);
       const currentPoint = currentMap.points[point];
       currentMap.markers[point].addListener("click", () => {
-        console.log(point);
 
         const contentString =
         `<div id="content">
@@ -189,7 +196,6 @@ const loadPoints = function(id) {
         infowindow.open(map, currentMap.markers[point]);
       });
     }
-    console.log('AFter points: ', currentMap.markers);
   }).catch((err) => {
     console.log('err: ', err);
   });

@@ -214,6 +214,7 @@ $(document).ready(function() {
       }
 
       currentMap.id = response.mapId;
+      console.log('set new map!!!!!', currentMap.id);
       loadMap(currentMap);
     })
     .catch(err => console.log('err in add: ', err));
