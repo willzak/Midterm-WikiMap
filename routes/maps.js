@@ -15,7 +15,8 @@ const router  = express.Router();
 module.exports = (db, database) => {
   //loads all maps
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM maps;`;
+    let query = `SELECT maps.*, users.name as owner_name FROM maps
+    JOIN users on users.id = maps.owner_id;`;
     console.log(query);
     db.query(query)
       .then(data => {
