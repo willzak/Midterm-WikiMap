@@ -106,6 +106,8 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
+=======
   /**********************************
    * Dev demo code
    **********************************/
@@ -115,10 +117,18 @@ const login = function(user) {
   /**********************************
    * end dev demo
    **********************************/
+>>>>>>> 69dd5c4b93eeac7eaded92e2298914643b99db5c
   console.log('MAP READY');
 };
 
 const loadMap = function(mapData) {
+  let changed = false;
+  for (const key of mapData) {
+    if (currentMap[key] !== mapData[key]) {
+      changed = true;
+    }
+  }
+  if (!changed) return;
   currentMap = mapData;
   $('.map_intro h2').text(mapData.name);
   $('.map_intro p').text(mapData.description);
