@@ -106,6 +106,18 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+<<<<<<< HEAD
+=======
+  /**********************************
+   * Dev demo code
+   **********************************/
+  // loadMap(defaultMap);
+  // hideEditForm(false);
+  // currentView = setView('map', currentView);
+  /**********************************
+   * end dev demo
+   **********************************/
+>>>>>>> bf49ec8b6dad150f2a37d32292a3bfe66487e4b2
   console.log('MAP READY');
 };
 
@@ -127,4 +139,48 @@ const loadMap = function(mapData) {
   $('.save').hide();
 };
 
+
+
+//On list view - to load an indvidual map card
+const createMapCard = function(mapInfo) {
+  let $map = $(`
+  <div class='map-container'>
+    <div>
+      <h2>${mapInfo.name}</h2>
+      <p>${mapInfo.description}</p>
+      <p>Created By: ${mapInfo.owner_name}</p>
+    </div>
+    <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
+  </div>
+  `)
+  return $map;
+};
+
+//Load each map card from an array of data (can be changed to obj of data)
+const renderMaps = function(data) {
+  //organize by creation date
+  data.sort(function(x, y){
+    return y.id - x.id;
+  });
+
+  for (let mapInfo of data) {
+    let output = createMapCard(mapInfo);
+    $('.map-list').append(output);
+  }
+};
+
+let fakeMaps = [
+  {
+    id: 1,
+    name: 'Map1',
+    description: 'This is map 1 description',
+    owner_name: 'Map 1 owner'
+  },
+  {
+    id: 2,
+    name: 'Map2',
+    description: 'This is map 2 description',
+    owner_name: 'Map 2 owner'
+  }
+];
 
