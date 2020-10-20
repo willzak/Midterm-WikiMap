@@ -8,7 +8,9 @@ const defaultMap = {
   description: 'Please enter a title and description for your new map bellow.  When you are done, hit save to continue.',
   latitude: 52.627849747795025,
   longitude: -4416.512126890331,
-  zoom: 3
+  zoom: 3,
+  points: [],
+  markers: []
 };
 let currentMap = defaultMap;
 let map;
@@ -160,8 +162,11 @@ $(document).ready(function() {
       if (currentMap.id === response.id) {
         console.log("Successful Edit");
       }
+
+      currentMap.id = response.mapId;
       loadMap(currentMap);
-    });
+    })
+    .catch(err => console.log('err in add: ', err));
     //hide the form
     hideEditForm(true);
   });

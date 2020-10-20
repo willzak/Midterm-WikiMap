@@ -28,6 +28,28 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
+
+  router.get("/points", (req, res) => {
+    console.log('req: ', req.query);
+    const id = req.query.id;
+    console.log("IMHERE", id);
+    database.getPointsByMap(id)
+    .then(data=>{
+      data.latitude = parseFloat(data.latitude);
+      data.longitude = parseFloat(data.longitude);
+
+      res.send(data)}
+    )
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+
+
+  });
+
+
   //loads map by map_id
   router.get("/:id", (req, res) => {
     const id = req.params.id;
@@ -42,6 +64,8 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
+
+
 
   //route to add point
   router.post("/add_point", (req, res) => {

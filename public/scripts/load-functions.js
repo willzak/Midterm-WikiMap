@@ -56,6 +56,7 @@ const initMap = function() {
             console.log("error ", errorThrown);
           }
         }).then((response) => {
+          console.log('point for res: ',response);
           $('#point-form')[0].reset();
         }).catch((err) => {
           console.log('err: ', err);
@@ -82,7 +83,7 @@ const initMap = function() {
         //     }
         // });
         $('.map_container').slideDown();
-
+        loadPoints(currentMap.id);
         hideEditForm(true);
       });
   });
@@ -125,8 +126,60 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
-
+  loadPoints(mapData.id);
   $('.save').hide();
 };
 
+const loadPoints = function(id) {
+  const values = {id};
+  console.log('values: ', values);
+  $.ajax({
+    method: "GET",
+    url: "/api/maps/points",
+    data: values,
+    dataType: "json"
 
+
+  }).then((response) => {
+    console.log('POINTS RESULTS: ',response);
+    currentMap.points = response;
+    console.log("currentMap: ", currentMap);
+    currentMap.markers = [];
+    for (let point in response) {
+      console.log('POINT: ',point);
+      const latLng = { lat: parseFloat(response[point].latitude), lng: parseFloat(response[point].longitude)};
+      console.log('latlng: ', latLng);
+      const marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+      });
+      currentMap.markers.push(marker);
+      const currentPoint = currentMap.points[point];
+      currentMap.markers[point].addListener("click", () => {
+        console.log(point);
+
+        const contentString =
+        `<div id="content">
+    <div id="siteNotice">
+    </div>
+    <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+    <div id="bodyContent">
+        <li>Created by: ${currentPoint.creator_id}</li>
+        <li>Description: ${currentPoint.description}</li>
+        <img src=${currentPoint.image}><img>
+
+    </div>
+    </div>`;
+
+        const infowindow = new google.maps.InfoWindow({
+          content: contentString,
+        });
+        infowindow.open(map, currentMap.markers[point]);
+      });
+    }
+    console.log('AFter points: ', currentMap.markers);
+  }).catch((err) => {
+    console.log('err: ', err);
+  });
+
+};
