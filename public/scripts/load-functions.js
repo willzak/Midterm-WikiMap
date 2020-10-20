@@ -121,11 +121,7 @@ const login = function(user) {
 
 const loadMap = function(mapData) {
   let changed = false;
-  //console.log(mapData);
-  console.log('current: ', currentMap);
-    console.log('new map: ', mapData);
   for (const key in mapData) {
-
     if (currentMap[key] !== mapData[key]) {
 
       changed = true;
