@@ -12,18 +12,7 @@ const defaultMap = {
 };
 let currentMap = defaultMap;
 let map;
-let fakeMaps = [
-  {
-    name: 'Map1',
-    description: 'This is map 1 description',
-    owner_name: 'Map 1 owner'
-  },
-  {
-    name: 'Map2',
-    description: 'This is map 2 description',
-    owner_name: 'Map 2 owner'
-  }
-];
+
 //END Client side global variables
 
 $(document).ready(function() {
@@ -137,6 +126,7 @@ $(document).ready(function() {
   });
   //END profile_reg_view listeners
 
+  //LIST VIEW map population start
   const loadMapCards = function() {
     $(function() {
       //NEED TO RETRIEVE DATA HERE
@@ -146,6 +136,7 @@ $(document).ready(function() {
   }
 
   loadMapCards();
+  //LIST VIEW map population end
 
   //START map_view listeners
   //  edit_map

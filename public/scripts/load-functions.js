@@ -159,27 +159,18 @@ const renderMaps = function(data) {
   }
 };
 
-//TO INCLUDE IN $(document).ready
-
-// const loadMapCards = function() {
-//   $(function() {
-//     //NEED TO RETRIEVE DATA HERE
-//     $('.map-list').empty();
-//     renderMaps(fakeMaps)
-//   })
-// }
-
-// loadMapCards();
-
 let fakeMaps = [
   {
+    id: 1,
     name: 'Map1',
     description: 'This is map 1 description',
     owner_name: 'Map 1 owner'
   },
   {
+    id: 2,
     name: 'Map2',
     description: 'This is map 2 description',
     owner_name: 'Map 2 owner'
   }
 ];
+
