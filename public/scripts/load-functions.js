@@ -34,57 +34,55 @@ const initMap = function() {
     //disabling click until submission
     $('.map_container').slideUp();
 
-    $('#point-form')
-      .submit(event => {
-        event.preventDefault();
-        let $inputs = $('#point-form :input');
-        let values = {map_id: currentMap.id};
-        $inputs.each(function() {
-          values[this.name] = $(this).val();
-        });
+    $('#point-form').submit(event => {
+      event.preventDefault();
+      let $inputs = $('#point-form :input');
+      let values = {map_id: currentMap.id};
+      $inputs.each(function() {
+        values[this.name] = $(this).val();
+      });
 
-        //prevents double submission of the form
-        $(this).find(':submit').attr('disabled','disabled');
-
-
-        $.ajax({
-          method: "POST",
-          url: "/api/maps/add_point",
-          data: values
-
-          , error: function(jqXHR, textStatus, errorThrown) {
-            console.log("error ", errorThrown);
-          }
-        }).then((response) => {
+      //prevents double submission of the form
+      $(this).find(':submit').attr('disabled','disabled');
+      $.ajax({
+        method: "POST",
+        url: "/api/maps/add_point",
+        data: values
+        , error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error ", errorThrown);
+        }
+      })
+        .then((response) => {
           $('#point-form')[0].reset();
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log('err: ', err);
         });
-        // $.ajax({
-        //   method: "POST",
-        //   url: "/api/users/login",
-        //   data: values
-        // }).then((response) => {
-        //   console.log('result user: ',response);
-        //   user = response.user;
-        //   mapKey = response.map;
-        //   login(user);
-        // });
-        //   $.ajax({
-        //     url: '/resource_url_goes_here',
-        //     type : 'POST',
-        //     data: sendJson,
-        //     success: function(data){
-        //         /* implementation goes here */
-        //     },
-        //     error: function(jqXHR, textStatus, errorThrown) {
-        //         /* implementation goes here */
-        //     }
-        // });
-        $('.map_container').slideDown();
-        loadPoints(currentMap.id);
-        hideEditForm(true);
-      });
+      // $.ajax({
+      //   method: "POST",
+      //   url: "/api/users/login",
+      //   data: values
+      // }).then((response) => {
+      //   console.log('result user: ',response);
+      //   user = response.user;
+      //   mapKey = response.map;
+      //   login(user);
+      // });
+      //   $.ajax({
+      //     url: '/resource_url_goes_here',
+      //     type : 'POST',
+      //     data: sendJson,
+      //     success: function(data){
+      //         /* implementation goes here */
+      //     },
+      //     error: function(jqXHR, textStatus, errorThrown) {
+      //         /* implementation goes here */
+      //     }
+      // });
+      $('.map_container').slideDown();
+
+      hidePointForm(true);
+    });
   });
 };
 
@@ -106,15 +104,6 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-  /**********************************
-   * Dev demo code
-   **********************************/
-  // loadMap(defaultMap);
-  // hideEditForm(false);
-  // currentView = setView('map', currentView);
-  /**********************************
-   * end dev demo
-   **********************************/
   console.log('MAP READY');
 };
 
@@ -122,7 +111,6 @@ const loadMap = function(mapData) {
   let changed = false;
   for (const key in mapData) {
     if (currentMap[key] !== mapData[key]) {
-
       changed = true;
     }
   }
@@ -133,67 +121,10 @@ const loadMap = function(mapData) {
   $('.map_intro h6').text('Created by ' + user.name);
   map.setCenter({lat: mapData.latitude, lng: mapData.longitude});
   map.setZoom(map.zoom);
-  loadPoints(currentMap.id);
+
   $('.save').hide();
 };
 
-const loadPoints = function(id) {
-  const values = {id};
-  $.ajax({
-    method: "GET",
-    url: "/api/maps/points",
-    data: values,
-    dataType: "json"
-
-
-  }).then((response) => {
-    let changed = false;
-
-    for(let index in currentMap.points){
-      for(let key in currentMap.points[index]){
-        if(currentMap.points[index][key] !== response[index][key]){
-          changed = true;
-        }
-      }
-    }
-    // if(!changed){
-    //   return;
-    // }
-
-    currentMap.points = response;
-    currentMap.markers = [];
-    for (let point in response) {
-      const latLng = { lat: parseFloat(response[point].latitude), lng: parseFloat(response[point].longitude)};
-      const marker = new google.maps.Marker({
-        position: latLng,
-        map: map,
-      });
-      currentMap.markers.push(marker);
-      const currentPoint = currentMap.points[point];
-      currentMap.markers[point].addListener("click", () => {
-
-        const contentString =
-        `<div id="content">
-    <div id="siteNotice">
-    </div>
-    <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
-    <div id="bodyContent">
-        <li>Created by: ${currentPoint.creator_id}</li>
-        <li>Description: ${currentPoint.description}</li>
-        <img src=${currentPoint.image}><img>
-
-    </div>
-    </div>`;
-
-        const infowindow = new google.maps.InfoWindow({
-          content: contentString,
-        });
-        infowindow.open(map, currentMap.markers[point]);
-      });
-    }
-  }).catch((err) => {
-    console.log('err: ', err);
-  });
 
 
 //On list view - to load an indvidual map card
@@ -238,4 +169,3 @@ let fakeMaps = [
   }
 ];
 
-};
