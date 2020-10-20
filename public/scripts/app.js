@@ -12,6 +12,18 @@ const defaultMap = {
 };
 let currentMap = defaultMap;
 let map;
+let fakeMaps = [
+  {
+    name: 'Map1',
+    description: 'This is map 1 description',
+    owner_name: 'Map 1 owner'
+  },
+  {
+    name: 'Map2',
+    description: 'This is map 2 description',
+    owner_name: 'Map 2 owner'
+  }
+];
 //END Client side global variables
 
 $(document).ready(function() {
@@ -92,6 +104,7 @@ $(document).ready(function() {
     });
   });
   //END login_reg_view listeners
+
   //START profile_view listeners
   $('div.profile_update form').submit(event => {
     event.preventDefault();
@@ -123,6 +136,17 @@ $(document).ready(function() {
     });
   });
   //END profile_reg_view listeners
+
+  const loadMapCards = function() {
+    $(function() {
+      //NEED TO RETRIEVE DATA HERE
+      $('.map-list').empty();
+      renderMaps(fakeMaps)
+    })
+  }
+
+  loadMapCards();
+
   //START map_view listeners
   //  edit_map
   $('button.edit_map').click(function() {
