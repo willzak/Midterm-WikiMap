@@ -46,15 +46,14 @@ module.exports = (db, database) => {
     }
     //USER HELPER FUNCTION???
     database.getUserWithId(userId, db)
-    .then(user => {
-      if (!user) {
-        res.send({error: "no user with that id"});
-        return;
-      }
-
-      res.send({user: {name: user.name, id: userId}});
-    })
-    .catch(e => res.send(e));
+      .then(user => {
+        if (!user) {
+          res.send({error: "no user with that id"});
+          return;
+        }
+        res.send({user: {name: user.name, id: userId}});
+      })
+      .catch(e => res.send(e));
   });
 
   router.get("/:id", (req, res) => { //Profile page given userId
@@ -80,24 +79,15 @@ module.exports = (db, database) => {
   const login =  function(email, password) {
     return database.getUserWithEmail(email) //Change
       .then(user => {
-        console.log('login: ',user);
         return user;
       });
   };
 
   router.post('/login', (req, res) => {
-    console.log('HERE:', req.body);
     const {email, password} = req.body;
     login(email, password)
       .then(user => {
-
-        // if (!user) {
-        //   res.send({error: "error"});
-        //   return;
-        // }
         req.session.userId = user.id;
-        console.log('map key: ', process.env.MAP_API_KEY);
-
         res.send({user, map: process.env.MAP_API_KEY});
       })
       .catch(e => {
@@ -105,9 +95,15 @@ module.exports = (db, database) => {
         res.send(e)});
   });
 
-  router.post('/logout', (req, res) => {
-    req.session.userId = null;
-    res.send({});
+  router.post("/profile", (req, res) => {
+    const newUserData = req.body;
+    database.editUser(newUserData)
+      .then(()=> {
+        res.send({success: true});
+      }).catch(e => {
+        console.log('ERROR: ', e);
+        res.send(e);
+      });
   });
 
   return router;
