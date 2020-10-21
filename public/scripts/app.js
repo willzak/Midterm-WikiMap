@@ -14,6 +14,7 @@ const defaultMap = {
 };
 let currentMap = defaultMap;
 let map;
+let mapClickable = true;
 
 //END Client side global variables
 
@@ -215,7 +216,9 @@ $(document).ready(function() {
     hidePointForm(false);
   });
   $('#cancel_add_point').click(function() {
-    hidePointsForm(true);
+    $('.map_container').slideDown();
+    loadMap(currentMap);
+    hidePointForm(true);
   });
   // $('div.add_point > form').submit(event => {
   //   event.preventDefault();
