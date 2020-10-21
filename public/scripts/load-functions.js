@@ -1,4 +1,5 @@
 const initMap = function () {
+  console.log('KEY HERE!', mapKey)
   $("#map_script").attr(
     "src",
     `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
@@ -224,7 +225,9 @@ const loadPoints = function (id) {
 };
 
 //On list view - to load an indvidual map card
-const createMapCard = function (mapInfo) {
+const createMapCard = function (mapInfo, key) {
+  const image = createImage(mapInfo, key);
+
   let $map = $(`
   <div class='map-container'>
     <div>
@@ -233,13 +236,24 @@ const createMapCard = function (mapInfo) {
       <p>Created By: ${mapInfo.owner_name}</p>
       <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
-    <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
+    <img class='map-profile-img' src='${image}'>
   </div>
   `);
 
 
   return $map;
 };
+
+//Creates static screenshot of map
+const createImage = function(mapInfo, key) {
+  console.log('map info: ', mapInfo); //40.702147,-74.015794
+  center = {lat: mapInfo.latitude,
+            lng: mapInfo.longitude};
+  console.log(`https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=${key}`);
+
+
+  return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=${key}`;
+}
 
 //Load each map card from an array of data (can be changed to obj of data)
 const renderMaps = function (data) {
@@ -248,7 +262,7 @@ const renderMaps = function (data) {
     return y.id - x.id;
   });
   for (let mapInfo of data) {
-    let output = createMapCard(mapInfo);
+    let output = createMapCard(mapInfo, mapKey);
     $(".map-list").append(output);
   }
 };

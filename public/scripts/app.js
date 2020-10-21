@@ -65,11 +65,14 @@ $(document).ready(function() {
       console.log('result user: ',response);
       user = response.user;
       mapKey = response.map;
+      console.log('MAP KEY: ', mapKey);
       login(user);
       $inputs.each(function() {
         $(this).val('');
       });
     });
+    //NEEDED FOR IMAGE LOADING
+    loadMapCards(listView);
   });
 
   $('div.register > form').submit(event => {
@@ -177,7 +180,7 @@ $(document).ready(function() {
     })
   }
 
-  loadMapCards(listView);
+  //loadMapCards(listView);
 
   //Change View of list
   $('#fav').on('click', function(event) {
