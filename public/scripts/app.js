@@ -154,14 +154,14 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function() {
     $(function() {
-      $.ajax('http://localhost:8080/api/maps', { method: 'GET' })
-      .then (function(res) {
-        $('.map-list').empty();
-        console.log('maps obj: ', res);
-        renderMaps(res.maps);
-      })
-    })
-  }
+      $.ajax('http://localhost:8080/api/maps/list/all', { method: 'GET' })
+        .then (function(res) {
+          $('.map-list').empty();
+          console.log('maps obj: ', res);
+          renderMaps(res.maps);
+        });
+    });
+  };
 
   loadMapCards();
   //LIST VIEW map population end

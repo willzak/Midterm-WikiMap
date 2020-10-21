@@ -40,3 +40,9 @@ VALUES (2, 2, 'Mount Douglas Park', 'Nice hike with a beautiful view!', 'https:/
 
 INSERT INTO points (map_id, creator_id, title, description, image, longitude, latitude)
 VALUES (2, 3, 'Mount Tolmie Park', 'Great place for families', 'https://i2.wp.com/victoriahype.com/wp-content/uploads/2017/11/mount_tolmie_park_viewpoint.jpg?resize=1024%2C681&ssl=1', 48.457504, -123.325652);
+
+-- Favourites Starter Data
+INSERT INTO favourites (user_id, map_id) VALUES (1,3);
+INSERT INTO favourites (user_id, map_id) VALUES (1,2);
+INSERT INTO favourites (user_id, map_id) VALUES (2,2);
+

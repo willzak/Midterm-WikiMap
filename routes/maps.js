@@ -14,19 +14,19 @@ const router  = express.Router();
 
 module.exports = (db, database) => {
   //loads all maps
-  router.get("/", (req, res) => {
-    let query = `SELECT maps.*, users.name as owner_name FROM maps
-    JOIN users on users.id = maps.owner_id;`;
-    console.log(query);
-    db.query(query)
+  router.get("/list/:restriction", (req, res) => {
+    const restriction = req.params.restriction;
+    const userId = req.session.userId;
+    console.log(restriction, userId);
+    database.getMapList(restriction, userId)
       .then(data => {
-        const maps = data.rows;
+        const maps = data;
+        console.log('******************************** sending ', maps);
         res.json({ maps });
       })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
+      .catch(e => {
+        console.log('ERROR: ', e);
+        res.send(e);
       });
   });
 

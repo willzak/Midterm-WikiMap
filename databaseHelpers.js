@@ -61,11 +61,10 @@ const addUser =  function(newData) {
     references += `$${values.length}`;
   }
   let queryString = `
-  INSERT INTO users (${properties})
-  VALUES(${references})
-  RETURNING *;
-  `;
-  console.log('8**************addUser', queryString, values);
+    INSERT INTO users (${properties})
+    VALUES(${references})
+    RETURNING *;
+    `;
   return pool.query(queryString, values)
     .then(res => res.rows[0])
     .catch(err => console.log(err));
@@ -107,8 +106,6 @@ exports.editUser = editUser;
     } map
  * @param {*} pool
  */
-
-
 const addMap = function(map, pool) {
   let queryString = `
   INSERT INTO maps (name, owner_id, description, public_edits, latitude, longitude, zoom)
@@ -139,8 +136,6 @@ exports.addMap = addMap;
 } map
 * @param {*} pool
 */
-
-
 const editMap = function(map, pool) {
   let queryString = `
   UPDATE maps
@@ -181,72 +176,131 @@ exports.addPoint = addPoint;
  * @param {String} id
  * @return {Promise<{}>} A promise to the user
  */
-
- const getMapByID = function(id, pool) {
+const getMapByID = function(id, pool) {
   const queryString = `
   SELECT * FROM maps
   WHERE id = $1;
   `;
 
-   return pool.query(queryString, [id])
-   .then(res => res.rows[0])
- };
- exports.getMapByID = getMapByID;
+  return pool.query(queryString, [id])
+    .then(res => res.rows[0])
+};
+exports.getMapByID = getMapByID;
 
- /**
+/**
  * Get a specific map using map name
  * @param {String} name
  * @return {Promise<{}>} A promise to the user
  */
-
 const getMapByName = function(name) {
   const queryString = `
   SELECT * FROM maps
   WHERE name = $1;
   `;
 
-   return pool.query(queryString, [name])
-   .then(res => res.rows[0])
- };
- exports.getMapByName = getMapByName;
+  return pool.query(queryString, [name])
+    .then(res => res.rows[0])
+};
+exports.getMapByName = getMapByName;
 
- /**
+/**
   * Get points that belong to a certain map
   * @param {Integer} map_id
   * @return {Promise<{}>} A promise to the user
   */
-
-  const getPointsByMap = function(map_id) {
-    console.log('MAP_ID: ', map_id);
-    const queryString = `
+const getPointsByMap = function(map_id) {
+  console.log('MAP_ID: ', map_id);
+  const queryString = `
     SELECT * FROM points
     WHERE map_id = $1;
     `;
 
-    return pool.query(queryString, [map_id])
+  return pool.query(queryString, [map_id])
     .then(res => res.rows)
-  };
-  exports.getPointsByMap = getPointsByMap;
+};
+exports.getPointsByMap = getPointsByMap;
 
-  /**
+/**
    * Get the center object for a map
    * @param {id: integer, owner_id: integer, name: string, city: string, description: string, public_edits: boolean, latitude: integer, longitude: integer, zoom: integer}
    * @return {Promise<{}>}
    */
+const getCenterOfMap = function(map_id) {
+  const queryString = `
+    SELECT latitude, longitude
+    FROM maps
+    WHERE id = $1;
+    `;
 
-   const getCenterOfMap = function(map_id) {
-     const queryString = `
-     SELECT latitude, longitude
-     FROM maps
-     WHERE id = $1;
-     `;
+  return pool.query(queryString, [map_id])
+    .then(res => {
+      const center = {};
+      center[lat] = res.rows[0].longitude;
+      center[lng] = res.rows[0].latitude;
+      return center;
+    });
+};
+exports.getCenterOfMap = getCenterOfMap;
 
-     return pool.query(queryString, [map_id])
-     .then(res => {
-       const center = {};
-       center[lat] = res.rows[0].longitude;
-       center[lng] = res.rows[0].latitude;
-       return center;
-     });
-   };
-   exports.getCenterOfMap = getCenterOfMap;
+const getMapList = function(restriction, userID) {
+  let queryString = `SELECT maps.*, users.name as owner_name FROM maps
+  JOIN users on users.id = maps.owner_id`;
+  let values = undefined;
+  if (restriction === 'favs') {
+    queryString = `SELECT maps.*, users.name as owner_name
+    FROM users JOIN favourites ON user_id = users.id
+    JOIN maps ON maps.id = favourites.map_id
+    WHERE users.id = $1`;
+    values = [userID];
+  }
+  if (restriction === 'cont') {
+    queryString = `
+    SELECT * FROM
+    (SELECT maps.*, users.name AS owner_name
+      FROM maps JOIN users ON users.id = maps.owner_id
+      WHERE users.id = $1
+    UNION
+    SELECT points_part.*, users.name AS owner_name FROM
+      (SELECT maps.*
+        FROM users JOIN points ON creator_id = users.id
+        JOIN maps ON map_id = maps.id
+        WHERE users.id = $1
+      ) AS points_part
+      JOIN users ON points_part.owner_id = users.id) AS map_list
+    ORDER BY id`;
+    values = [userID];
+  }
+  if (restriction === 'favcont') {
+    queryString = `
+    SELECT * FROM
+    (SELECT maps.*, users.name as owner_name
+      FROM users JOIN favourites ON user_id = users.id
+      JOIN maps ON maps.id = favourites.map_id
+      WHERE users.id = $1
+    UNION
+    SELECT * FROM
+      (SELECT maps.*, users.name AS owner_name
+        FROM maps JOIN users ON users.id = maps.owner_id
+        WHERE users.id = $1
+      UNION
+      SELECT points_part.*, users.name AS owner_name FROM
+        (SELECT maps.*
+          FROM users JOIN points ON creator_id = users.id
+          JOIN maps ON map_id = maps.id
+          WHERE users.id = $1
+        ) AS points_part
+        JOIN users ON points_part.owner_id = users.id) AS sub_list) AS map_list
+    ORDER BY id`;
+    values = [userID];
+  }
+  console.log('********************************query', queryString);
+  if (values) {
+    return pool.query(queryString, values)
+      .then(res => res.rows)
+      .catch(err => console.log(err));
+  }
+  return pool.query(queryString)
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+};
+exports.getMapList = getMapList;
