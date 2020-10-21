@@ -20,21 +20,21 @@ const initMap = function () {
   });
 
   //Listener for clicks to add markers
-  if(mapClickable){
+  if (mapClickable) {
     map.addListener("click", (e) => {
-    mapClickable = false;
-    console.log("CLICKED! ", e.latLng);
-    marker.setMap(null);
-    marker = new google.maps.Marker({
-      position: e.latLng,
-      map: map,
+      mapClickable = false;
+      console.log("CLICKED! ", e.latLng);
+      marker.setMap(null);
+      marker = new google.maps.Marker({
+        position: e.latLng,
+        map: map,
+      });
+      $(".form_div input[name=lat]").val(e.latLng.lat);
+      $(".form_div  input[name=lng]").val(e.latLng.lng);
+      //disabling click until submission
+      //$(".map_container").slideUp();
     });
-    $(".form_div input[name=lat]").val(e.latLng.lat);
-    $(".form_div  input[name=lng]").val(e.latLng.lng);
-    //disabling click until submission
-    //$(".map_container").slideUp();
-  });
-  };
+  }
 
   $("#point-form").submit((event) => {
     event.preventDefault();
@@ -108,15 +108,6 @@ const login = function (user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-  /**********************************
-   * Dev demo code
-   **********************************/
-  // loadMap(defaultMap);
-  // hideEditForm(false);
-  // currentView = setView('map', currentView);
-  /**********************************
-   * end dev demo
-   **********************************/
   console.log("MAP READY");
 };
 
@@ -145,46 +136,44 @@ const loadPoints = function (id) {
     url: "/api/maps/points",
     data: values,
     dataType: "json",
-  })
-    .then((response) => {
-      let changed = false;
+  }).then((response) => {
+    let changed = false;
 
-      for (let index in currentMap.points) {
-        for (let key in currentMap.points[index]) {
-          if (currentMap.points[index][key] !== response[index][key]) {
-            changed = true;
-          }
+    for (let index in currentMap.points) {
+      for (let key in currentMap.points[index]) {
+        if (currentMap.points[index][key] !== response[index][key]) {
+          changed = true;
         }
       }
-      // if(!changed){
-      //   return;
-      // }
+    }
+    // if(!changed){
+    //   return;
+    // }
 
-      currentMap.points = response;
-      currentMap.markers = [];
-      for (let point in response) {
-        const latLng = {
-          lat: parseFloat(response[point].latitude),
-          lng: parseFloat(response[point].longitude),
-        };
-        const marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-        });
-        currentMap.markers.push(marker);
-        const currentPoint = currentMap.points[point];
-        let username = "";
-        currentMap.markers[point].addListener("click", () => {
-          //Make request to get creators name
-          $.ajax({
-            method: "GET",
-            url: `/api/users/${currentPoint.creator_id}`,
-            data: values,
-            dataType: "json",
-          }).then((response) => {
-            username = response.user[0].name;
-            const contentString =
-            `<div id="content">
+    currentMap.points = response;
+    currentMap.markers = [];
+    for (let point in response) {
+      const latLng = {
+        lat: parseFloat(response[point].latitude),
+        lng: parseFloat(response[point].longitude),
+      };
+      const marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+      });
+      currentMap.markers.push(marker);
+      const currentPoint = currentMap.points[point];
+      let username = "";
+      currentMap.markers[point].addListener("click", () => {
+        //Make request to get creators name
+        $.ajax({
+          method: "GET",
+          url: `/api/users/${currentPoint.creator_id}`,
+          data: values,
+          dataType: "json",
+        }).then((response) => {
+          username = response.user[0].name;
+          const contentString = `<div id="content">
             <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
             <div id="bodyContent">
                 <li>Created by: ${username}</li>
@@ -194,23 +183,21 @@ const loadPoints = function (id) {
             </div>
             </div>`;
 
-            const infowindow = new google.maps.InfoWindow({
-              content: contentString,
-            });
-            infowindow.open(map, currentMap.markers[point]);
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
           });
+          infowindow.open(map, currentMap.markers[point]);
         });
+      });
 
-        console.log("username response: ", username);
-      }
-    })
-    .catch((err) => {
-      console.log("err: ", err);
-    });
+      $(".save").hide();
+    }
+  });
+};
 
-  //On list view - to load an indvidual map card
-  const createMapCard = function (mapInfo) {
-    let $map = $(`
+//On list view - to load an indvidual map card
+const createMapCard = function (mapInfo) {
+  let $map = $(`
   <div class='map-container'>
     <div>
       <h2>${mapInfo.name}</h2>
@@ -220,33 +207,32 @@ const loadPoints = function (id) {
     <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
   </div>
   `);
-    return $map;
-  };
-
-  //Load each map card from an array of data (can be changed to obj of data)
-  const renderMaps = function (data) {
-    //organize by creation date
-    data.sort(function (x, y) {
-      return y.id - x.id;
-    });
-    for (let mapInfo of data) {
-      let output = createMapCard(mapInfo);
-      $(".map-list").append(output);
-    }
-  };
-
-  let fakeMaps = [
-    {
-      id: 1,
-      name: "Map1",
-      description: "This is map 1 description",
-      owner_name: "Map 1 owner",
-    },
-    {
-      id: 2,
-      name: "Map2",
-      description: "This is map 2 description",
-      owner_name: "Map 2 owner",
-    },
-  ];
+  return $map;
 };
+
+//Load each map card from an array of data (can be changed to obj of data)
+const renderMaps = function (data) {
+  //organize by creation date
+  data.sort(function (x, y) {
+    return y.id - x.id;
+  });
+  for (let mapInfo of data) {
+    let output = createMapCard(mapInfo);
+    $(".map-list").append(output);
+  }
+};
+
+let fakeMaps = [
+  {
+    id: 1,
+    name: "Map1",
+    description: "This is map 1 description",
+    owner_name: "Map 1 owner",
+  },
+  {
+    id: 2,
+    name: "Map2",
+    description: "This is map 2 description",
+    owner_name: "Map 2 owner",
+  },
+];

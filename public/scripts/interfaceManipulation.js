@@ -60,6 +60,7 @@ const setDefaultUI = function(views) {
  * @param {*} showHide false shows the form true hides it
  */
 const hideEditForm = function(showHide) {
+  console.log('HIDING');
   if (showHide) {
     $('button.edit_map').fadeIn();
     $('div.edit_map').slideUp();
