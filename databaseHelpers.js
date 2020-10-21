@@ -165,6 +165,36 @@ const addPoint = function(point) {
 
 exports.addPoint = addPoint;
 
+const editPoint = function(point, id) {
+  return pool.query( `
+  UPDATE points
+  SET map_id = $1,
+      title = $2,
+      description = $3,
+      image = $4,
+      longitude = $5,
+      latitude = $6
+
+  WHERE id = $7
+  `,[point.map_id, point.title, point.text, point.image, point.lng, point.lat, id])
+    .then(res => res.row)
+    .catch(err => console.log('edit error: ', err));
+};
+
+exports.editPoint = editPoint;
+
+const deletePoint = function(id) {
+  return pool.query( `
+  DELETE FROM points
+
+  WHERE id = $1
+  `,[id])
+    .then(res => res.row)
+    .catch(err => console.log('delete error: ', err));
+};
+
+exports.deletePoint = deletePoint;
+
 
 // FUNCTIONS FOR MAP VIEWS
 
@@ -212,9 +242,24 @@ const getPointsByMap = function(map_id) {
     `;
 
   return pool.query(queryString, [map_id])
-    .then(res => res.rows)
+    .then(res => {
+      console.log('res rows: ',res.rows);
+      return res.rows})
 };
 exports.getPointsByMap = getPointsByMap;
+
+const getPointsById = function(id) {
+  const queryString = `
+    SELECT * FROM points
+    WHERE id = $1;
+    `;
+
+  return pool.query(queryString, [id])
+    .then(res => {
+      console.log('res rows: ',res.rows);
+      return res.rows})
+};
+exports.getPointsById = getPointsById;
 
 /**
    * Get the center object (latitude and longitude) for a map

@@ -45,6 +45,7 @@ $(document).ready(function() {
   });
   $('#home_btn').click(function() {
     currentView = setView('list', currentView);
+    hidePointForm(true);
     loadMapCards(listView);
   });
   //END nav bar listeners
@@ -286,11 +287,12 @@ $(document).ready(function() {
   });
 
   //  add_point
-  $('div.map_container').click(function() {
-    hidePointForm(false);
-  });
+  // $('div.map_container').click(function() {
+  //   hidePointForm(false);
+  // });
   $('#cancel_add_point').click(function() {
     $('.map_container').slideDown();
+    $("#point-form")[0].reset();
     loadMap(currentMap);
     hidePointForm(true);
   });
@@ -316,5 +318,8 @@ $(document).ready(function() {
 
     $(this).hide();
   });
+
+  //listeners for edit point
+
   //END map_view listeners
 });

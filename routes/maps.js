@@ -31,7 +31,25 @@ module.exports = (db, database) => {
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
+      console.log('data: ', data);
+      res.send(data)}
+    )
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
 
+
+  });
+
+  router.get("/points/:id", (req, res) => {
+    const id = req.params.id;
+    database.getPointsById(id)
+    .then(data=>{
+      data.latitude = parseFloat(data.latitude);
+      data.longitude = parseFloat(data.longitude);
+      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -64,10 +82,27 @@ module.exports = (db, database) => {
   router.post("/add_point", (req, res) => {
     point = req.body;
     point.user_id = req.session.userId;
-    database.addPoint(point);
+    const id = parseInt(point.id);
+    console.log('point id in submit: ', id);
+    if(id === 0){
+      database.addPoint(point);
+    } else {
+      console.log('editing point:', point);
+      database.editPoint(point, id);
+    }
+
     res.json(point);
   });
 
+  router.post("/points/delete", (req, res) => {
+    point = req.body;
+    const id = parseInt(point.id);
+    console.log('point id in delete: ', id);
+
+
+    database.deletePoint(id);
+    res.json(point);
+  });
 
 
   //adds new map or edits existing map based on map_id is null or not

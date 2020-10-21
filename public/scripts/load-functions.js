@@ -33,10 +33,10 @@ const initMap = function() {
         position: e.latLng,
         map: map,
       });
-
+      hidePointForm(false);
       $(".form_div input[name=lat]").val(e.latLng.lat);
       $(".form_div  input[name=lng]").val(e.latLng.lng);
-
+      $(".form_div  input[name=id]").val(0);
 
       $('#cancel_add_point').click(function() {
         marker.setMap(null);
@@ -58,7 +58,7 @@ const initMap = function() {
 
     $.ajax({
       method: "POST",
-      url: "/api/maps/add_point",
+      url: `/api/maps/add_point/`,
       data: values,
 
       error: function(jqXHR, textStatus, errorThrown) {
@@ -175,9 +175,14 @@ const loadPoints = function(id) {
         }).then((response) => {
           username = response.user[0].name;
           //html layout for infoWindow
+          //console.log('point: ', currentPoint);
           const contentString =
             `<div id="content">
               <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+              <button type='button' class = 'edit-point'>Edit</button>
+              <button type='button' class = 'delete-point'> Delete </button>
+              <p hidden class = 'point-id'>${currentPoint.id}</p>
+              <p hidden class = 'map-id''> ${currentPoint.map_id} </p>
               <h3>Created by: ${username}</h3>
               <div id="bodyContent">
                   <li>Description: ${currentPoint.description}</li>
@@ -188,13 +193,64 @@ const loadPoints = function(id) {
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
           });
+
+          //listener for edit and delete point
+          google.maps.event.addListener(infowindow, 'domready', function() {
+            hidePointForm(true);
+            // Bind the click event on your button here
+            $('.edit-point').click(function() {
+              hidePointForm(false);
+
+              const point_id = $(this).siblings('.point-id').text();
+
+              $.ajax({
+                method: "GET",
+                url: `/api/maps/points/${currentPoint.creator_id}`,
+
+                dataType: "json",
+              }).then(res2 => {
+
+              $(".form_div input[name=title]").val(res2[0].title);
+              $(".form_div  textarea[name=text]").val(res2[0].description);
+              $(".form_div  input[name=image]").val(res2[0].image);
+              $(".form_div input[name=lat]").val(res2[0].latitude);
+              $(".form_div  input[name=lng]").val(res2[0].longitude);
+              $(".form_div  input[name=id]").val(point_id);
+              })
+              infowindow.close(map, currentMap.markers[point]);
+            })
+
+            $('.delete-point').click(function() {
+              const id = $(this).siblings('.point-id').text();
+              $.ajax({
+                method: "POST",
+                url: `/api/maps/points/delete`,
+                data: {id},
+                dataType: "json",
+              }).then(res => {
+                //reload map after delete
+                currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
+
+              })
+            });
+
+          });
           infowindow.open(map, currentMap.markers[point]);
+
         });
       });
       $(".save").hide();
     }
   });
 };
+
+const markerSearch = function(map, id) {
+  for(let index in map.points){
+    if(map.points[index].id === id){
+      return index;
+    }
+  }
+}
 
 //On list view - to load an indvidual map card
 const createMapCard = function(mapInfo, key) {
