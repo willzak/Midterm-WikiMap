@@ -14,6 +14,7 @@ const defaultMap = {
 };
 let currentMap = defaultMap;
 let map;
+let listView = '';
 
 //END Client side global variables
 
@@ -152,9 +153,9 @@ $(document).ready(function() {
   //END profile_reg_view listeners
 
   //LIST VIEW map population start
-  const loadMapCards = function() {
+  const loadMapCards = function(listView) {
     $(function() {
-      $.ajax('http://localhost:8080/api/maps', { method: 'GET' })
+      $.ajax(`http://localhost:8080/api/maps/${listView}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
         console.log('maps obj: ', res);
@@ -163,7 +164,24 @@ $(document).ready(function() {
     })
   }
 
-  loadMapCards();
+  loadMapCards(listView);
+
+  //Change View of list
+  $('#fav').on('click', function(event) {
+    event.preventDefault();
+    console.log('I CLICKED FAVOURITES')
+    listView += 'fav';
+    loadMapCards(listView);
+    listView = '';
+  })
+
+  $('#cont').on('click', function(event) {
+    event.preventDefault();
+    listView += 'cont';
+    loadMapCards(listView);
+    listView = '';
+  })
+
   //LIST VIEW map population end
 
   //START map_view listeners
