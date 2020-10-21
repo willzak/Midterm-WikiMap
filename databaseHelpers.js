@@ -147,10 +147,8 @@ const editMap = function(map, pool) {
   WHERE id = $6
   `;
   return pool.query(queryString ,[map.name, map.description, map.longitude, map.latitude, map.zoom, map.id])
-    .then(res => pool.query(`SELECT currval('maps_id_seq');`)
-      .then(res2 => {
-        return res2.rows[0].currval;
-      }))
+    .then(res => map.id
+      )
     .catch(err => console.log(err));
 };
 

@@ -296,8 +296,25 @@ $(document).ready(function() {
     console.log('center: Long', center.lng());
     console.log('center: zoom', zoom);
 
+    currentMap.latitude = center.lat();
+    currentMap.longitude = center.lng();
+    currentMap.zoom = zoom;
+
+    console.log('MAP NOW: ', currentMap);
 
 
+    $.ajax({
+      method: "POST",
+      url: `/api/maps/${currentMap.id}`,
+      data: currentMap
+    }).then((response) => {
+      console.log('result id: ',response);
+      if (currentMap.id === response.id) {
+        console.log("Successful Edit");
+        return;
+      }
+      currentMap.id = response.id;
+    });
 
     $(this).hide();
   });
