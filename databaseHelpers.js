@@ -243,16 +243,20 @@ const getCenterOfMap = function(map_id) {
 exports.getCenterOfMap = getCenterOfMap;
 
 const getMapList = function(restriction, userID) {
-  let queryString = `SELECT maps.*, users.name as owner_name FROM maps
+  let queryString = `
+  SELECT maps.*, users.name as owner_name
+  FROM maps
   JOIN users on users.id = maps.owner_id`;
   let values = undefined;
+
   if (restriction === 'favs') {
     queryString = `SELECT maps.*, users.name as owner_name
     FROM users JOIN favourites ON user_id = users.id
     JOIN maps ON maps.id = favourites.map_id
-    WHERE users.id = $1`;
+    WHERE users.id = $1;`;
     values = [userID];
   }
+
   if (restriction === 'cont') {
     queryString = `
     SELECT * FROM
@@ -270,6 +274,7 @@ const getMapList = function(restriction, userID) {
     ORDER BY id`;
     values = [userID];
   }
+
   if (restriction === 'favcont') {
     queryString = `
     SELECT * FROM
@@ -293,12 +298,16 @@ const getMapList = function(restriction, userID) {
     ORDER BY id`;
     values = [userID];
   }
+
   console.log('********************************query', queryString);
   if (values) {
     return pool.query(queryString, values)
-      .then(res => res.rows)
+      .then(res => {
+        return res.rows
+      })
       .catch(err => console.log(err));
   }
+
   return pool.query(queryString)
     .then(res => res.rows)
     .catch(err => console.log(err));
