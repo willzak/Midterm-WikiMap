@@ -22,6 +22,7 @@ let listCounter = 0;
 //END Client side global variables
 
 $(document).ready(function() {
+  initMap();
 
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map', 'list'];
@@ -319,7 +320,39 @@ $(document).ready(function() {
     $(this).hide();
   });
 
-  //listeners for edit point
+  $("#point-form").submit((event) => {
+    console.log('submit triggerd');
+    event.preventDefault();
+    mapClickable = true;
+    let $inputs = $("#point-form :input");
+    let values = { map_id: currentMap.id };
+    $inputs.each(function() {
+      values[this.name] = $(this).val();
+    });
+
+    //prevents double submission of the form
+    //$(this).find(":submit").attr("disabled", "disabled");
+
+    $.ajax({
+      method: "POST",
+      url: `/api/maps/add_point/`,
+      data: values,
+
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log("error ", errorThrown);
+      },
+    })
+      .then((response) => {
+        $("#point-form")[0].reset();
+      })
+      .catch((err) => {
+        console.log("err: ", err);
+      });
+
+    $(".map_container").slideDown();
+    loadPoints(currentMap.id);
+    hidePointForm(true);
+  });
 
   //END map_view listeners
 });

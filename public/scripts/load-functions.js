@@ -11,7 +11,7 @@ const initMap = function() {
     zoom: 3,
   });
 
-  let marker = new google.maps.Marker({ map: null });
+  //let marker = new google.maps.Marker({ map: null });
   $(".save").hide();
 
   //listner for zoom change
@@ -28,8 +28,8 @@ const initMap = function() {
   if (mapClickable) {
     map.addListener("click", (e) => {
       mapClickable = false;
-      marker.setMap(null);
-      marker = new google.maps.Marker({
+      //marker.setMap(null);
+      const marker = new google.maps.Marker({
         position: e.latLng,
         map: map,
       });
@@ -44,38 +44,7 @@ const initMap = function() {
     });
   }
 
-  $("#point-form").submit((event) => {
-    event.preventDefault();
-    mapClickable = true;
-    let $inputs = $("#point-form :input");
-    let values = { map_id: currentMap.id };
-    $inputs.each(function() {
-      values[this.name] = $(this).val();
-    });
 
-    //prevents double submission of the form
-    $(this).find(":submit").attr("disabled", "disabled");
-
-    $.ajax({
-      method: "POST",
-      url: `/api/maps/add_point/`,
-      data: values,
-
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log("error ", errorThrown);
-      },
-    })
-      .then((response) => {
-        $("#point-form")[0].reset();
-      })
-      .catch((err) => {
-        console.log("err: ", err);
-      });
-
-    $(".map_container").slideDown();
-    loadPoints(currentMap.id);
-    hidePointForm(true);
-  });
 };
 
 const loadProfile = function(user) {
@@ -161,6 +130,7 @@ const loadPoints = function(id) {
         position: latLng,
         map: map,
       });
+
       //Adds marker to the array in currentMap
       currentMap.markers.push(marker);
       const currentPoint = currentMap.points[point];
@@ -229,7 +199,16 @@ const loadPoints = function(id) {
                 dataType: "json",
               }).then(res => {
                 //reload map after delete
+                console.log("THIS MARKER: ", currentMap.markers[markerSearch(currentMap, parseInt(id))]);
+
                 currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
+                currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
+                //currentMap.markers[markerSearch(currentMap, parseInt(id))].visible = false;
+                currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
+                currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
+                console.log('MAP NOW: ', currentMap);
+                initMap();
+                loadMap(currentMap);
 
               })
             });
