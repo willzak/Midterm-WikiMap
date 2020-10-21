@@ -15,7 +15,8 @@ const defaultMap = {
 let currentMap = defaultMap;
 let map;
 let mapClickable = true;
-let listView = '';
+let listView = 'none';
+let listCounter = 0;
 
 //END Client side global variables
 
@@ -156,10 +157,10 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function(listView) {
     $(function() {
-      $.ajax(`http://localhost:8080/api/maps/${listView}`, { method: 'GET' })
+      $.ajax(`http://localhost:8080/api/maps/list/${listView}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
-        console.log('maps obj: ', res);
+        console.log('maps obj: ', `http://localhost:8080/api/maps/list/${listView}`);
         renderMaps(res.maps);
       })
     })
@@ -170,17 +171,28 @@ $(document).ready(function() {
   //Change View of list
   $('#fav').on('click', function(event) {
     event.preventDefault();
-    console.log('I CLICKED FAVOURITES')
-    listView += 'fav';
+    listView = 'favs';
+    if (listCounter === 0) {
+      listCounter += 1;
+      listView = 'favs';
+    } else {
+      listCounter = 0;
+      listView = 'favcont';
+    }
     loadMapCards(listView);
-    listView = '';
   })
 
   $('#cont').on('click', function(event) {
     event.preventDefault();
-    listView += 'cont';
-    loadMapCards(listView);
     listView = '';
+    if (listCounter === 0) {
+      listCounter += 1;;
+      listView = 'cont';
+    } else {
+      listCounter = 0;
+      listView += 'favcont';
+    }
+    loadMapCards(listView);
   })
 
   //LIST VIEW map population end

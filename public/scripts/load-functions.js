@@ -224,18 +224,3 @@ const renderMaps = function (data) {
     $(".map-list").append(output);
   }
 };
-
-let fakeMaps = [
-  {
-    id: 1,
-    name: "Map1",
-    description: "This is map 1 description",
-    owner_name: "Map 1 owner",
-  },
-  {
-    id: 2,
-    name: "Map2",
-    description: "This is map 2 description",
-    owner_name: "Map 2 owner",
-  },
-];
