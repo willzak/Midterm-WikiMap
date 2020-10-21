@@ -16,7 +16,6 @@
  * $(document).ready function.
  */
 const setView = function(newView, currentView) {
-  console.log(newView, currentView);
   $('.' + currentView + '_view').fadeOut(() => {
     $('.' + newView + '_view').fadeIn();
   });
@@ -45,6 +44,7 @@ const setDefaultUI = function(views) {
   for (let i = 1; i < views.length; i++) {
     $('.' + views[i] + '_view').hide();
   }
+
   $('.' + views[0] + '_view').fadeIn();
   loggedIn(false);
   hideEditForm(true);
@@ -60,12 +60,12 @@ const setDefaultUI = function(views) {
  * @param {*} showHide false shows the form true hides it
  */
 const hideEditForm = function(showHide) {
-  console.log('HIDING');
   if (showHide) {
     $('button.edit_map').fadeIn();
     $('div.edit_map').slideUp();
     return;
   }
+
   $('button.edit_map').fadeOut();
   $('div.edit_map').slideDown();
 };
@@ -80,6 +80,7 @@ const hidePointForm = function(showHide) {
     $('div.add_point').slideUp();
     return;
   }
+
   $('h5.add_point').fadeOut();
   $('div.add_point').slideDown();
 };
