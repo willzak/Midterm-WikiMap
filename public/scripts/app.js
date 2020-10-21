@@ -108,6 +108,11 @@ $(document).ready(function() {
   //END login_reg_view listeners
 
   //START profile_view listeners
+  $('#cancel_profile_update').click(function() {
+    currentView = setView('list', currentView);
+    loadProfile(user);
+  });
+
   $('div.profile_update form').submit(event => {
     event.preventDefault();
     //retrieve values from the form
@@ -153,9 +158,9 @@ $(document).ready(function() {
   //END profile_reg_view listeners
 
   //LIST VIEW map population start
-  const loadMapCards = function() {
+  const loadMapCards = function(restriction) {
     $(function() {
-      $.ajax('http://localhost:8080/api/maps/list/all', { method: 'GET' })
+      $.ajax(`http://localhost:8080/api/maps/list/${restriction}`, { method: 'GET' })
         .then (function(res) {
           $('.map-list').empty();
           console.log('maps obj: ', res);
@@ -164,7 +169,7 @@ $(document).ready(function() {
     });
   };
 
-  loadMapCards();
+  loadMapCards('all');
   //LIST VIEW map population end
 
   //START map_view listeners
