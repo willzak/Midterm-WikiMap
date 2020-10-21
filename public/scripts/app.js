@@ -110,6 +110,11 @@ $(document).ready(function() {
   //END login_reg_view listeners
 
   //START profile_view listeners
+  $('#cancel_profile_update').click(function() {
+    currentView = setView('list', currentView);
+    loadProfile(user);
+  });
+
   $('div.profile_update form').submit(event => {
     event.preventDefault();
     //retrieve values from the form

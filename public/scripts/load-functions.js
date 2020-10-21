@@ -95,12 +95,16 @@ const initMap = function () {
 
 const loadProfile = function (user) {
   // fill in the title block
-  $(".profile_title img").attr("src", user.profile_photo);
+  if (user.profile_photo) {
+    $(".profile_title img").attr("src", user.profile_photo);
+  }
   $(".profile_title h2").text(user.name);
   // fill in the form fields
   $(".profile_update input[name=name]").val(user.name);
   $(".profile_update input[name=email]").val(user.email);
-  $(".profile_update input[name=profile_photo]").val(user.profile_photo);
+  if (user.profile_photo) {
+    $(".profile_update input[name=profile_photo]").val(user.profile_photo);
+  }
   $(".profile_update input[name=password]").val(user.password);
   $(".profile_update input[name=confirm_password]").val(user.password);
 };
