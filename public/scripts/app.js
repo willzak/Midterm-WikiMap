@@ -14,6 +14,7 @@ const defaultMap = {
 };
 let currentMap = defaultMap;
 let map;
+let mapClickable = true;
 
 //END Client side global variables
 

@@ -20,7 +20,9 @@ const initMap = function () {
   });
 
   //Listener for clicks to add markers
-  map.addListener("click", (e) => {
+  if(mapClickable){
+    map.addListener("click", (e) => {
+    mapClickable = false;
     console.log("CLICKED! ", e.latLng);
     marker.setMap(null);
     marker = new google.maps.Marker({
@@ -30,11 +32,13 @@ const initMap = function () {
     $(".form_div input[name=lat]").val(e.latLng.lat);
     $(".form_div  input[name=lng]").val(e.latLng.lng);
     //disabling click until submission
-    $(".map_container").slideUp();
+    //$(".map_container").slideUp();
   });
+  };
 
   $("#point-form").submit((event) => {
     event.preventDefault();
+    mapClickable = true;
     let $inputs = $("#point-form :input");
     let values = { map_id: currentMap.id };
     $inputs.each(function () {
@@ -179,17 +183,16 @@ const loadPoints = function (id) {
             dataType: "json",
           }).then((response) => {
             username = response.user[0].name;
-            const contentString = `<div id="content">
-    <div id="siteNotice">
-    </div>
-    <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
-    <div id="bodyContent">
-        <li>Created by: ${username}</li>
-        <li>Description: ${currentPoint.description}</li>
-        <img src=${currentPoint.image}><img>
+            const contentString =
+            `<div id="content">
+            <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+            <div id="bodyContent">
+                <li>Created by: ${username}</li>
+                <li>Description: ${currentPoint.description}</li>
+                <img src=${currentPoint.image}><img>
 
-    </div>
-    </div>`;
+            </div>
+            </div>`;
 
             const infowindow = new google.maps.InfoWindow({
               content: contentString,
