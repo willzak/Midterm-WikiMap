@@ -1,19 +1,24 @@
+
+// Initialize google maps API
 const initMap = function () {
   $("#map_script").attr(
     "src",
     `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
   );
+
   map = new google.maps.Map(document.getElementById("test_map"), {
     center: { lat: 52.627849747795025, lng: -4416.512126890331 },
     zoom: 3,
   });
-  console.log("center: ", map.getCenter());
+
   let marker = new google.maps.Marker({ map: null });
   $(".save").hide();
+
   //listner for zoom change
   map.addListener("zoom_changed", function () {
     $(".save").show();
   });
+
   //listner for center change
   map.addListener("center_changed", function () {
     $(".save").show();
@@ -23,12 +28,12 @@ const initMap = function () {
   if (mapClickable) {
     map.addListener("click", (e) => {
       mapClickable = false;
-      console.log("CLICKED! ", e.latLng);
       marker.setMap(null);
       marker = new google.maps.Marker({
         position: e.latLng,
         map: map,
       });
+
       $(".form_div input[name=lat]").val(e.latLng.lat);
       $(".form_div  input[name=lng]").val(e.latLng.lng);
 
@@ -66,27 +71,7 @@ const initMap = function () {
       .catch((err) => {
         console.log("err: ", err);
       });
-    // $.ajax({
-    //   method: "POST",
-    //   url: "/api/users/login",
-    //   data: values
-    // }).then((response) => {
-    //   console.log('result user: ',response);
-    //   user = response.user;
-    //   mapKey = response.map;
-    //   login(user);
-    // });
-    //   $.ajax({
-    //     url: '/resource_url_goes_here',
-    //     type : 'POST',
-    //     data: sendJson,
-    //     success: function(data){
-    //         /* implementation goes here */
-    //     },
-    //     error: function(jqXHR, textStatus, errorThrown) {
-    //         /* implementation goes here */
-    //     }
-    // });
+
     $(".map_container").slideDown();
     loadPoints(currentMap.id);
     hidePointForm(true);
@@ -98,13 +83,17 @@ const loadProfile = function (user) {
   if (user.profile_photo) {
     $(".profile_title img").attr("src", user.profile_photo);
   }
+
   $(".profile_title h2").text(user.name);
+
   // fill in the form fields
   $(".profile_update input[name=name]").val(user.name);
   $(".profile_update input[name=email]").val(user.email);
+
   if (user.profile_photo) {
     $(".profile_update input[name=profile_photo]").val(user.profile_photo);
   }
+
   $(".profile_update input[name=password]").val(user.password);
   $(".profile_update input[name=confirm_password]").val(user.password);
 };
@@ -115,15 +104,12 @@ const login = function (user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-  console.log("MAP READY");
 };
 
 const loadMap = function (mapData) {
   console.log('LOAD MAP: ', mapData);
     //clear old points
   if(!currentMap.markers){
-    console.log('im here');
-
     currentMap.markers = [];
   }
   console.log('these markers: ', currentMap.markers);
@@ -133,12 +119,7 @@ const loadMap = function (mapData) {
     }
     currentMap.markers = [];
   let changed = false;
-  // for (const key in mapData) {
-  //   if (currentMap[key] !== mapData[key]) {
-  //     changed = true;
-  //   }
-  // }
-  // if (!changed) return;
+
   currentMap = mapData;
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
@@ -148,6 +129,10 @@ const loadMap = function (mapData) {
 
 
 
+  for(let marker in currentMap.markers){
+    currentMap.markers[marker].setMap(null);
+  }
+  currentMap.markers = [];
 
   loadPoints(currentMap.id);
   $(".save").hide();
@@ -162,7 +147,6 @@ const loadPoints = function (id) {
     dataType: "json",
   }).then((response) => {
     let changed = false;
-    console.log('points: ',response);
     for (let index in currentMap.points) {
       for (let key in currentMap.points[index]) {
         if (currentMap.points[index][key] !== response[index][key]) {
@@ -170,9 +154,6 @@ const loadPoints = function (id) {
         }
       }
     }
-    // if(!changed){
-    //   return;
-    // }
 
     currentMap.points = response;
 
@@ -189,7 +170,6 @@ const loadPoints = function (id) {
       });
 
       currentMap.markers.push(marker);
-      console.log('adding marker: ', currentMap.markers)
       const currentPoint = currentMap.points[point];
       let username = "";
       currentMap.markers[point].addListener("click", () => {
@@ -237,16 +217,15 @@ const createMapCard = function (mapInfo) {
   </div>
   `);
 
-
   return $map;
 };
 
-//Load each map card from an array of data (can be changed to obj of data)
+//Load each map card from an array of data
 const renderMaps = function (data) {
-  //organize by creation date
   data.sort(function (x, y) {
     return y.id - x.id;
   });
+
   for (let mapInfo of data) {
     let output = createMapCard(mapInfo);
     $(".map-list").append(output);
