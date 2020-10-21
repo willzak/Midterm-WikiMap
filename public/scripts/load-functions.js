@@ -31,8 +31,11 @@ const initMap = function () {
       });
       $(".form_div input[name=lat]").val(e.latLng.lat);
       $(".form_div  input[name=lng]").val(e.latLng.lng);
-      //disabling click until submission
-      //$(".map_container").slideUp();
+
+
+      $('#cancel_add_point').click(function() {
+        marker.setMap(null);
+      });
     });
   }
 
