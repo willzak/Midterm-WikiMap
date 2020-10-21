@@ -15,6 +15,7 @@ const defaultMap = {
 let currentMap = defaultMap;
 let map;
 let mapClickable = true;
+let listView = '';
 
 //END Client side global variables
 
@@ -108,6 +109,11 @@ $(document).ready(function() {
   //END login_reg_view listeners
 
   //START profile_view listeners
+  $('#cancel_profile_update').click(function() {
+    currentView = setView('list', currentView);
+    loadProfile(user);
+  });
+
   $('div.profile_update form').submit(event => {
     event.preventDefault();
     //retrieve values from the form
@@ -153,8 +159,9 @@ $(document).ready(function() {
   //END profile_reg_view listeners
 
   //LIST VIEW map population start
-  const loadMapCards = function() {
+  const loadMapCards = function(listView) {
     $(function() {
+<<<<<<< HEAD
       $.ajax('http://localhost:8080/api/maps/list/all', { method: 'GET' })
         .then (function(res) {
           $('.map-list').empty();
@@ -164,8 +171,35 @@ $(document).ready(function() {
         });
     });
   };
+=======
+      $.ajax(`http://localhost:8080/api/maps/${listView}`, { method: 'GET' })
+      .then (function(res) {
+        $('.map-list').empty();
+        console.log('maps obj: ', res);
+        renderMaps(res.maps);
+      })
+    })
+  }
 
-  loadMapCards();
+  loadMapCards(listView);
+
+  //Change View of list
+  $('#fav').on('click', function(event) {
+    event.preventDefault();
+    console.log('I CLICKED FAVOURITES')
+    listView += 'fav';
+    loadMapCards(listView);
+    listView = '';
+  })
+
+  $('#cont').on('click', function(event) {
+    event.preventDefault();
+    listView += 'cont';
+    loadMapCards(listView);
+    listView = '';
+  })
+>>>>>>> 174717cdc40156de943fe03233b173102ae0aeb7
+
   //LIST VIEW map population end
 
   //START LIST VIEW listeners
