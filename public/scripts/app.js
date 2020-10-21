@@ -15,8 +15,7 @@ const defaultMap = {
 let currentMap = defaultMap;
 let map;
 let mapClickable = true;
-let listView = '';
-
+let listView = 'all';
 //END Client side global variables
 
 $(document).ready(function() {
@@ -160,19 +159,9 @@ $(document).ready(function() {
 
   //LIST VIEW map population start
   const loadMapCards = function(listView) {
+    console.log('loading map cards');
     $(function() {
-<<<<<<< HEAD
-      $.ajax('http://localhost:8080/api/maps/list/all', { method: 'GET' })
-        .then (function(res) {
-          $('.map-list').empty();
-          console.log('maps obj: ', res);
-          renderMaps(res.maps);
-
-        });
-    });
-  };
-=======
-      $.ajax(`http://localhost:8080/api/maps/${listView}`, { method: 'GET' })
+      $.ajax(`http://localhost:8080/api/maps/list/${listView}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
         console.log('maps obj: ', res);
@@ -198,12 +187,12 @@ $(document).ready(function() {
     loadMapCards(listView);
     listView = '';
   })
->>>>>>> 174717cdc40156de943fe03233b173102ae0aeb7
 
   //LIST VIEW map population end
 
   //START LIST VIEW listeners
   $('.map-list').on('mouseenter', '.map-container', function(e) {
+    console.log('this box: ', $(this).children('div').children('.map-id').text());
     $.ajax({
       method: "GET",
       url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,

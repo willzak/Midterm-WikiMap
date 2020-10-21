@@ -119,6 +119,7 @@ const login = function (user) {
 };
 
 const loadMap = function (mapData) {
+  console.log('LOAD MAP: ', mapData);
   let changed = false;
   for (const key in mapData) {
     if (currentMap[key] !== mapData[key]) {
@@ -132,6 +133,20 @@ const loadMap = function (mapData) {
   $(".map_intro h6").text("Created by " + user.name);
   map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
   map.setZoom(map.zoom);
+  //clear old points
+  if(!currentMap.markers){
+    console.log('im here');
+
+    currentMap.markers = [];
+  }
+  console.log('these markers: ', currentMap.markers);
+    for(let marker in currentMap.markers){
+      console.log('deleting markers: ', currentMap.markers[marker]);
+      currentMap.markers[marker].setMap(null);
+    }
+    currentMap.markers = [];
+
+
   loadPoints(currentMap.id);
   $(".save").hide();
 };
@@ -158,17 +173,19 @@ const loadPoints = function (id) {
     // }
 
     currentMap.points = response;
-    currentMap.markers = [];
+
     for (let point in response) {
       const latLng = {
         lat: parseFloat(response[point].latitude),
         lng: parseFloat(response[point].longitude),
       };
-      const marker = new google.maps.Marker({
+      marker = new google.maps.Marker({
         position: latLng,
         map: map,
       });
+
       currentMap.markers.push(marker);
+      console.log('adding marker: ', currentMap.markers)
       const currentPoint = currentMap.points[point];
       let username = "";
       currentMap.markers[point].addListener("click", () => {
