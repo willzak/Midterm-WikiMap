@@ -65,7 +65,6 @@ $(document).ready(function() {
     }).then((response) => {
       user = response.user;
       mapKey = response.map;
-      console.log('MAP KEY: ', mapKey);
       login(user);
       $inputs.each(function() {
         $(this).val('');

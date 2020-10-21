@@ -1,7 +1,6 @@
 
 // Initialize google maps API
-const initMap = function () {
-  console.log('KEY HERE!', mapKey)
+const initMap = function() {
   $("#map_script").attr(
     "src",
     `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
@@ -16,12 +15,12 @@ const initMap = function () {
   $(".save").hide();
 
   //listner for zoom change
-  map.addListener("zoom_changed", function () {
+  map.addListener("zoom_changed", function() {
     $(".save").show();
   });
 
   //listner for center change
-  map.addListener("center_changed", function () {
+  map.addListener("center_changed", function() {
     $(".save").show();
   });
 
@@ -50,7 +49,7 @@ const initMap = function () {
     mapClickable = true;
     let $inputs = $("#point-form :input");
     let values = { map_id: currentMap.id };
-    $inputs.each(function () {
+    $inputs.each(function() {
       values[this.name] = $(this).val();
     });
 
@@ -62,7 +61,7 @@ const initMap = function () {
       url: "/api/maps/add_point",
       data: values,
 
-      error: function (jqXHR, textStatus, errorThrown) {
+      error: function(jqXHR, textStatus, errorThrown) {
         console.log("error ", errorThrown);
       },
     })
@@ -79,7 +78,7 @@ const initMap = function () {
   });
 };
 
-const loadProfile = function (user) {
+const loadProfile = function(user) {
   // fill in the title block
   if (user.profile_photo) {
     $(".profile_title img").attr("src", user.profile_photo);
@@ -99,7 +98,7 @@ const loadProfile = function (user) {
   $(".profile_update input[name=confirm_password]").val(user.password);
 };
 
-const login = function (user) {
+const login = function(user) {
   loadProfile(user);
   currentView = setView("list", currentView);
   loggedIn(true);
@@ -107,19 +106,15 @@ const login = function (user) {
   initMap();
 };
 
-const loadMap = function (mapData) {
-  console.log('LOAD MAP: ', mapData);
-    //clear old points
-  if(!currentMap.markers){
+const loadMap = function(mapData) {
+  //clear old points from currentMaps
+  if (!currentMap.markers) {
     currentMap.markers = [];
   }
-  console.log('these markers: ', currentMap.markers);
-    for(let marker in currentMap.markers){
-      console.log('deleting markers: ', currentMap.markers[marker]);
-      currentMap.markers[marker].setMap(null);
-    }
-    currentMap.markers = [];
-  let changed = false;
+  for (let marker in currentMap.markers) {
+    currentMap.markers[marker].setMap(null);
+  }
+  currentMap.markers = [];
 
   currentMap = mapData;
   $(".map_intro h2").text(mapData.name);
@@ -128,18 +123,16 @@ const loadMap = function (mapData) {
   map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
   map.setZoom(mapData.zoom);
 
-
-
-  for(let marker in currentMap.markers){
+  for (let marker in currentMap.markers) {
     currentMap.markers[marker].setMap(null);
   }
   currentMap.markers = [];
-
   loadPoints(currentMap.id);
   $(".save").hide();
 };
 
-const loadPoints = function (id) {
+const loadPoints = function(id) {
+  //Request to get points data given map id
   const values = { id };
   $.ajax({
     method: "GET",
@@ -157,9 +150,8 @@ const loadPoints = function (id) {
     }
 
     currentMap.points = response;
-
     currentMap.markers = [];
-    console.log('before push: ', currentMap.markers);
+    //Iterates through list of points and create markers and info window for each.
     for (let point in response) {
       const latLng = {
         lat: parseFloat(response[point].latitude),
@@ -169,7 +161,7 @@ const loadPoints = function (id) {
         position: latLng,
         map: map,
       });
-
+      //Adds marker to the array in currentMap
       currentMap.markers.push(marker);
       const currentPoint = currentMap.points[point];
       let username = "";
@@ -182,32 +174,30 @@ const loadPoints = function (id) {
           dataType: "json",
         }).then((response) => {
           username = response.user[0].name;
-          const contentString = `<div id="content">
-            <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
-            <h3>Created by: ${username}</h3>
-            <div id="bodyContent">
-
-                <li>Description: ${currentPoint.description}</li>
-                </br>
-                <img class = "info-window-img" src=${currentPoint.image}><img>
-
-            </div>
+          //html layout for infoWindow
+          const contentString =
+            `<div id="content">
+              <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+              <h3>Created by: ${username}</h3>
+              <div id="bodyContent">
+                  <li>Description: ${currentPoint.description}</li>
+                  </br>
+                  <img class = "info-window-img" src=${currentPoint.image}><img>
+              </div>
             </div>`;
-
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
           });
           infowindow.open(map, currentMap.markers[point]);
         });
       });
-
       $(".save").hide();
     }
   });
 };
 
 //On list view - to load an indvidual map card
-const createMapCard = function (mapInfo, key) {
+const createMapCard = function(mapInfo, key) {
   const image = createImage(mapInfo, key);
 
   let $map = $(`
@@ -227,18 +217,12 @@ const createMapCard = function (mapInfo, key) {
 
 //Creates static screenshot of map
 const createImage = function(mapInfo, key) {
-  console.log('map info: ', mapInfo); //40.702147,-74.015794
-  center = {lat: mapInfo.latitude,
-            lng: mapInfo.longitude};
-  console.log(`https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=${key}`);
-
-
-  return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=${key}`;
-}
+  return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&key=${key}`;
+};
 
 //Load each map card from an array of data (can be changed to obj of data)
-const renderMaps = function (data) {
-  data.sort(function (x, y) {
+const renderMaps = function(data) {
+  data.sort(function(x, y) {
     return y.id - x.id;
   });
 

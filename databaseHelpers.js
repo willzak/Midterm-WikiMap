@@ -32,7 +32,6 @@ const getUserWithId = function(id, pool) {
   WHERE id = $1
   `, [id])
     .then(res => {
-      console.log(res.rows[0]);
       return res.rows[0]});
 };
 exports.getUserWithId = getUserWithId;
@@ -156,7 +155,6 @@ const editMap = function(map, pool) {
 exports.editMap = editMap;
 
 const addPoint = function(point) {
-  console.log('POINT INSIDE ADD POINT: ', point);
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
   VALUES($1, $2, $3, $4, $5, $6, $7);
@@ -208,7 +206,6 @@ exports.getMapByName = getMapByName;
   * @return {Promise<{}>} A promise to the user
   */
 const getPointsByMap = function(map_id) {
-  console.log('MAP_ID: ', map_id);
   const queryString = `
     SELECT * FROM points
     WHERE map_id = $1;
