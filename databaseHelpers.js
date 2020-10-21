@@ -310,9 +310,7 @@ const getMapList = function(restriction, userID) {
 
   if (values) {
     return pool.query(queryString, values)
-      .then(res => {
-        return res.rows
-      })
+      .then(res => res.rows)
       .catch(err => console.log(err));
   }
 
@@ -321,3 +319,37 @@ const getMapList = function(restriction, userID) {
     .catch(err => console.log(err));
 };
 exports.getMapList = getMapList;
+
+/**
+ * Adds a user id and map id to the favourites table
+ */
+const addFavourite = function(user_id, map_id) {
+  let queryString = `
+  INSERT INTO favourites (user_id, map_id)
+  VALUES ($1, $2)
+  RETURNING *;
+  `;
+  let values = [user_id, map_id];
+
+  return pool.query(queryString, values)
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+}
+exports.addFavourite = addFavourite;
+
+/**
+ * Removes a user id and map id from the favourites table
+ */
+const removeFavourite = function(user_id, map_id, pool) {
+  let queryString = `
+  DELETE FROM favourites (user_id, map_id)
+  WHERE user_id = $1 AND map_id = $2
+  RETURNING *;
+  `;
+  let values = [user_id, map_id];
+
+  return pool.query(queryString, values)
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+}
+exports.removeFavourite = removeFavourite;

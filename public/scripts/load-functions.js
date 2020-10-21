@@ -231,3 +231,15 @@ const renderMaps = function (data) {
     $(".map-list").append(output);
   }
 };
+
+const addFav = function() {
+  $('#addFavs').empty();
+  $('#addFavs').removeClass('noFav');
+  $('#addFavs').append('Remove From Favourites');
+};
+
+const removeFav = function() {
+  $('#addFavs').empty();
+  $('#addFavs').addClass('noFav');
+  $('#addFavs').append('Add to Favourites');
+};

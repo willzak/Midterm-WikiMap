@@ -76,6 +76,28 @@ module.exports = (db, database) => {
       });
   });
 
+  router.get("/favs/:id", (req, res) => {
+    const userId = req.params.id;
+    if (!userId) {
+      res.send({message: 'not logged in'});
+      return
+    }
+
+    db.query(`
+    SELECT * FROM favourites
+    WHERE user_id = ${userId};
+    `)
+      .then(data => {
+        const userFavs = data.rows;
+        res.json({ userFavs });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({error: err.message});
+      });
+  });
+
   const login =  function(email, password) {
     return database.getUserWithEmail(email) //Change
       .then(user => {
@@ -119,6 +141,10 @@ module.exports = (db, database) => {
         res.send(e);
       });
   });
+
+  router.post("/favs/:id", (req, res) => {
+    console.log('WHAT IS REQ?', req.body);
+  })
 
   return router;
 };

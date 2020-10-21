@@ -233,6 +233,15 @@ $(document).ready(function() {
 
   //START map_view listeners
 
+  $('#addFav').on('click', function(event) {
+    event.preventDefault();
+    if ($('#addFav').hasClass('noFav')) {
+      addFav();
+    } else {
+      removeFav();
+    }
+  })
+
   //  edit_map
   $('button.edit_map').click(function() {
     hideEditForm(false);

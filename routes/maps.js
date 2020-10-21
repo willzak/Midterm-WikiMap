@@ -89,5 +89,17 @@ module.exports = (db, database) => {
     }
   });
 
+  //route to add to favourite
+  // router.post('/list/favs', (req, res) => {
+  //   console.log(req.body)
+  //   let map_id = parseInt(req.params.id);
+  //   let user_id;
+
+  //   database.addFav(user_id, map_id, db)
+  //     .then(response => {
+  //       res.send(response)
+  //     })
+  // });
+
   return router;
 };
