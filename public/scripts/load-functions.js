@@ -204,10 +204,12 @@ const loadPoints = function (id) {
           username = response.user[0].name;
           const contentString = `<div id="content">
             <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+            <h3>Created by: ${username}</h3>
             <div id="bodyContent">
-                <li>Created by: ${username}</li>
+
                 <li>Description: ${currentPoint.description}</li>
-                <img src=${currentPoint.image}><img>
+                </br>
+                <img class = "info-window-img" src=${currentPoint.image}><img>
 
             </div>
             </div>`;
