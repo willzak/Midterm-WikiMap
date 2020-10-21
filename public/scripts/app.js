@@ -12,7 +12,7 @@ const defaultMap = {
   points: [],
   markers: []
 };
-let currentMap = defaultMap;
+let currentMap = {};
 let map;
 let mapClickable = true;
 let listView = 'none';
