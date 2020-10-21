@@ -126,7 +126,7 @@ const loadMap = function (mapData) {
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + user.name);
-  map.setCenter({ lat: mapData.latitude, lng: mapData.longitude });
+  map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
   map.setZoom(map.zoom);
   loadPoints(currentMap.id);
   $(".save").hide();
@@ -141,7 +141,7 @@ const loadPoints = function (id) {
     dataType: "json",
   }).then((response) => {
     let changed = false;
-
+    console.log('points: ',response);
     for (let index in currentMap.points) {
       for (let key in currentMap.points[index]) {
         if (currentMap.points[index][key] !== response[index][key]) {
@@ -206,10 +206,13 @@ const createMapCard = function (mapInfo) {
       <h2>${mapInfo.name}</h2>
       <p>${mapInfo.description}</p>
       <p>Created By: ${mapInfo.owner_name}</p>
+      <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
     <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
   </div>
   `);
+
+
   return $map;
 };
 

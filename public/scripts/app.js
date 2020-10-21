@@ -160,12 +160,34 @@ $(document).ready(function() {
           $('.map-list').empty();
           console.log('maps obj: ', res);
           renderMaps(res.maps);
+
         });
     });
   };
 
   loadMapCards();
   //LIST VIEW map population end
+
+  //START LIST VIEW listeners
+  $('.map-list').on('mouseenter', '.map-container', function(e) {
+    $.ajax({
+      method: "GET",
+      url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,
+      //data: values,
+      dataType: "json",
+    }).then((response) => {
+      console.log('mapdata: ', response.data);
+      loadMap(response.data);
+    });
+    //console.log('MAP ID: ', );
+  });
+
+  $('.map-list').on('click', '.map-container', function(e) {
+    currentView = setView('map', currentView);
+    //console.log('MAP ID: ', );
+  });
+
+  //END LIST VIEW listeners
 
   //START map_view listeners
   //  edit_map
