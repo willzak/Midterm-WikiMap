@@ -36,10 +36,15 @@ $(document).ready(function() {
   });
   $('#logout_btn').click(function() {
     currentView = setDefaultUI(views);
+    $.ajax({
+      method: "POST",
+      url: "/api/users/logout"
+    }).then(res => console.log(res));
   });
   $('#home_btn').click(function() {
     console.log('been clicked***********************');
     currentView = setView('list', currentView);
+    loadMapCards(listView);
   });
   //END nav bar listeners
 
