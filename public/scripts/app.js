@@ -2,6 +2,7 @@
 let user = {};
 let mapKey = 0;
 let currentView;
+
 const defaultMap = {
   id: 0,
   name: 'New Map',
@@ -12,15 +13,16 @@ const defaultMap = {
   points: [],
   markers: []
 };
+
 let currentMap = {};
 let map;
 let mapClickable = true;
 let listView = 'none';
 let listCounter = 0;
-
 //END Client side global variables
 
 $(document).ready(function() {
+
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map', 'list'];
   currentView = setDefaultUI(views);
@@ -42,7 +44,6 @@ $(document).ready(function() {
     }).then(res => console.log(res));
   });
   $('#home_btn').click(function() {
-    console.log('been clicked***********************');
     currentView = setView('list', currentView);
     loadMapCards(listView);
   });
@@ -62,7 +63,6 @@ $(document).ready(function() {
       url: "/api/users/login",
       data: values
     }).then((response) => {
-      console.log('result user: ',response);
       user = response.user;
       mapKey = response.map;
       console.log('MAP KEY: ', mapKey);
@@ -77,38 +77,46 @@ $(document).ready(function() {
 
   $('div.register > form').submit(event => {
     event.preventDefault();
+
     //retrieve the values from the form
     let $inputs = $('div.register > form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
+
     //verify the values
     if (values.name === '' || values.email === '' || values.password === '') {
       $('div.register span.error').text("Fill in required (*) fields");
       $('div.register span.error').fadeIn();
       return;
     }
+
     if (values.password !== values.confirm_password) {
       $('div.register span.error').text("Password fields don't match");
       $('div.register span.error').fadeIn();
       return;
     }
+
     //purge un-needed values
     if (values.profile_photo === '') delete values.profile_photo;
     delete values.confirm_password;
+
     //hide the error if one was presented
     $('div.register span.error').fadeOut();
+
     //send the post request
     $.ajax({
       method: "POST",
       url: "/api/users/register",
       data: values
     }).then((response) => {
+
       //log the user in
       user = response.user;
       mapKey = response.map;
       login(user);
+
       //clear the form
       $inputs.each(function() {
         $(this).val('');
@@ -125,37 +133,44 @@ $(document).ready(function() {
 
   $('div.profile_update form').submit(event => {
     event.preventDefault();
+
     //retrieve values from the form
     let $inputs = $('div.profile_update form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
+
     //verify the values
     if (values.name === '' || values.email === '' || values.password === '') {
       $('div.profile_update p.error').text("Fill in required (*) fields");
       $('div.profile_update p.error').fadeIn();
       return;
     }
+
     if (values.password !== values.confirm_password) {
       $('div.profile_update p.error').text("Password fields don't match");
       $('div.profile_update p.error').fadeIn();
       return;
     }
+
     //hide the error if one was presented
     $('div.profile_update p.error').fadeOut();
+
     //purge un-needed values
     if (values.profile_photo === '') delete values.profile_photo;
     delete values.confirm_password;
+
     //keep only changed values
     for (const value in values) {
-      console.log(`(${user[value]})`, '===', `(${values[value]})`);
       if (user[value] === values[value]) {
         delete values[value];
       }
     }
+
     delete values.confirm_password;
     values.id = user.id;
+
     //make the server request
     $.ajax({
       method: "POST",
@@ -169,12 +184,10 @@ $(document).ready(function() {
 
   //LIST VIEW map population start
   const loadMapCards = function(listView) {
-    console.log('loading map cards');
     $(function() {
       $.ajax(`http://localhost:8080/api/maps/list/${listView}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
-        console.log('maps obj: ', `http://localhost:8080/api/maps/list/${listView}`);
         renderMaps(res.maps);
       })
     })
@@ -208,32 +221,26 @@ $(document).ready(function() {
     }
     loadMapCards(listView);
   })
-
   //LIST VIEW map population end
 
   //START LIST VIEW listeners
   $('.map-list').on('mouseenter', '.map-container', function(e) {
-    console.log('this box: ', $(this).children('div').children('.map-id').text());
     $.ajax({
       method: "GET",
       url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,
-      //data: values,
       dataType: "json",
     }).then((response) => {
-      console.log('mapdata: ', response.data);
       loadMap(response.data);
     });
-    //console.log('MAP ID: ', );
   });
 
   $('.map-list').on('click', '.map-container', function(e) {
     currentView = setView('map', currentView);
-    //console.log('MAP ID: ', );
   });
-
   //END LIST VIEW listeners
 
   //START map_view listeners
+
   //  edit_map
   $('button.edit_map').click(function() {
     hideEditForm(false);
@@ -243,12 +250,14 @@ $(document).ready(function() {
   });
   $('div.edit_map > form').submit(event => {
     event.preventDefault();
+
     // get the form data
     let $inputs = $('div.edit_map > form :input');
     let values = {};
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
+
     // format the data for transfer to server
     let saveMap = {
       id: currentMap.id,
@@ -260,19 +269,19 @@ $(document).ready(function() {
       zoom: map.getZoom()
     };
     loadMap(saveMap);
+
     //make the POST to the server
     $.ajax({
       method: "POST",
       url: `/api/maps/${currentMap.id}`,
       data: saveMap
     }).then((response) => {
-      console.log('result id: ',response);
       if (currentMap.id === response.id) {
-        console.log("Successful Edit");
         return;
       }
       currentMap.id = response.id;
     });
+
     //hide the form
     hideEditForm(true);
   });
@@ -286,39 +295,21 @@ $(document).ready(function() {
     loadMap(currentMap);
     hidePointForm(true);
   });
-  // $('div.add_point > form').submit(event => {
-  //   event.preventDefault();
-  //   let $inputs = $('div.add_point > form :input');
-  //   let values = {};
-  //   $inputs.each(function() {
-  //     values[this.name] = $(this).val();
-  //   });
-  //   console.log(values);
-  //   hidePointForm(true);
-  // });
-  // save map position
+
   $('.bar button.save').click(function() {
     let center = map.getCenter();
     let zoom = map.getZoom();
-    console.log('center: Lat', center.lat());
-    console.log('center: Long', center.lng());
-    console.log('center: zoom', zoom);
 
     currentMap.latitude = center.lat();
     currentMap.longitude = center.lng();
     currentMap.zoom = zoom;
-
-    console.log('MAP NOW: ', currentMap);
-
 
     $.ajax({
       method: "POST",
       url: `/api/maps/${currentMap.id}`,
       data: currentMap
     }).then((response) => {
-      console.log('result id: ',response);
       if (currentMap.id === response.id) {
-        console.log("Successful Edit");
         return;
       }
       currentMap.id = response.id;

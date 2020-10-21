@@ -1,9 +1,5 @@
-/// Users
 const cookieSession = require('cookie-session');
-
-
 const { Pool } = require('pg');
-
 const pool = new Pool({
   user: 'vagrant',
   password: '123',
@@ -71,6 +67,11 @@ const addUser =  function(newData) {
 };
 exports.addUser = addUser;
 
+/**
+ * Using the profile form, this function updates changes a user inputs on their profile
+ * @param {Object} newData
+ * @reutrn update to the profile table
+ */
 const editUser = function(newData) {
   let changes = '';
   let values = [];
@@ -95,7 +96,7 @@ const editUser = function(newData) {
 exports.editUser = editUser;
 
 /**
- *
+ * Adds a map to database
  * @param {
       id: req.body.map_id,
       owner_id: owner_id,
@@ -125,7 +126,7 @@ exports.addMap = addMap;
 
 
 /**
- *
+ * Changes a map currently in the database
  * @param {
   id: req.body.map_id,
   owner_id: owner_id,
@@ -219,7 +220,7 @@ const getPointsByMap = function(map_id) {
 exports.getPointsByMap = getPointsByMap;
 
 /**
-   * Get the center object for a map
+   * Get the center object (latitude and longitude) for a map
    * @param {id: integer, owner_id: integer, name: string, city: string, description: string, public_edits: boolean, latitude: integer, longitude: integer, zoom: integer}
    * @return {Promise<{}>}
    */
@@ -240,13 +241,21 @@ const getCenterOfMap = function(map_id) {
 };
 exports.getCenterOfMap = getCenterOfMap;
 
+/**
+ * Gets the appropriate query for the list view of maps based on user input of buttons
+ * @param {String} restriction
+ * @param {Integer} userID
+ * @return query object to specified route
+ */
 const getMapList = function(restriction, userID) {
+  //query string for all maps
   let queryString = `
   SELECT maps.*, users.name as owner_name
   FROM maps
   JOIN users on users.id = maps.owner_id`;
   let values = undefined;
 
+  //query string for maps favourited by user
   if (restriction === 'favs') {
     queryString = `SELECT maps.*, users.name as owner_name
     FROM users JOIN favourites ON user_id = users.id
@@ -255,6 +264,7 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
+  //query string for maps a user contributed to
   if (restriction === 'cont') {
     queryString = `
     SELECT * FROM
@@ -273,6 +283,7 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
+  //query string for maps a user favourited AND contributed to
   if (restriction === 'favcont') {
     queryString = `
     SELECT * FROM
@@ -297,7 +308,6 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
-  console.log('********************************query', queryString);
   if (values) {
     return pool.query(queryString, values)
       .then(res => {
