@@ -2,7 +2,6 @@
 let user = {};
 let mapKey = 0;
 let currentView;
-
 const defaultMap = {
   id: 0,
   name: 'New Map',
@@ -19,6 +18,10 @@ let map;
 let mapClickable = true;
 let listView = 'none';
 let listCounter = 0;
+
+const pageSize = 20;
+let pageStart = 1;
+let pageEnd = pageStart + pageSize - 1;
 //END Client side global variables
 
 $(document).ready(function() {
@@ -238,6 +241,22 @@ $(document).ready(function() {
   $('.map-list').on('click', '.map-container', function(e) {
     currentView = setView('map', currentView);
   });
+
+  $('.next-page-button').on('click', function(){
+    console.log('next!');
+    pageStart += pageSize;
+    pageEnd = pageStart + pageSize - 1;
+    console.log('Start: ', pageStart);
+    console.log('End: ', pageEnd);
+  })
+
+  $('.previous-page-button').on('click', function(){
+    console.log('previous!');
+    pageStart -= pageSize;
+    pageEnd = pageStart + pageSize - 1;
+    console.log('Start: ', pageStart);
+    console.log('End: ', pageEnd);
+  })
   //END LIST VIEW listeners
 
   //START map_view listeners
