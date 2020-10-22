@@ -32,7 +32,6 @@ module.exports = (db, database) => {
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
-      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -50,7 +49,6 @@ module.exports = (db, database) => {
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
-      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -101,13 +99,10 @@ module.exports = (db, database) => {
     point = req.body;
     point.user_id = req.session.userId;
     const id = parseInt(point.id);
-    console.log('point id in submit: ', id);
-    console.log('point??? : ', point);
+
     if(id === 0){
-      console.log('im here!!!');
       database.addPoint(point);
     } else {
-      console.log('editing point:', point);
       database.editPoint(point, id);
     }
 
@@ -117,7 +112,6 @@ module.exports = (db, database) => {
   router.post("/points/delete", (req, res) => {
     point = req.body;
     const id = parseInt(point.id);
-    console.log('point id in delete: ', id);
 
 
     database.deletePoint(id);

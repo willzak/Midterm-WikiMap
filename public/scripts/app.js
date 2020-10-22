@@ -61,7 +61,7 @@ $(document).ready(function() {
     $.ajax({
       method: "POST",
       url: "/api/users/logout"
-    }).then(res => console.log(res));
+    }).then(res => res);
   });
   $('#home_btn').click(function() {
     currentView = setView('list', currentView);
@@ -284,7 +284,6 @@ $(document).ready(function() {
 
   //START LIST VIEW listeners
   $('.map-list').on('mouseenter', '.map-container', function(e) {
-    //console.log('HOVER: ',$(this).children('div').children('.map-id').text() );
     $.ajax({
       method: "GET",
       url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,
@@ -299,21 +298,15 @@ $(document).ready(function() {
   });
 
   $('.next-page-button').on('click', function(){
-    console.log('next!');
     pageStart += pageSize;
     pageEnd = pageStart + pageSize - 1;
-    console.log('Start: ', pageStart);
-    console.log('End: ', pageEnd);
     $('.previous-page-button').prop('disabled', false);
     loadMapCards(listView, pageSize, pageStart - 1);
   })
 
   $('.previous-page-button').on('click', function(){
-    console.log('previous!');
     pageStart -= pageSize;
     pageEnd = pageStart + pageSize - 1;
-    console.log('Start: ', pageStart);
-    console.log('End: ', pageEnd);
     if(pageStart === 1){
       $('.previous-page-button').prop('disabled', true);
     }
@@ -404,7 +397,6 @@ $(document).ready(function() {
   });
 
   $("#point-form").submit((event) => {
-    console.log('submit triggerd');
     event.preventDefault();
     mapClickable = true;
     let $inputs = $("#point-form :input");

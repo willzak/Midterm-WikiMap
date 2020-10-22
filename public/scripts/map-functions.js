@@ -1,30 +1,49 @@
-const loadProfile = function(user) {
-  // fill in the title block
-  if (user.profile_photo) {
-    $(".profile_title img").attr("src", user.profile_photo);
+// Initialize google maps API
+const initMap = function() {
+  $("#map_script").attr(
+    "src",
+    `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
+  );
+
+  map = new google.maps.Map(document.getElementById("test_map"), {
+    center: { lat: 52.627849747795025, lng: -4416.512126890331 },
+    zoom: 3,
+  });
+
+  //let marker = new google.maps.Marker({ map: null });
+  $(".save").hide();
+
+  //listner for zoom change
+  map.addListener("zoom_changed", function() {
+    $(".save").show();
+  });
+
+  //listner for center change
+  map.addListener("center_changed", function() {
+    $(".save").show();
+  });
+
+  //Listener for clicks to add markers
+  if (mapClickable) {
+    map.addListener("click", (e) => {
+      mapClickable = false;
+      //marker.setMap(null);
+      const marker = new google.maps.Marker({
+        position: e.latLng,
+        map: map,
+      });
+      hidePointForm(false);
+      $(".form_div input[name=lat]").val(e.latLng.lat);
+      $(".form_div  input[name=lng]").val(e.latLng.lng);
+      $(".form_div  input[name=id]").val(0);
+
+      $('#cancel_add_point').click(function() {
+        marker.setMap(null);
+      });
+    });
   }
 
-  $(".profile_title h2").text(user.name);
 
-  // fill in the form fields
-  $(".profile_update input[name=name]").val(user.name);
-  $(".profile_update input[name=email]").val(user.email);
-
-  if (user.profile_photo) {
-    $(".profile_update input[name=profile_photo]").val(user.profile_photo);
-  }
-
-  $(".profile_update input[name=password]").val(user.password);
-  $(".profile_update input[name=confirm_password]").val(user.password);
-};
-
-const login = function(user) {
-  loadProfile(user);
-  currentView = setView("list", currentView);
-  loggedIn(true);
-  defaultMap.owner_id = user.id;
-  initMap();
-  $('#fav-user').val(user.id)
 };
 
 const loadMap = function(mapData) {
@@ -38,7 +57,6 @@ const loadMap = function(mapData) {
   currentMap.markers = [];
 
   currentMap = mapData;
-  $("#fav-map").val(mapData.id);
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + user.name);
@@ -52,6 +70,7 @@ const loadMap = function(mapData) {
   loadPoints(currentMap.id);
   $(".save").hide();
 };
+
 
 const loadPoints = function(id) {
   //Request to get points data given map id
@@ -98,12 +117,11 @@ const loadPoints = function(id) {
         }).then((response) => {
           username = response.user[0].name;
           //html layout for infoWindow
-          //console.log('point: ', currentPoint);
           const contentString =
             `<div id="content">
               <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
-              <button type='button' class = 'edit-point'>Edit</button>
-              <button type='button' class = 'delete-point'> Delete </button>
+              <button type='button' class = 'button is-small is-outlined is-link edit-point'>Edit</button>
+              <button type='button' class = 'button is-small is-outlined is-danger delete-point'> Delete </button>
               <p hidden class = 'point-id'>${currentPoint.id}</p>
               <p hidden class = 'map-id''> ${currentPoint.map_id} </p>
               <h3>Created by: ${username}</h3>
@@ -116,6 +134,7 @@ const loadPoints = function(id) {
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
           });
+
 
           //listener for edit and delete point
           google.maps.event.addListener(infowindow, 'domready', function() {
@@ -152,14 +171,12 @@ const loadPoints = function(id) {
                 dataType: "json",
               }).then(res => {
                 //reload map after delete
-                console.log("THIS MARKER: ", currentMap.markers[markerSearch(currentMap, parseInt(id))]);
 
                 currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
                 currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
                 //currentMap.markers[markerSearch(currentMap, parseInt(id))].visible = false;
                 currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
                 currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
-                console.log('MAP NOW: ', currentMap);
                 initMap();
                 loadMap(currentMap);
 
@@ -183,78 +200,3 @@ const markerSearch = function(map, id) {
     }
   }
 }
-
-//On list view - to load an indvidual map card
-const createMapCard = function(mapInfo, key) {
-  const image = createImage(mapInfo, key);
-
-  let $map = $(`
-  <div class='map-container'>
-    <div>
-      <h2 class="is-size-4">${mapInfo.name}</h2>
-      <p>${mapInfo.description}</p>
-      <p class="is-size-7">Created By: ${mapInfo.owner_name}</p>
-      <p hidden class = 'map-id'>${mapInfo.id}</p>
-    </div>
-    <img class='map-profile-img' src='${image}'>
-  </div>
-  `);
-
-  return $map;
-};
-
-//Creates static screenshot of map
-const createImage = function(mapInfo, key) {
-
-  return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&key=${key}`;
-};
-
-//Load each map card from an array of data (can be changed to obj of data)
-const renderMaps = function(data) {
-  data.sort(function(x, y) {
-    return y.id - x.id;
-  });
-
-  for (let mapInfo of data) {
-    let output = createMapCard(mapInfo, mapKey);
-    $(".map-list").append(output);
-  }
-};
-
-const addFavourite = function() {
-  const mapId = $('#fav-map').val();
-  const userId = $('#fav-user').val();
-  const liked = $('#liked').val();
-  let data = {
-    mapId,
-    userId,
-    liked
-  }
-
-  if ($('#addFavs').hasClass('noFav')) {
-    $.ajax({
-      method: "POST",
-      url: `http://localhost:8080/api/maps/favs/${userId}`,
-      data,
-      dataType: "json"
-    }).then(res => {
-      $('#addFavs').removeClass('noFav').addClass('yesFav');
-      $('#liked').val('yes');
-      $('#addFavs').html("<button type='submit' name='favs-btn'>Remove From Favourites</button>");
-      console.log('liked!', res);
-    })
-  } else {
-    $.ajax({
-      method: "POST",
-      url: `http://localhost:8080/api/maps/favs/${userId}`,
-      data,
-      dataType: "json"
-    }).then(res => {
-      $('#addFavs').removeClass('yesFav').addClass('noFav');
-      $('#addFavs').val('no');
-      $('#addFavs').html("<button type='submit' name='favs-btn'>Add To Favourites</button>");
-      console.log('unliked!', res);
-    })
-  }
-
-};

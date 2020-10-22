@@ -1,11 +1,15 @@
+<!-- view and edit the current users profile -->
 <section class='profile_view'>
+  <!-- profile_title: display user name and image -->
   <div class="profile_title">
         <img src=''>
         <h2 class="is-size-3">Your Name</h2>
   </div>
   <div class="profile_update">
     <h3 class="is-size-4">Edit Your Profile</h3>
+    <!-- error only displayed on submit of improper data values -->
     <p class='error'>Error Here</p>
+    <!-- form to edit user profile -->
     <form action="/profile_update" method="POST">
       <div>
         <label for="name">User Name<b>*</b></label>
@@ -22,9 +26,7 @@
           <button type="submit" class="submit button is-link is-outlined">Submit</button>
           <button type="button" class="button is-danger is-outlined" id="cancel_profile_update">Cancel</button>
         </span>
-
       </div>
     </form>
   </div>
 </section>
-<!-- name, email, password, profile_photo, username -->

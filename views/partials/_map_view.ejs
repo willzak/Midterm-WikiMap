@@ -1,6 +1,7 @@
-
+<!-- view a single map with all it's details(also for map creation) -->
 <section class="map_view columns">
   <div class="column is-half flex-grow-1">
+    <!-- map_intro: show the title, description, and creator -->
     <div class="map_intro">
       <h2 class="is-size-4">New Map</h2>
       <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
@@ -17,8 +18,8 @@
       </div>
     </div>
     <div class="median">
-      <div class="padding">
-        <!-- edit_map - displays when edit button clicked in map_intro -->
+      <div class="padding"><!-- pulls the sides in the width of border-radius -->
+        <!-- edit_map: open for new map or when edit clicked-->
         <div class="edit_map">
           <form action="/edit_map" method="POST">
             <div class="form_div">
@@ -44,8 +45,8 @@
         <!-- save button only displayed when map center moved, or zoom changed -->
         <button class="save button is-link is-inverted is-outlined">Save Position</button>
       </div>
-      <!-- add_point - displays when map is clicked -->
-      <div class="padding">
+      <div class="padding"><!-- pulls the sides in the width of border-radius -->
+        <!-- add_point: only displayed when adding or editing points -->
         <div class="add_point">
           <form id="point-form" action="/api/maps/add_point" method="POST">
             <div class="form_div">
@@ -62,16 +63,13 @@
                 <input type="text" name="image" placeholder="Image URL">
               </span>
               <!--shows latlng of point (can remove) -->
-              <span>
-                <label for="lat">Latitude</label>
-                <input type="text" name="lat" placeholder="latitude">
-              </span>
-              <span>
-                <label for="lng">Longitude</label>
-                <input type="text" name="lng" placeholder="longitude">
+              <span hidden>
+                <input type = "hidden" type="text" name="lat" placeholder="latitude">
               </span>
               <span hidden>
-
+                <input type = "hidden" type="text" name="lng" placeholder="longitude">
+              </span>
+              <span hidden>
                 <input type="hidden" name="id">
               </span>
               <span>
@@ -84,7 +82,7 @@
       </div>
     </div>
   </div>
-  <div class="map_container column is-half flex-grow-1 " id='test_map'>
+  <div class="map_container column is-half flex-grow-1" id='test_map'>
     <!-- Map Goes HERE -->
   </div>
 </section>

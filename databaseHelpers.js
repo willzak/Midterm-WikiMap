@@ -242,9 +242,7 @@ const getPointsByMap = function(map_id) {
     `;
 
   return pool.query(queryString, [map_id])
-    .then(res => {
-      console.log('res rows: ',res.rows);
-      return res.rows})
+    .then(res => {return res.rows})
 };
 exports.getPointsByMap = getPointsByMap;
 
@@ -255,9 +253,7 @@ const getPointsById = function(id) {
     `;
 
   return pool.query(queryString, [id])
-    .then(res => {
-      console.log('res rows: ',res.rows);
-      return res.rows})
+    .then(res => {return res.rows})
 };
 exports.getPointsById = getPointsById;
 
