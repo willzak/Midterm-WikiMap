@@ -368,3 +368,62 @@ const getMapList = function(restriction, userID) {
     .catch(err => console.log(err));
 };
 exports.getMapList = getMapList;
+
+/**
+ * Get the user ids of someone who has favourited a map
+ * @param {Integer} user_id
+ */
+const getFavs = function(userId) {
+  let queryString = `
+  SELECT * FROM favourites
+  WHERE user_id = $1;
+  `;
+
+  return pool.query(queryString, [userId])
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+};
+exports.getFavs = getFavs;
+
+/**
+ * Adds a user id and map id to the favourites table
+ * @param {Integer} user_id
+ * @param {Integer} map_id
+ * @return an insert command to the favourites table
+ */
+const addFav = function(userId, mapId) {
+  let queryString = `
+  INSERT INTO favourites (user_id, map_id)
+  VALUES ($1, $2)
+  RETURNING *;
+  `;
+  let values = [userId, mapId];
+
+  return pool.query(queryString, values)
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+}
+exports.addFav = addFav;
+
+/**
+ * Removes a user id and map id from the favourites table
+ * @param {Integer} user_id
+ * @param {Integer} map_id
+ * @return a delete command to the favourites table
+ */
+const removeFav = function(userId, mapId) {
+  let queryString = `
+  DELETE FROM favourites (user_id, map_id)
+  WHERE user_id = $1 AND map_id = $2
+  RETURNING (SELECT maps.*, users.name as owner_name
+    FROM users JOIN favourites ON user_id = users.id
+    JOIN maps ON maps.id = favourites.map_id
+    WHERE users.id = $1;);
+  `;
+  let values = [userId, mapId];
+
+  return pool.query(queryString, values)
+    .then(res => res.rows)
+    .catch(err => console.log(err));
+}
+exports.removeFav = removeFav;

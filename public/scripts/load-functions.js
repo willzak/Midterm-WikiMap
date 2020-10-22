@@ -73,6 +73,7 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
+  $('#fav-user').val(user.id)
 };
 
 const loadMap = function(mapData) {
@@ -86,6 +87,7 @@ const loadMap = function(mapData) {
   currentMap.markers = [];
 
   currentMap = mapData;
+  $("#fav-map").val(mapData.id);
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + user.name);
@@ -266,4 +268,42 @@ const renderMaps = function(data) {
     let output = createMapCard(mapInfo, mapKey);
     $(".map-list").append(output);
   }
+};
+
+const addFavourite = function() {
+  const mapId = $('#fav-map').val();
+  const userId = $('#fav-user').val();
+  const liked = $('#liked').val();
+  let data = {
+    mapId,
+    userId,
+    liked
+  }
+
+  if ($('#addFavs').hasClass('noFav')) {
+    $.ajax({
+      method: "POST",
+      url: `http://localhost:8080/api/maps/favs/${userId}`,
+      data,
+      dataType: "json"
+    }).then(res => {
+      $('#addFavs').removeClass('noFav').addClass('yesFav');
+      $('#liked').val('yes');
+      $('#addFavs').html("<button type='submit' name='favs-btn'>Remove From Favourites</button>");
+      console.log('liked!', res);
+    })
+  } else {
+    $.ajax({
+      method: "POST",
+      url: `http://localhost:8080/api/maps/favs/${userId}`,
+      data,
+      dataType: "json"
+    }).then(res => {
+      $('#addFavs').removeClass('yesFav').addClass('noFav');
+      $('#addFavs').val('no');
+      $('#addFavs').html("<button type='submit' name='favs-btn'>Add To Favourites</button>");
+      console.log('unliked!', res);
+    })
+  }
+
 };

@@ -232,29 +232,51 @@ $(document).ready(function() {
 
 
 
+  //favourites button start
+  $('#addFavs').on('submit', function(event) {
+    event.preventDefault();
+    addFavourite();
+  });
+  //favourites button end
+
   //Change View of list
   $('#fav').on('click', function(event) {
     event.preventDefault();
-    listView = 'favs';
-    if (listCounter === 0) {
-      listCounter += 1;
-      listView = 'favs';
+    if (listViewTracker.includes('f')) {
+      listViewTracker = listViewTracker.replace('f', '');
+      if (listViewTracker.includes('c')) {
+        listView = 'cont';
+      } else {
+        listView = 'none';
+      }
     } else {
-      listCounter = 0;
-      listView = 'favcont';
+      listViewTracker += 'f';
+      if (listViewTracker.includes('c')){
+        listView = 'favcont';
+      } else {
+        listView = 'favs';
+      }
     }
     loadMapCards(listView, pageSize, 0);
   })
 
   $('#cont').on('click', function(event) {
     event.preventDefault();
-    listView = '';
-    if (listCounter === 0) {
-      listCounter += 1;;
-      listView = 'cont';
+
+    if (listViewTracker.includes('c')) {
+      listViewTracker = listViewTracker.replace('c', '');
+      if (listViewTracker.includes('f')) {
+        listView = 'favs';
+      } else {
+        listView = 'none';
+      }
     } else {
-      listCounter = 0;
-      listView += 'favcont';
+      listViewTracker += 'c';
+      if (listViewTracker.includes('f')){
+        listView = 'favcont';
+      } else {
+        listView = 'cont';
+      }
     }
     loadMapCards(listView, pageSize, 0);
   })
