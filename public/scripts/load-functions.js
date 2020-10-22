@@ -233,15 +233,15 @@ const renderMaps = function (data) {
 };
 
 const addFavourite = function() {
-  $('#addFavs').empty();
-  $('#addFavs').removeClass('noFav');
-  $('#addFavs').addClass('yesFav');
-  $('#addFavs').append('Remove From Favourites');
-};
+  console.log('clicked add')
+  if ($('#addFavs').hasClass('noFav')) {
+    $('#addFavs').empty();
+    $('#addFavs').removeClass('noFav').addClass('yesFav');
+    $('#addFavs').append('Remove From Favourites');
+  } else {
+    $('#addFavs').empty();
+    $('#addFavs').removeClass('yesFav').addClass('noFav');
+    $('#addFavs').append('Add to Favourites');
+  }
 
-const removeFavourite = function() {
-  $('#addFavs').empty();
-  $('#addFavs').removeClass('yesFav');
-  $('#addFavs').addClass('noFav');
-  $('#addFavs').append('Add to Favourites');
 };

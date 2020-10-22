@@ -233,16 +233,6 @@ $(document).ready(function() {
 
   //START map_view listeners
 
-  //favourites button start
-  $('.noFav').on('click', function(event) {
-    addFavourite();
-  });
-
-  $('.yesFav').on('click', function(event) {
-    removeFavourite();
-  });
-  //favourites button end
-
   //  edit_map
   $('button.edit_map').click(function() {
     hideEditForm(false);
@@ -287,6 +277,16 @@ $(document).ready(function() {
     //hide the form
     hideEditForm(true);
   });
+
+  //favourites button start
+  $('.noFav').on('click', function(event) {
+    addFavourite();
+  });
+
+  $('.yesFav').on('click', function(event) {
+    addFavourite();
+  });
+  //favourites button end
 
   //  add_point
   $('div.map_container').click(function() {
