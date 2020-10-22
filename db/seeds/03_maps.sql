@@ -998,3 +998,5 @@ insert into maps (name, owner_id, description, public_edits, latitude, longitude
 insert into maps (name, owner_id, description, public_edits, latitude, longitude, zoom) values ('Ibadan', 926, 'turpis adipiscing lorem vitae mattis nibh ligula nec sem duis', true, 7.3775355, 3.9470396, 9);
 insert into maps (name, owner_id, description, public_edits, latitude, longitude, zoom) values ('Estancia', 25, 'ante vel ipsum praesent blandit lacinia erat vestibulum sed magna at nunc commodo', true, 11.4693878, 123.1476046, 5);
 insert into maps (name, owner_id, description, public_edits, latitude, longitude, zoom) values ('Cuogang', 395, 'condimentum id luctus nec molestie sed justo pellentesque viverra pede ac diam cras pellentesque volutpat dui maecenas tristique est', false, 29.315251, 90.599794, 7);
+
+
