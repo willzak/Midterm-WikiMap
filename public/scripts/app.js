@@ -138,6 +138,7 @@ $(document).ready(function() {
     //hide the error if one was presented
     $('div.register span.error').fadeOut();
 
+
     //send the post request
     $.ajax({
       method: "POST",
