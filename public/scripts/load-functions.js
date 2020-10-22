@@ -239,7 +239,7 @@ const addFavourite = function(data) {
       $('#addFavs').empty();
       $('#addFavs').removeClass('noFav').addClass('yesFav');
       $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='yes'>")
-      $('#addFavs').html("<button type='submit' name='favs-btn'>Remove From Favourites</button>");
+      $('#addFavs').html("<button type='submit' name='favs-btn' class='button is-danger is-outlined'>Remove From Favourites</button>");
       console.log('liked!', res);
     })
   } else {
@@ -252,7 +252,7 @@ const addFavourite = function(data) {
       $('#addFavs').empty();
       $('#addFavs').removeClass('yesFav').addClass('noFav');
       $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='no'>")
-      $('#addFavs').html("<button type='submit' name='favs-btn'>Add To Favourites</button>");
+      $('#addFavs').html("<button type='submit' name='favs-btn' class='button is-success is-outlined'>Add To Favourites</button>");
       console.log('unliked!', res);
     })
   }
