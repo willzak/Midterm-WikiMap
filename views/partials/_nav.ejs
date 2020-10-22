@@ -1,17 +1,21 @@
+<!-- Navigation Menus -->
 <nav class="navbar is-fixed-top has-background-primary-dark px-2 mb-1">
   <div class="navbar-brand">
     <span class='logo has-text-weight-bold is-size-2 has-text-light mt-2'>WikiMap</span>
-    <a role="button" class="navbar-burger has-background-primary-light" aria-label="menu" aria-expanded="false">
+    <!-- navbar-burger: drop down menu with all navbar-item elements on small screens -->
+    <a role="button" class="navbar-burger has-background-primary-light is-align-self-center" aria-label="menu" aria-expanded="false">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </a>
   </div>
   <div class='nav_links navbar-menu'>
+    <!-- navbar-start: list of links for left side -->
     <div class="navbar-start">
       <a class='logged_in navbar-item' id='home_btn'>My Maps</a>
       <a class='new_map_btn logged_in navbar-item'>New Map</a>
     </div>
+    <!-- navbar-end: list of links for right side -->
     <div class="navbar-end">
       <a class='logged_in navbar-item' id="profile_btn">Profile</a>
       <a class='logged_in button navbar-item is-align-self-center has-background-primary-dark' id="logout_btn">Logout</a>

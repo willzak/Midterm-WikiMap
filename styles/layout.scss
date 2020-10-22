@@ -1,7 +1,7 @@
 // See: https://sass-lang.com/
 @charset "utf-8";
 @import "../node_modules/bulma/bulma.sass";
-//bulma variables here
+//override bulma variables here
 $navbar-item-hover-background-color: $primary;
 $navbar-item-hover-color: hsl(0, 0%, 29%);
 $navbar-item-color: $light;
@@ -17,18 +17,12 @@ $navbar-divider-background-color: $primary;
 @import "../node_modules/bulma/sass/layout/hero.sass";
 @import "../node_modules/bulma/sass/layout/section.sass";
 
-
+//Set the corner rounding, and position of drop out
+//menus relative to the rounding
 $borderRadius: 10px;
-
-// body {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   background-color: #EEE;
-//   padding-top: 122px;
-// }
-
-//nav bar properties
+/*******************************************
+*                nav bar                   *
+********************************************/
 .navbar-menu {
   background-color: $primary-dark;
 }
@@ -36,13 +30,11 @@ $borderRadius: 10px;
   font-family: cursive;
   text-shadow: 2px 2px 2px #000000;
 }
+.navbar-burger {
+  border-radius: 3px;
+}
 .navbar-item:hover {
   background-color: inherit;
-}
-
-// for infoWindow image size
-.info-window-img {
-  width: 180px;
 }
 
 @media only screen and (min-width: 650px) {
@@ -50,74 +42,22 @@ $borderRadius: 10px;
     height: 120;
   }
 }
-//   //display properties
-//   display: flex;
-//   flex-direction: column-reverse;
-//   align-items: center;
-//   justify-content: space-between;
-//   position: fixed;
-//   top: 0;
-//   z-index: 1;
-//   //sizing properties
-//   height: 120px;
-//   width: 100vw;
-//   max-width:100%;
-//   padding: 0.5rem;
-//   border-radius: $borderRadius;
-//   border: 2px solid #000000;
-//   //colour properties
-//   background-color: #4056A1;
-//   color: $navFontColor;
-//   //children
-//   a {
-//     color: $navFontColor;
-//     &:hover {
-//       text-shadow: 2px 7px 4px #1d284b;
-//       font-weight: bold;
-//     }
-//   }
-//   .nav_links {
-//     flex-direction: column;
-//   }
-//   .logo {
-//     font-family: cursive;
-//     font-size: 35px;
-//     text-shadow: 4px 4px 6px #1d284b;
-//   }
-//   button {
-//     color: $navFontColor;
-//     background-color: Transparent;
-//     border: 2px solid $navFontColor;
-//     border-radius: $borderRadius;
-//     &:hover {
-//       box-shadow: 0px 9px 4px -4px #1d284b;
-//       font-weight: bold;
-//       border: 3px solid $navFontColor;
-//     }
-//   }
-// }
-
-// @media only screen and (min-width: 650px) {
-//   nav {
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     align-items: flex-end;
-//     padding: 1.5rem;
-//   }
-// }
-
-// login/registration view
+/*******************************************
+*      login/registration view             *
+********************************************/
 .login_reg_view {
-  //display properties
+  //internal layout properties
   display: flex;
   flex-direction: column;
   align-items: center;
+  //size properties
   width: 100%;
   max-width: 60rem;
-  border-radius: $borderRadius;
+  //colors and border
   background-color: #FFFFFF;
   border: 2px solid #000000;
+  border-radius: $borderRadius;
+  //child elements
   h3 {
     align-self: center;
   }
@@ -142,7 +82,7 @@ $borderRadius: 10px;
     align-self: center;
   }
 }
-
+//large screen: put login and reg beside each other
 @media only screen and (min-width: 650px) {
   .login_reg_view {
     flex-direction: row;
@@ -150,7 +90,6 @@ $borderRadius: 10px;
     .divider {
       width: initial;
       height: 20rem;
-
       margin: 1rem;
       border-left: 2px solid #000000;
       border-bottom: none;
@@ -158,8 +97,9 @@ $borderRadius: 10px;
   }
 }
 
-
-//profile view
+/*******************************************
+*              profile view                *
+********************************************/
 .profile_view {
   display: flex;
   width: 100%;
@@ -222,10 +162,10 @@ $borderRadius: 10px;
   }
 }
 
-// map view
+/*******************************************
+*               map view                   *
+********************************************/
 .map_view {
-  // display: flex;
-  // flex-direction: column;
   width: 100%;
   .map_intro {
     display: flex;
@@ -267,7 +207,7 @@ $borderRadius: 10px;
     }
   }
   .padding {
-    padding: 0px 10px 0 10px
+    padding: 0px $borderRadius 0 $borderRadius;
   }
   div.add_point, div.edit_map {
     display: flex;
@@ -277,7 +217,7 @@ $borderRadius: 10px;
     border-color: #000000;
     border-style: solid;
     border-width: 0 2px 2px 2px;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 $borderRadius $borderRadius;
     background-color: #FFFFFF;
     * {
       margin: 0.25rem;
@@ -292,8 +232,6 @@ $borderRadius: 10px;
     }
   }
   .map_container {
-    // margin-top: 2px;
-    // width: 100%;
     min-height: 500px;
     border-radius: $borderRadius;
     border: 2px solid #000000;
@@ -303,23 +241,21 @@ $borderRadius: 10px;
   }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 770px) {
   .map_view {
-    // flex-direction: row;
-    // justify-content: space-evenly;
     & > div {
       flex: 1;
     }
     .map_container {
-      margin-top: 0;
+      margin-top: 0.75rem;
       margin-left: 2px;
     }
   }
 }
 
-
-//LIST VIEW
-
+/*******************************************
+*               list view                  *
+********************************************/
 .list_view {
   width: 90vw;
   margin: 0;
@@ -394,7 +330,6 @@ $borderRadius: 10px;
 @media only screen and (min-width: 1024px) {
   .list_view {
     width: 95%;
-    display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
@@ -408,8 +343,6 @@ $borderRadius: 10px;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background-color: #ccccccc0;
-    border-radius: $borderRadius;
     padding: 10vh;
     margin: 0;
   }
