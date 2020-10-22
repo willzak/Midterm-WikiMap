@@ -84,7 +84,9 @@ module.exports = (db, database) => {
     point.user_id = req.session.userId;
     const id = parseInt(point.id);
     console.log('point id in submit: ', id);
+    console.log('point??? : ', point);
     if(id === 0){
+      console.log('im here!!!');
       database.addPoint(point);
     } else {
       console.log('editing point:', point);

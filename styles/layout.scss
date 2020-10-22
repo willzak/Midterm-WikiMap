@@ -240,6 +240,13 @@ $borderRadius: 10px;
     align-self: center;
   }
 }
+// for infoWindow image size
+.info-window-img {
+  max-width:12rem;
+  max-height:12rem;
+  width: auto;
+  height: auto;
+}
 
 @media only screen and (min-width: 770px) {
   .map_view {

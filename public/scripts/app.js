@@ -26,7 +26,8 @@ let pageEnd = pageStart + pageSize - 1;
 //END Client side global variables
 
 $(document).ready(function() {
-  initMap();
+
+  //loadMapCards(listView);
 
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map', 'list'];
@@ -137,6 +138,7 @@ $(document).ready(function() {
     //hide the error if one was presented
     $('div.register span.error').fadeOut();
 
+
     //send the post request
     $.ajax({
       method: "POST",
@@ -148,7 +150,7 @@ $(document).ready(function() {
       user = response.user;
       mapKey = response.map;
       login(user);
-
+      loadMapCards(listView, pageSize, 0);
       //clear the form
       $inputs.each(function() {
         $(this).val('');
@@ -228,7 +230,7 @@ $(document).ready(function() {
     })
   }
 
-  //loadMapCards(listView);
+
 
   //Change View of list
   $('#fav').on('click', function(event) {
