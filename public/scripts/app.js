@@ -69,7 +69,7 @@ $(document).ready(function() {
       $(".navbar-menu").toggleClass("is-active");
     }
     hidePointForm(true);
-    loadMapCards(listView);
+    loadMapCards(listView, pageSize, 0);
   });
   // Check for click events on the navbar burger icon
   $(".navbar-burger").click(function() {
@@ -104,7 +104,7 @@ $(document).ready(function() {
       });
     });
     //NEEDED FOR IMAGE LOADING
-    loadMapCards(listView);
+    loadMapCards(listView, pageSize, 0);
   });
 
   $('div.register > form').submit(event => {
@@ -215,11 +215,14 @@ $(document).ready(function() {
   //END profile_reg_view listeners
 
   //LIST VIEW map population start
-  const loadMapCards = function(listView) {
+  const loadMapCards = function(listView, limit, offset) {
     $(function() {
-      $.ajax(`http://localhost:8080/api/maps/list/${listView}`, { method: 'GET' })
+      $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
+        if(res.maps.length < pageSize) {
+          $('.next-page-button').prop('disabled', true);
+        }
         renderMaps(res.maps);
       })
     })
@@ -238,7 +241,7 @@ $(document).ready(function() {
       listCounter = 0;
       listView = 'favcont';
     }
-    loadMapCards(listView);
+    loadMapCards(listView, pageSize, 0);
   })
 
   $('#cont').on('click', function(event) {
@@ -251,12 +254,13 @@ $(document).ready(function() {
       listCounter = 0;
       listView += 'favcont';
     }
-    loadMapCards(listView);
+    loadMapCards(listView, pageSize, 0);
   })
   //LIST VIEW map population end
 
   //START LIST VIEW listeners
   $('.map-list').on('mouseenter', '.map-container', function(e) {
+    //console.log('HOVER: ',$(this).children('div').children('.map-id').text() );
     $.ajax({
       method: "GET",
       url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,
@@ -276,6 +280,8 @@ $(document).ready(function() {
     pageEnd = pageStart + pageSize - 1;
     console.log('Start: ', pageStart);
     console.log('End: ', pageEnd);
+    $('.previous-page-button').prop('disabled', false);
+    loadMapCards(listView, pageSize, pageStart - 1);
   })
 
   $('.previous-page-button').on('click', function(){
@@ -284,7 +290,13 @@ $(document).ready(function() {
     pageEnd = pageStart + pageSize - 1;
     console.log('Start: ', pageStart);
     console.log('End: ', pageEnd);
+    if(pageStart === 1){
+      $('.previous-page-button').prop('disabled', true);
+    }
+    loadMapCards(listView, pageSize, pageStart - 1);
   })
+
+
   //END LIST VIEW listeners
 
   //START map_view listeners
