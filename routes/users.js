@@ -76,28 +76,6 @@ module.exports = (db, database) => {
       });
   });
 
-  router.get("/:id/favs", (req, res) => {
-    const userId = req.params.id;
-    if (!userId) {
-      res.send({message: 'not logged in'});
-      return
-    }
-
-    db.query(`
-    SELECT * FROM favourites
-    WHERE user_id = ${userId};
-    `)
-      .then(data => {
-        const userFavs = data.rows;
-        res.json({ userFavs });
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({error: err.message});
-      });
-  });
-
   const login =  function(email, password) {
     return database.getUserWithEmail(email) //Change
       .then(user => {
@@ -139,26 +117,6 @@ module.exports = (db, database) => {
       }).catch(e => {
         console.log('ERROR: ', e);
         res.send(e);
-      });
-  });
-
-  //add map to favourites
-  router.post("/:id/favs", (req, res) => {
-    const userId = req.params.id;
-    const mapId = req.body.mapId;
-    database.addFav(userId, mapId, db)
-      .then((result) => {
-        res.send(result)
-      });
-  });
-
-  //remove map from favourites
-  router.post("/:id/favs", (req, res) => {
-    const userId = req.params.id;
-    const mapId = req.body.mapId;
-    database.removeFav(userId, mapId, db)
-      .then((result) => {
-        res.send(result)
       });
   });
 

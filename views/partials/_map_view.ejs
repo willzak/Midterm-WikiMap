@@ -4,14 +4,15 @@
     <div class="map_intro">
       <h2>New Map</h2>
       <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
-      <form name='favourites' action='/api/users/:id/favs' method='POST'>
-        <input hidden type='text' name='mapId'>
-        <button type='submit' id='addFavs'>Add To Favourites</button>
-      </form>
 
       <div>
         <h6>Created By USER</h6> <!--Change to include which user-->
         <button class="edit_map">Edit</button>
+        <form action='/api/maps/favs/:userId' method='POST' id='addFavs' class='noFav'>
+          <input hidden type='text' name='userId' id='fav-user'>
+          <input hidden type='text' name='mapId' id='fav-map'>
+          <button type='submit' name='favs-btn'>Add To Favourites</button>
+        </form>
       </div>
     </div>
     <div class="median">

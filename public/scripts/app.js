@@ -188,7 +188,7 @@ $(document).ready(function() {
   loadMapCards(listView);
 
   //favourites button start
-  $('#addFavs').on('click', function(event) {
+  $('#addFavs').on('submit', function(event) {
     event.preventDefault();
     addFavourite();
   });
