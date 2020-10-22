@@ -297,6 +297,7 @@ const getMapList = function(restriction, userID) {
   SELECT maps.*, users.name as owner_name
   FROM maps
   JOIN users on users.id = maps.owner_id
+  ORDER by maps.id DESC
   LIMIT $1 OFFSET $2`;
   let values = [params[1], params[2]];
 
@@ -306,6 +307,7 @@ const getMapList = function(restriction, userID) {
     FROM users JOIN favourites ON user_id = users.id
     JOIN maps ON maps.id = favourites.map_id
     WHERE users.id = $3
+    ORDER BY maps.id DESC
     LIMIT $1 OFFSET $2`;
     values.push(userID);
   }
@@ -326,7 +328,7 @@ const getMapList = function(restriction, userID) {
         ) AS points_part
         JOIN users ON points_part.owner_id = users.id
     ) AS map_list
-    ORDER BY id
+    ORDER BY id DESC
     LIMIT $1 OFFSET $2`;
     values.push(userID);
   }
@@ -354,7 +356,7 @@ const getMapList = function(restriction, userID) {
         JOIN users ON points_part.owner_id = users.id
       ) AS sub_list
     ) AS map_list
-    ORDER BY id
+    ORDER BY id DESC
     LIMIT $1 OFFSET $2`;
     values.push(userID);
   }

@@ -40,10 +40,7 @@ $borderRadius: 10px;
   background-color: inherit;
 }
 
-// for infoWindow image size
-.info-window-img {
-  width: 180px;
-}
+
 
 @media only screen and (min-width: 650px) {
   nav {
@@ -301,6 +298,14 @@ $borderRadius: 10px;
   button.submit {
     align-self: center;
   }
+}
+
+// for infoWindow image size
+.info-window-img {
+  max-width:12rem;
+  max-height:12rem;
+  width: auto;
+  height: auto;
 }
 
 @media only screen and (min-width: 1024px) {
