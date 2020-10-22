@@ -135,6 +135,7 @@ const loadPoints = function(id) {
             content: contentString,
           });
 
+
           //listener for edit and delete point
           google.maps.event.addListener(infowindow, 'domready', function() {
             hidePointForm(true);
