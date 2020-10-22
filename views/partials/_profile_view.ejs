@@ -1,10 +1,10 @@
 <section class='profile_view'>
   <div class="profile_title">
         <img src=''>
-        <h2>Your Name</h2>
+        <h2 class="is-size-3">Your Name</h2>
   </div>
   <div class="profile_update">
-    <h3>Edit Your Profile</h3>
+    <h3 class="is-size-4">Edit Your Profile</h3>
     <p class='error'>Error Here</p>
     <form action="/profile_update" method="POST">
       <div>
@@ -19,8 +19,8 @@
         <label for="password">Confirm Password<b>*</b></label>
         <input type="password" name="confirm_password" placeholder="Password">
         <span>
-          <button type="submit" class="submit">Submit</button>
-          <button type="button" id="cancel_profile_update">Cancel</button>
+          <button type="submit" class="submit button is-link is-outlined">Submit</button>
+          <button type="button" class="button is-danger is-outlined" id="cancel_profile_update">Cancel</button>
         </span>
 
       </div>

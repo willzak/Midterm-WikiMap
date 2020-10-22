@@ -1,73 +1,105 @@
 // See: https://sass-lang.com/
+@charset "utf-8";
+@import "../node_modules/bulma/bulma.sass";
+//bulma variables here
+$navbar-item-hover-background-color: $primary;
+$navbar-item-hover-color: hsl(0, 0%, 29%);
+$navbar-item-color: $light;
+$navbar-divider-background-color: $primary;
+// Import only what you need from Bulma
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+@import "../node_modules/bulma/sass/base/_all.sass";
+@import "../node_modules/bulma/sass/elements/button.sass";
+@import "../node_modules/bulma/sass/elements/container.sass";
+@import "../node_modules/bulma/sass/elements/title.sass";
+@import "../node_modules/bulma/sass/form/_all.sass";
+@import "../node_modules/bulma/sass/components/navbar.sass";
+@import "../node_modules/bulma/sass/layout/hero.sass";
+@import "../node_modules/bulma/sass/layout/section.sass";
+
+
 $borderRadius: 10px;
 
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #EEE;
-  padding-top: 122px;
-}
+// body {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   background-color: #EEE;
+//   padding-top: 122px;
+// }
 
 //nav bar properties
-$navFontColor: #FFFFFF;
-nav {
-  //display properties
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  //sizing properties
-  height: 120px;
-  width: 100vw;
-  max-width:100%;
-  padding: 0.5rem;
-  border-radius: $borderRadius;
-  border: 2px solid #000000;
-  //colour properties
-  background-color: #4056A1;
-  color: $navFontColor;
-  //children
-  a {
-    color: $navFontColor;
-    &:hover {
-      text-shadow: 2px 7px 4px #1d284b;
-      font-weight: bold;
-    }
-  }
-  .nav_links {
-    flex-direction: column;
-  }
-  .logo {
-    font-family: 'Bungee', cursive;
-    font-size: 35px;
-    text-shadow: 4px 4px 6px #1d284b;
-  }
-  button {
-    color: $navFontColor;
-    background-color: Transparent;
-    border: 2px solid $navFontColor;
-    border-radius: $borderRadius;
-    &:hover {
-      box-shadow: 0px 9px 4px -4px #1d284b;
-      font-weight: bold;
-      border: 3px solid $navFontColor;
-    }
-  }
+.navbar-menu {
+  background-color: $primary-dark;
 }
-
+.logo {
+  font-family: cursive;
+  text-shadow: 2px 2px 2px #000000;
+}
+.navbar-item:hover {
+  background-color: inherit;
+}
 @media only screen and (min-width: 650px) {
   nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 1.5rem;
+    height: 120;
   }
 }
+//   //display properties
+//   display: flex;
+//   flex-direction: column-reverse;
+//   align-items: center;
+//   justify-content: space-between;
+//   position: fixed;
+//   top: 0;
+//   z-index: 1;
+//   //sizing properties
+//   height: 120px;
+//   width: 100vw;
+//   max-width:100%;
+//   padding: 0.5rem;
+//   border-radius: $borderRadius;
+//   border: 2px solid #000000;
+//   //colour properties
+//   background-color: #4056A1;
+//   color: $navFontColor;
+//   //children
+//   a {
+//     color: $navFontColor;
+//     &:hover {
+//       text-shadow: 2px 7px 4px #1d284b;
+//       font-weight: bold;
+//     }
+//   }
+//   .nav_links {
+//     flex-direction: column;
+//   }
+//   .logo {
+//     font-family: cursive;
+//     font-size: 35px;
+//     text-shadow: 4px 4px 6px #1d284b;
+//   }
+//   button {
+//     color: $navFontColor;
+//     background-color: Transparent;
+//     border: 2px solid $navFontColor;
+//     border-radius: $borderRadius;
+//     &:hover {
+//       box-shadow: 0px 9px 4px -4px #1d284b;
+//       font-weight: bold;
+//       border: 3px solid $navFontColor;
+//     }
+//   }
+// }
+
+// @media only screen and (min-width: 650px) {
+//   nav {
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     align-items: flex-end;
+//     padding: 1.5rem;
+//   }
+// }
 
 // login/registration view
 .login_reg_view {
@@ -186,8 +218,8 @@ nav {
 
 // map view
 .map_view {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   width: 100%;
   .map_intro {
     display: flex;
@@ -254,10 +286,9 @@ nav {
     }
   }
   .map_container {
-    margin-top: 2px;
-    width: 100%;
-    height: 500px;
-    background-color: green;
+    // margin-top: 2px;
+    // width: 100%;
+    min-height: 500px;
     border-radius: $borderRadius;
     border: 2px solid #000000;
   }
@@ -268,8 +299,8 @@ nav {
 
 @media only screen and (min-width: 1024px) {
   .map_view {
-    flex-direction: row;
-    justify-content: space-evenly;
+    // flex-direction: row;
+    // justify-content: space-evenly;
     & > div {
       flex: 1;
     }

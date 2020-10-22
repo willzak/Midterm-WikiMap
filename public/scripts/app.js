@@ -2,6 +2,7 @@
 let user = {};
 let mapKey = 0;
 let currentView;
+let logIn = false;
 const defaultMap = {
   id: 0,
   name: 'New Map',
@@ -30,16 +31,43 @@ $(document).ready(function() {
     loadMap(defaultMap);
     hideEditForm(false);
     currentView = setView('map', currentView);
+    console.log("**********************")
+    if ($(".navbar-menu").hasClass("is-active")) {
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    }
   });
   $('#profile_btn').click(function() {
     currentView = setView('profile', currentView);
+    if ($(".navbar-menu").hasClass("is-active")) {
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    }
   });
   $('#logout_btn').click(function() {
+    logIn = false;
+    if ($(".navbar-menu").hasClass("is-active")) {
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    }
     currentView = setDefaultUI(views);
   });
   $('#home_btn').click(function() {
     console.log('been clicked***********************');
     currentView = setView('list', currentView);
+    if ($(".navbar-menu").hasClass("is-active")) {
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    }
+  });
+  // Check for click events on the navbar burger icon
+  $(".navbar-burger").click(function() {
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    if (logIn) {
+      $(".navbar-burger").toggleClass("is-active");
+      $(".navbar-menu").toggleClass("is-active");
+    }
+
   });
   //END nav bar listeners
 
@@ -61,6 +89,7 @@ $(document).ready(function() {
       user = response.user;
       mapKey = response.map;
       login(user);
+      logIn = true;
       $inputs.each(function() {
         $(this).val('');
       });

@@ -198,7 +198,7 @@ const loadPoints = function (id) {
         }).then((response) => {
           username = response.user[0].name;
           const contentString = `<div id="content">
-            <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+            <h1 id="firstHeading" class="firstHeading is-size-4">${currentPoint.title}</h1>
             <div id="bodyContent">
                 <li>Created by: ${username}</li>
                 <li>Description: ${currentPoint.description}</li>
@@ -224,9 +224,9 @@ const createMapCard = function (mapInfo) {
   let $map = $(`
   <div class='map-container'>
     <div>
-      <h2>${mapInfo.name}</h2>
+      <h2 class="is-size-4">${mapInfo.name}</h2>
       <p>${mapInfo.description}</p>
-      <p>Created By: ${mapInfo.owner_name}</p>
+      <pclass="is-size-7">Created By: ${mapInfo.owner_name}</pclass=>
       <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
     <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>

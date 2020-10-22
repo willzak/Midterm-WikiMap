@@ -1,12 +1,12 @@
 
-<section class="map_view">
-  <div>
+<section class="map_view columns">
+  <div class="column is-half flex-grow-1">
     <div class="map_intro">
-      <h2>New Map</h2>
+      <h2 class="is-size-4">New Map</h2>
       <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
       <div>
-        <h6>Created By USER</h6> <!--Change to include which user-->
-        <button class="edit_map">Edit</button>
+        <h6 class="is-size-7">Created By USER</h6> <!--Change to include which user-->
+        <button class="edit_map button is-link is-outlined">Edit</button>
       </div>
     </div>
     <div class="median">
@@ -24,18 +24,18 @@
                 <textarea name='description'></textarea>
               </span>
               <span>
-                <button type="submit" class="submit">Save</button>
-                <button type="button" id="cancel_edit_map">Cancel</button>
+                <button type="submit" class="submit button is-link is-outlined">Save</button>
+                <button type="button" class="button is-danger is-outlined" id="cancel_edit_map">Cancel</button>
               </span>
             </div>
           </form>
         </div>
       </div>
-      <div class="bar">
+      <div class="bar has-background-primary-dark">
         <!-- directions hidden when in add_point form -->
         <h5 class="add_point">Click on the map to add a new point of interest</h5>
         <!-- save button only displayed when map center moved, or zoom changed -->
-        <button class="save">Save Position</button>
+        <button class="save button is-link is-inverted is-outlined">Save Position</button>
       </div>
       <!-- add_point - displays when map is clicked -->
       <div class="padding">
@@ -64,8 +64,8 @@
                 <input type="text" name="lng" placeholder="longitude">
               </span>
               <span>
-                <button type="submit" class="submit">Save</button>
-                <button type='button' id="cancel_add_point">Cancel</button>
+                <button type="submit" class="submit button is-link is-outlined">Save</button>
+                <button type='button' class="button is-danger is-outlined" id="cancel_add_point">Cancel</button>
               </span>
             </div>
           </form>
@@ -73,7 +73,7 @@
       </div>
     </div>
   </div>
-  <div class="map_container" id='test_map'>
+  <div class="map_container column is-half flex-grow-1 " id='test_map'>
     <!-- Map Goes HERE -->
   </div>
 </section>
