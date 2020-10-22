@@ -240,7 +240,7 @@ const createMapCard = function(mapInfo, key) {
     <div>
       <h2 class="is-size-4">${mapInfo.name}</h2>
       <p>${mapInfo.description}</p>
-      <pclass="is-size-7">Created By: ${mapInfo.owner_name}</pclass=>
+      <p class="is-size-7">Created By: ${mapInfo.owner_name}</p>
       <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
     <img class='map-profile-img' src='${image}'>

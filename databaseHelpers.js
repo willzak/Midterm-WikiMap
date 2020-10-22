@@ -290,76 +290,79 @@ exports.getCenterOfMap = getCenterOfMap;
  * @return query object to specified route
  */
 const getMapList = function(restriction, userID) {
+  //restrictions format = "<all||favs||cont||contfavs>-<limit>-<offset>"
+  let params = restriction.split('-');
   //query string for all maps
   let queryString = `
   SELECT maps.*, users.name as owner_name
   FROM maps
-  JOIN users on users.id = maps.owner_id`;
-  let values = undefined;
+  JOIN users on users.id = maps.owner_id
+  LIMIT $1 OFFSET $2`;
+  let values = [params[1], params[2]];
 
   //query string for maps favourited by user
-  if (restriction === 'favs') {
+  if (params[0] === 'favs') {
     queryString = `SELECT maps.*, users.name as owner_name
     FROM users JOIN favourites ON user_id = users.id
     JOIN maps ON maps.id = favourites.map_id
-    WHERE users.id = $1;`;
-    values = [userID];
+    WHERE users.id = $3
+    LIMIT $1 OFFSET $2`;
+    values.push(userID);
   }
 
   //query string for maps a user contributed to
-  if (restriction === 'cont') {
+  if (params[0] === 'cont') {
     queryString = `
     SELECT * FROM
     (SELECT maps.*, users.name AS owner_name
       FROM maps JOIN users ON users.id = maps.owner_id
-      WHERE users.id = $1
-    UNION
-    SELECT points_part.*, users.name AS owner_name FROM
-      (SELECT maps.*
-        FROM users JOIN points ON creator_id = users.id
-        JOIN maps ON map_id = maps.id
-        WHERE users.id = $1
-      ) AS points_part
-      JOIN users ON points_part.owner_id = users.id) AS map_list
-    ORDER BY id`;
-    values = [userID];
-  }
-
-  //query string for maps a user favourited AND contributed to
-  if (restriction === 'favcont') {
-    queryString = `
-    SELECT * FROM
-    (SELECT maps.*, users.name as owner_name
-      FROM users JOIN favourites ON user_id = users.id
-      JOIN maps ON maps.id = favourites.map_id
-      WHERE users.id = $1
-    UNION
-    SELECT * FROM
-      (SELECT maps.*, users.name AS owner_name
-        FROM maps JOIN users ON users.id = maps.owner_id
-        WHERE users.id = $1
+      WHERE users.id = $3
       UNION
       SELECT points_part.*, users.name AS owner_name FROM
         (SELECT maps.*
           FROM users JOIN points ON creator_id = users.id
           JOIN maps ON map_id = maps.id
-          WHERE users.id = $1
+          WHERE users.id = $3
         ) AS points_part
-        JOIN users ON points_part.owner_id = users.id) AS sub_list) AS map_list
-    ORDER BY id`;
-    values = [userID];
+        JOIN users ON points_part.owner_id = users.id
+    ) AS map_list
+    ORDER BY id
+    LIMIT $1 OFFSET $2`;
+    values.push(userID);
   }
 
-  if (values) {
-    return pool.query(queryString, values)
-      .then(res => {
-        return res.rows
-      })
-      .catch(err => console.log(err));
+  //query string for maps a user favourited AND contributed to
+  if (params[0] === 'favcont') {
+    queryString = `
+    SELECT * FROM
+    (SELECT maps.*, users.name as owner_name
+      FROM users JOIN favourites ON user_id = users.id
+      JOIN maps ON maps.id = favourites.map_id
+      WHERE users.id = $3
+      UNION
+      SELECT * FROM
+      (SELECT maps.*, users.name AS owner_name
+        FROM maps JOIN users ON users.id = maps.owner_id
+        WHERE users.id = $3
+        UNION
+        SELECT points_part.*, users.name AS owner_name FROM
+        (SELECT maps.*
+          FROM users JOIN points ON creator_id = users.id
+          JOIN maps ON map_id = maps.id
+          WHERE users.id = $3
+        ) AS points_part
+        JOIN users ON points_part.owner_id = users.id
+      ) AS sub_list
+    ) AS map_list
+    ORDER BY id
+    LIMIT $1 OFFSET $2`;
+    values.push(userID);
   }
 
-  return pool.query(queryString)
-    .then(res => res.rows)
+  return pool.query(queryString, values)
+    .then(res => {
+      return res.rows;
+    })
     .catch(err => console.log(err));
 };
 exports.getMapList = getMapList;
