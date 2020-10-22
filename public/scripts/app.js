@@ -36,6 +36,7 @@ $(document).ready(function() {
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
+    $("#addFavs").hide();
     hideEditForm(false);
     currentView = setView('map', currentView);
     console.log("**********************")
@@ -219,6 +220,7 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function(listView, limit, offset) {
     $(function() {
+      $('#addFavs').show();
       $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
@@ -231,6 +233,7 @@ $(document).ready(function() {
   }
 
   //favourites button start
+
   $('#addFavs').on('click', function(event) {
     event.preventDefault();
 
@@ -328,6 +331,7 @@ $(document).ready(function() {
   //  edit_map
   $('button.edit_map').click(function() {
     hideEditForm(false);
+    $('#addFavs').hide();
   });
   $('#cancel_edit_map').click(function() {
     hideEditForm(true);

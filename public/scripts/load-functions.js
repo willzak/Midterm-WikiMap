@@ -221,6 +221,12 @@ const renderMaps = function(data) {
   }
 };
 
+const loadFavButton = function() {
+  $('#addFavs').empty();
+  $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='no'>",
+    "<button type='button' name='favs-btn'>Add To Favourites</button>");
+}
+
 const addFavourite = function(data) {
 
   if ($('#addFavs').hasClass('noFav')) {

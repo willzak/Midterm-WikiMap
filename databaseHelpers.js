@@ -411,10 +411,7 @@ const removeFav = function(userId, mapId) {
   let queryString = `
   DELETE FROM favourites (user_id, map_id)
   WHERE user_id = $1 AND map_id = $2
-  RETURNING (SELECT maps.*, users.name as owner_name
-    FROM users JOIN favourites ON user_id = users.id
-    JOIN maps ON maps.id = favourites.map_id
-    WHERE users.id = $1;);
+  RETURNING *;
   `;
   let values = [userId, mapId];
 

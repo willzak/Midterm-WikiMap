@@ -150,7 +150,7 @@ module.exports = (db, database) => {
           console.log('REMOVED users post req: ', result)
           res.send(result)
         });
-    } else if (liked === 'no') {
+    } else {
       database.addFav(userId, mapId)
         .then((result) => {
           console.log('ADDED users post req: ', result)
