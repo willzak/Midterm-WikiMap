@@ -230,12 +230,19 @@ $(document).ready(function() {
     })
   }
 
-
-
   //favourites button start
-  $('#addFavs').on('submit', function(event) {
+  $('#addFavs').on('click', function(event) {
     event.preventDefault();
-    addFavourite();
+
+    const mapId = user.id;
+    const userId = currentMap.id;
+    const liked = $('#liked').val();
+    let data = {
+      mapId,
+      userId,
+      liked
+    }
+    addFavourite(data);
   });
   //favourites button end
 

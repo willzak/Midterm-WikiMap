@@ -221,37 +221,31 @@ const renderMaps = function(data) {
   }
 };
 
-const addFavourite = function() {
-  const mapId = $('#fav-map').val();
-  const userId = $('#fav-user').val();
-  const liked = $('#liked').val();
-  let data = {
-    mapId,
-    userId,
-    liked
-  }
+const addFavourite = function(data) {
 
   if ($('#addFavs').hasClass('noFav')) {
     $.ajax({
       method: "POST",
-      url: `http://localhost:8080/api/maps/favs/${userId}`,
+      url: `http://localhost:8080/api/maps/favs/${data.userId}`,
       data,
       dataType: "json"
     }).then(res => {
+      $('#addFavs').empty();
       $('#addFavs').removeClass('noFav').addClass('yesFav');
-      $('#liked').val('yes');
+      $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='yes'>")
       $('#addFavs').html("<button type='submit' name='favs-btn'>Remove From Favourites</button>");
       console.log('liked!', res);
     })
   } else {
     $.ajax({
       method: "POST",
-      url: `http://localhost:8080/api/maps/favs/${userId}`,
+      url: `http://localhost:8080/api/maps/favs/${data.userId}`,
       data,
       dataType: "json"
     }).then(res => {
+      $('#addFavs').empty();
       $('#addFavs').removeClass('yesFav').addClass('noFav');
-      $('#addFavs').val('no');
+      $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='no'>")
       $('#addFavs').html("<button type='submit' name='favs-btn'>Add To Favourites</button>");
       console.log('unliked!', res);
     })
