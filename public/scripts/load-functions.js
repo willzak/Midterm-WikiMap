@@ -1,21 +1,26 @@
-const initMap = function () {
+
+// Initialize google maps API
+const initMap = function() {
   $("#map_script").attr(
     "src",
     `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
   );
+
   map = new google.maps.Map(document.getElementById("test_map"), {
     center: { lat: 52.627849747795025, lng: -4416.512126890331 },
     zoom: 3,
   });
-  console.log("center: ", map.getCenter());
-  let marker = new google.maps.Marker({ map: null });
+
+  //let marker = new google.maps.Marker({ map: null });
   $(".save").hide();
+
   //listner for zoom change
-  map.addListener("zoom_changed", function () {
+  map.addListener("zoom_changed", function() {
     $(".save").show();
   });
+
   //listner for center change
-  map.addListener("center_changed", function () {
+  map.addListener("center_changed", function() {
     $(".save").show();
   });
 
@@ -23,15 +28,15 @@ const initMap = function () {
   if (mapClickable) {
     map.addListener("click", (e) => {
       mapClickable = false;
-      console.log("CLICKED! ", e.latLng);
-      marker.setMap(null);
-      marker = new google.maps.Marker({
+      //marker.setMap(null);
+      const marker = new google.maps.Marker({
         position: e.latLng,
         map: map,
       });
+      hidePointForm(false);
       $(".form_div input[name=lat]").val(e.latLng.lat);
       $(".form_div  input[name=lng]").val(e.latLng.lng);
-
+      $(".form_div  input[name=id]").val(0);
 
       $('#cancel_add_point').click(function() {
         marker.setMap(null);
@@ -39,119 +44,64 @@ const initMap = function () {
     });
   }
 
-  $("#point-form").submit((event) => {
-    event.preventDefault();
-    mapClickable = true;
-    let $inputs = $("#point-form :input");
-    let values = { map_id: currentMap.id };
-    $inputs.each(function () {
-      values[this.name] = $(this).val();
-    });
 
-    //prevents double submission of the form
-    $(this).find(":submit").attr("disabled", "disabled");
-
-    $.ajax({
-      method: "POST",
-      url: "/api/maps/add_point",
-      data: values,
-
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.log("error ", errorThrown);
-      },
-    })
-      .then((response) => {
-        $("#point-form")[0].reset();
-      })
-      .catch((err) => {
-        console.log("err: ", err);
-      });
-    // $.ajax({
-    //   method: "POST",
-    //   url: "/api/users/login",
-    //   data: values
-    // }).then((response) => {
-    //   console.log('result user: ',response);
-    //   user = response.user;
-    //   mapKey = response.map;
-    //   login(user);
-    // });
-    //   $.ajax({
-    //     url: '/resource_url_goes_here',
-    //     type : 'POST',
-    //     data: sendJson,
-    //     success: function(data){
-    //         /* implementation goes here */
-    //     },
-    //     error: function(jqXHR, textStatus, errorThrown) {
-    //         /* implementation goes here */
-    //     }
-    // });
-    $(".map_container").slideDown();
-    loadPoints(currentMap.id);
-    hidePointForm(true);
-  });
 };
 
-const loadProfile = function (user) {
+const loadProfile = function(user) {
   // fill in the title block
   if (user.profile_photo) {
     $(".profile_title img").attr("src", user.profile_photo);
   }
+
   $(".profile_title h2").text(user.name);
+
   // fill in the form fields
   $(".profile_update input[name=name]").val(user.name);
   $(".profile_update input[name=email]").val(user.email);
+
   if (user.profile_photo) {
     $(".profile_update input[name=profile_photo]").val(user.profile_photo);
   }
+
   $(".profile_update input[name=password]").val(user.password);
   $(".profile_update input[name=confirm_password]").val(user.password);
 };
 
-const login = function (user) {
+const login = function(user) {
   loadProfile(user);
   currentView = setView("list", currentView);
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-  console.log("MAP READY");
 };
 
-const loadMap = function (mapData) {
-  console.log('LOAD MAP: ', mapData);
-  let changed = false;
-  for (const key in mapData) {
-    if (currentMap[key] !== mapData[key]) {
-      changed = true;
-    }
+const loadMap = function(mapData) {
+  //clear old points from currentMaps
+  if (!currentMap.markers) {
+    currentMap.markers = [];
   }
-  if (!changed) return;
+  for (let marker in currentMap.markers) {
+    currentMap.markers[marker].setMap(null);
+  }
+  currentMap.markers = [];
+
   currentMap = mapData;
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + user.name);
   map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
-  map.setZoom(map.zoom);
-  //clear old points
-  if(!currentMap.markers){
-    console.log('im here');
+  map.setZoom(mapData.zoom);
 
-    currentMap.markers = [];
+  for (let marker in currentMap.markers) {
+    currentMap.markers[marker].setMap(null);
   }
-  console.log('these markers: ', currentMap.markers);
-    for(let marker in currentMap.markers){
-      console.log('deleting markers: ', currentMap.markers[marker]);
-      currentMap.markers[marker].setMap(null);
-    }
-    currentMap.markers = [];
-
-
+  currentMap.markers = [];
   loadPoints(currentMap.id);
   $(".save").hide();
 };
 
-const loadPoints = function (id) {
+const loadPoints = function(id) {
+  //Request to get points data given map id
   const values = { id };
   $.ajax({
     method: "GET",
@@ -160,7 +110,6 @@ const loadPoints = function (id) {
     dataType: "json",
   }).then((response) => {
     let changed = false;
-    console.log('points: ',response);
     for (let index in currentMap.points) {
       for (let key in currentMap.points[index]) {
         if (currentMap.points[index][key] !== response[index][key]) {
@@ -168,24 +117,22 @@ const loadPoints = function (id) {
         }
       }
     }
-    // if(!changed){
-    //   return;
-    // }
 
     currentMap.points = response;
-
+    currentMap.markers = [];
+    //Iterates through list of points and create markers and info window for each.
     for (let point in response) {
       const latLng = {
         lat: parseFloat(response[point].latitude),
         lng: parseFloat(response[point].longitude),
       };
-      marker = new google.maps.Marker({
+      const marker = new google.maps.Marker({
         position: latLng,
         map: map,
       });
 
+      //Adds marker to the array in currentMap
       currentMap.markers.push(marker);
-      console.log('adding marker: ', currentMap.markers)
       const currentPoint = currentMap.points[point];
       let username = "";
       currentMap.markers[point].addListener("click", () => {
@@ -197,30 +144,97 @@ const loadPoints = function (id) {
           dataType: "json",
         }).then((response) => {
           username = response.user[0].name;
-          const contentString = `<div id="content">
-            <h1 id="firstHeading" class="firstHeading is-size-4">${currentPoint.title}</h1>
-            <div id="bodyContent">
-                <li>Created by: ${username}</li>
-                <li>Description: ${currentPoint.description}</li>
-                <img src=${currentPoint.image}><img>
-
-            </div>
+          //html layout for infoWindow
+          //console.log('point: ', currentPoint);
+          const contentString =
+            `<div id="content">
+              <h1 id="firstHeading" class="firstHeading">${currentPoint.title}</h1>
+              <button type='button' class = 'edit-point'>Edit</button>
+              <button type='button' class = 'delete-point'> Delete </button>
+              <p hidden class = 'point-id'>${currentPoint.id}</p>
+              <p hidden class = 'map-id''> ${currentPoint.map_id} </p>
+              <h3>Created by: ${username}</h3>
+              <div id="bodyContent">
+                  <li>Description: ${currentPoint.description}</li>
+                  </br>
+                  <img class = "info-window-img" src=${currentPoint.image}><img>
+              </div>
             </div>`;
-
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
           });
+
+          //listener for edit and delete point
+          google.maps.event.addListener(infowindow, 'domready', function() {
+            hidePointForm(true);
+            // Bind the click event on your button here
+            $('.edit-point').click(function() {
+              hidePointForm(false);
+
+              const point_id = $(this).siblings('.point-id').text();
+
+              $.ajax({
+                method: "GET",
+                url: `/api/maps/points/${currentPoint.creator_id}`,
+
+                dataType: "json",
+              }).then(res2 => {
+
+              $(".form_div input[name=title]").val(res2[0].title);
+              $(".form_div  textarea[name=text]").val(res2[0].description);
+              $(".form_div  input[name=image]").val(res2[0].image);
+              $(".form_div input[name=lat]").val(res2[0].latitude);
+              $(".form_div  input[name=lng]").val(res2[0].longitude);
+              $(".form_div  input[name=id]").val(point_id);
+              })
+              infowindow.close(map, currentMap.markers[point]);
+            })
+
+            $('.delete-point').click(function() {
+              const id = $(this).siblings('.point-id').text();
+              $.ajax({
+                method: "POST",
+                url: `/api/maps/points/delete`,
+                data: {id},
+                dataType: "json",
+              }).then(res => {
+                //reload map after delete
+                console.log("THIS MARKER: ", currentMap.markers[markerSearch(currentMap, parseInt(id))]);
+
+                currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
+                currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
+                //currentMap.markers[markerSearch(currentMap, parseInt(id))].visible = false;
+                currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
+                currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
+                console.log('MAP NOW: ', currentMap);
+                initMap();
+                loadMap(currentMap);
+
+              })
+            });
+
+          });
           infowindow.open(map, currentMap.markers[point]);
+
         });
       });
-
       $(".save").hide();
     }
   });
 };
 
+const markerSearch = function(map, id) {
+  for(let index in map.points){
+    if(map.points[index].id === id){
+      return index;
+    }
+  }
+}
+
 //On list view - to load an indvidual map card
-const createMapCard = function (mapInfo) {
+const createMapCard = function(mapInfo, key) {
+  const image = createImage(mapInfo, key);
+
   let $map = $(`
   <div class='map-container'>
     <div>
@@ -229,22 +243,26 @@ const createMapCard = function (mapInfo) {
       <pclass="is-size-7">Created By: ${mapInfo.owner_name}</pclass=>
       <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
-    <img class='map-profile-img' src='https://images.dailyhive.com/20190409192004/56481872_1154633324661092_3673180617329716882_n.jpg'>
+    <img class='map-profile-img' src='${image}'>
   </div>
   `);
-
 
   return $map;
 };
 
+//Creates static screenshot of map
+const createImage = function(mapInfo, key) {
+  return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&key=${key}`;
+};
+
 //Load each map card from an array of data (can be changed to obj of data)
-const renderMaps = function (data) {
-  //organize by creation date
-  data.sort(function (x, y) {
+const renderMaps = function(data) {
+  data.sort(function(x, y) {
     return y.id - x.id;
   });
+
   for (let mapInfo of data) {
-    let output = createMapCard(mapInfo);
+    let output = createMapCard(mapInfo, mapKey);
     $(".map-list").append(output);
   }
 };

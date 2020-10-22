@@ -39,6 +39,12 @@ $borderRadius: 10px;
 .navbar-item:hover {
   background-color: inherit;
 }
+
+// for infoWindow image size
+.info-window-img {
+  width: 180px;
+}
+
 @media only screen and (min-width: 650px) {
   nav {
     height: 120;

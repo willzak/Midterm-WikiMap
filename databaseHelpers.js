@@ -1,9 +1,5 @@
-/// Users
 const cookieSession = require('cookie-session');
-
-
 const { Pool } = require('pg');
-
 const pool = new Pool({
   user: 'vagrant',
   password: '123',
@@ -36,7 +32,6 @@ const getUserWithId = function(id, pool) {
   WHERE id = $1
   `, [id])
     .then(res => {
-      console.log(res.rows[0]);
       return res.rows[0]});
 };
 exports.getUserWithId = getUserWithId;
@@ -71,6 +66,11 @@ const addUser =  function(newData) {
 };
 exports.addUser = addUser;
 
+/**
+ * Using the profile form, this function updates changes a user inputs on their profile
+ * @param {Object} newData
+ * @reutrn update to the profile table
+ */
 const editUser = function(newData) {
   let changes = '';
   let values = [];
@@ -95,7 +95,7 @@ const editUser = function(newData) {
 exports.editUser = editUser;
 
 /**
- *
+ * Adds a map to database
  * @param {
       id: req.body.map_id,
       owner_id: owner_id,
@@ -125,7 +125,7 @@ exports.addMap = addMap;
 
 
 /**
- *
+ * Changes a map currently in the database
  * @param {
   id: req.body.map_id,
   owner_id: owner_id,
@@ -147,17 +147,14 @@ const editMap = function(map, pool) {
   WHERE id = $6
   `;
   return pool.query(queryString ,[map.name, map.description, map.longitude, map.latitude, map.zoom, map.id])
-    .then(res => pool.query(`SELECT currval('maps_id_seq');`)
-      .then(res2 => {
-        return res2.rows[0].currval;
-      }))
+    .then(res => map.id
+      )
     .catch(err => console.log(err));
 };
 
 exports.editMap = editMap;
 
 const addPoint = function(point) {
-  console.log('POINT INSIDE ADD POINT: ', point);
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
   VALUES($1, $2, $3, $4, $5, $6, $7);
@@ -167,6 +164,36 @@ const addPoint = function(point) {
 };
 
 exports.addPoint = addPoint;
+
+const editPoint = function(point, id) {
+  return pool.query( `
+  UPDATE points
+  SET map_id = $1,
+      title = $2,
+      description = $3,
+      image = $4,
+      longitude = $5,
+      latitude = $6
+
+  WHERE id = $7
+  `,[point.map_id, point.title, point.text, point.image, point.lng, point.lat, id])
+    .then(res => res.row)
+    .catch(err => console.log('edit error: ', err));
+};
+
+exports.editPoint = editPoint;
+
+const deletePoint = function(id) {
+  return pool.query( `
+  DELETE FROM points
+
+  WHERE id = $1
+  `,[id])
+    .then(res => res.row)
+    .catch(err => console.log('delete error: ', err));
+};
+
+exports.deletePoint = deletePoint;
 
 
 // FUNCTIONS FOR MAP VIEWS
@@ -209,19 +236,33 @@ exports.getMapByName = getMapByName;
   * @return {Promise<{}>} A promise to the user
   */
 const getPointsByMap = function(map_id) {
-  console.log('MAP_ID: ', map_id);
   const queryString = `
     SELECT * FROM points
     WHERE map_id = $1;
     `;
 
   return pool.query(queryString, [map_id])
-    .then(res => res.rows)
+    .then(res => {
+      console.log('res rows: ',res.rows);
+      return res.rows})
 };
 exports.getPointsByMap = getPointsByMap;
 
+const getPointsById = function(id) {
+  const queryString = `
+    SELECT * FROM points
+    WHERE id = $1;
+    `;
+
+  return pool.query(queryString, [id])
+    .then(res => {
+      console.log('res rows: ',res.rows);
+      return res.rows})
+};
+exports.getPointsById = getPointsById;
+
 /**
-   * Get the center object for a map
+   * Get the center object (latitude and longitude) for a map
    * @param {id: integer, owner_id: integer, name: string, city: string, description: string, public_edits: boolean, latitude: integer, longitude: integer, zoom: integer}
    * @return {Promise<{}>}
    */
@@ -242,13 +283,21 @@ const getCenterOfMap = function(map_id) {
 };
 exports.getCenterOfMap = getCenterOfMap;
 
+/**
+ * Gets the appropriate query for the list view of maps based on user input of buttons
+ * @param {String} restriction
+ * @param {Integer} userID
+ * @return query object to specified route
+ */
 const getMapList = function(restriction, userID) {
+  //query string for all maps
   let queryString = `
   SELECT maps.*, users.name as owner_name
   FROM maps
   JOIN users on users.id = maps.owner_id`;
   let values = undefined;
 
+  //query string for maps favourited by user
   if (restriction === 'favs') {
     queryString = `SELECT maps.*, users.name as owner_name
     FROM users JOIN favourites ON user_id = users.id
@@ -257,6 +306,7 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
+  //query string for maps a user contributed to
   if (restriction === 'cont') {
     queryString = `
     SELECT * FROM
@@ -275,6 +325,7 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
+  //query string for maps a user favourited AND contributed to
   if (restriction === 'favcont') {
     queryString = `
     SELECT * FROM
@@ -299,7 +350,6 @@ const getMapList = function(restriction, userID) {
     values = [userID];
   }
 
-  console.log('********************************query', queryString);
   if (values) {
     return pool.query(queryString, values)
       .then(res => {

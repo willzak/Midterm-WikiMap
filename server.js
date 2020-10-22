@@ -17,6 +17,7 @@ app.use(cookieSession({
     'supersecretsecret', 'anotherreallylongrandomstring', 'knockknockwhosthereshhhitsasecret'
   ]
 }));
+
 // PG database client/connection setup
 const { Pool } = require('pg');
 const dbParams = require('./lib/db.js');
@@ -43,16 +44,12 @@ app.use("/styles", sass({
 app.use(express.static("public"));
 
 // Separated Routes for each Resource
-// Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const mapsRoutes = require("./routes/maps");
 
 // Mount all resource routes
-// Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db, database));
 app.use("/api/maps", mapsRoutes(db, database));
-// Note: mount other resources here, using the same pattern above
-
 
 // Home page
 // Warning: avoid creating more routes in this file!
@@ -62,5 +59,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`Example app listening on port ${PORT} 📀`);
 });

@@ -1,27 +1,22 @@
 /*
- * All routes for Widgets are defined here
- * Since this file is loaded in server.js into api/widgets,
- *   these routes are mounted onto /widgets
+ * All routes for Maps are defined here
+ * Since this file is loaded in server.js into api/maps,
+ *   these routes are mounted onto /maps
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
 const e = require('express');
 const express = require('express');
 const router  = express.Router();
-//Database helpers
-
-
 
 module.exports = (db, database) => {
   //loads all maps
   router.get("/list/:restriction", (req, res) => {
     const restriction = req.params.restriction;
     const userId = req.session.userId;
-    console.log(restriction, userId);
     database.getMapList(restriction, userId)
       .then(data => {
         const maps = data;
-        console.log('******************************** sending ', maps);
         res.json({ maps });
       })
       .catch(e => {
@@ -31,14 +26,30 @@ module.exports = (db, database) => {
   });
 
   router.get("/points", (req, res) => {
-    console.log('req: ', req.query);
     const id = req.query.id;
-    console.log("IMHERE", id);
     database.getPointsByMap(id)
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
+      console.log('data: ', data);
+      res.send(data)}
+    )
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
 
+
+  });
+
+  router.get("/points/:id", (req, res) => {
+    const id = req.params.id;
+    database.getPointsById(id)
+    .then(data=>{
+      data.latitude = parseFloat(data.latitude);
+      data.longitude = parseFloat(data.longitude);
+      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -56,7 +67,6 @@ module.exports = (db, database) => {
     const id = req.params.id;
     database.getMapByID(id, db)
       .then(data => {
-        //const map = data.rows;
         res.json({ data });
       })
       .catch(err => {
@@ -70,15 +80,29 @@ module.exports = (db, database) => {
 
   //route to add point
   router.post("/add_point", (req, res) => {
-    //console.log("POINT ROUTE: ", req.body);
     point = req.body;
     point.user_id = req.session.userId;
-    console.log("POINT ROUTE: ", point);
-    //res.send('done');
-    database.addPoint(point);
+    const id = parseInt(point.id);
+    console.log('point id in submit: ', id);
+    if(id === 0){
+      database.addPoint(point);
+    } else {
+      console.log('editing point:', point);
+      database.editPoint(point, id);
+    }
+
     res.json(point);
   });
 
+  router.post("/points/delete", (req, res) => {
+    point = req.body;
+    const id = parseInt(point.id);
+    console.log('point id in delete: ', id);
+
+
+    database.deletePoint(id);
+    res.json(point);
+  });
 
 
   //adds new map or edits existing map based on map_id is null or not
@@ -87,18 +111,14 @@ module.exports = (db, database) => {
     const id = parseInt(req.params.id);
     if (id === 0) {
       const map = req.body;
-      console.log("creating new map");
       database.addMap(map,db)
         .then((id)=> {
-          console.log("HERE: ", id);
           res.send({id});
         });
     } else {
-      console.log("editing map");
       const map = req.body;
       database.editMap(map,db)
         .then((id)=> {
-          console.log("HERE: ", id);
           res.send({id});
         });
     }
@@ -106,46 +126,3 @@ module.exports = (db, database) => {
 
   return router;
 };
-
-
-
-/*
-curl --header "Content-Type: application/json" \
-  --request POST \
-  --data '{"name":"new map","description":"this is new"}' \
-  http://localhost:8080/api/maps/4
-
-  */
-// router.get("/:id", (req, res) => {
-//   const id = req.params.id;
-//   let query = `SELECT * FROM maps
-//   WHERE id = ${id};`;
-//   console.log(query);
-//   db.query(query)
-//     .then(data => {
-//       const map = data.rows;
-//       res.json({ map });
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ error: err.message });
-//     });
-// });
-
-// router.post("/:id", (req, res) => {
-//   const id = req.params.id;
-//   let query = `SELECT * FROM maps
-//   WHERE id = ${id};`;
-//   console.log(query);
-//   db.query(query)
-//     .then(data => {
-//       const map = data.rows;
-//       res.json({ map });
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ error: err.message });
-//     });
-// });
