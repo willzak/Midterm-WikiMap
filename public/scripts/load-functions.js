@@ -238,9 +238,9 @@ const createMapCard = function(mapInfo, key) {
   let $map = $(`
   <div class='map-container'>
     <div>
-      <h2>${mapInfo.name}</h2>
+      <h2 class="is-size-4">${mapInfo.name}</h2>
       <p>${mapInfo.description}</p>
-      <p>Created By: ${mapInfo.owner_name}</p>
+      <pclass="is-size-7">Created By: ${mapInfo.owner_name}</pclass=>
       <p hidden class = 'map-id'>${mapInfo.id}</p>
     </div>
     <img class='map-profile-img' src='${image}'>
