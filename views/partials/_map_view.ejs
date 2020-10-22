@@ -4,7 +4,10 @@
     <div class="map_intro">
       <h2>New Map</h2>
       <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
-      <h4 class='noFav' id='addFavs'>Add to Favorites</h4>
+      <form name='favourites' action='/api/users/:id/favs' method='POST'>
+        <input hidden type='text' name='mapId'>
+        <button type='submit' id='addFavs'>Add To Favourites</button>
+      </form>
 
       <div>
         <h6>Created By USER</h6> <!--Change to include which user-->

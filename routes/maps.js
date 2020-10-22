@@ -89,11 +89,5 @@ module.exports = (db, database) => {
     }
   });
 
-  router.post("/:id", (req, res) => {
-    const id = req.params.id;
-    console.log('req params: ', req.params)
-    console.log('req body: ', req.body)
-  })
-
   return router;
 };

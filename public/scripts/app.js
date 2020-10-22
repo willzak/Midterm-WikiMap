@@ -18,7 +18,7 @@ let currentMap = {};
 let map;
 let mapClickable = true;
 let listView = 'none';
-let listCounter = 0;
+let listViewTracker = '';
 //END Client side global variables
 
 $(document).ready(function() {
@@ -187,30 +187,54 @@ $(document).ready(function() {
 
   loadMapCards(listView);
 
+  //favourites button start
+  $('#addFavs').on('click', function(event) {
+    event.preventDefault();
+    addFavourite();
+  });
+  //favourites button end
+
   //Change View of list
   $('#fav').on('click', function(event) {
     event.preventDefault();
-    listView = 'favs';
-    if (listCounter === 0) {
-      listCounter += 1;
-      listView = 'favs';
+    if (listViewTracker.includes('f')) {
+      listViewTracker = listViewTracker.replace('f', '');
+      if (listViewTracker.includes('c')) {
+        listView = 'cont';
+      } else {
+        listView = 'none';
+      }
     } else {
-      listCounter = 0;
-      listView = 'favcont';
+      listViewTracker += 'f';
+      if (listViewTracker.includes('c')){
+        listView = 'favcont';
+      } else {
+        listView = 'favs';
+      }
     }
+
     loadMapCards(listView);
   })
 
   $('#cont').on('click', function(event) {
     event.preventDefault();
-    listView = '';
-    if (listCounter === 0) {
-      listCounter += 1;;
-      listView = 'cont';
+
+    if (listViewTracker.includes('c')) {
+      listViewTracker = listViewTracker.replace('c', '');
+      if (listViewTracker.includes('f')) {
+        listView = 'favs';
+      } else {
+        listView = 'none';
+      }
     } else {
-      listCounter = 0;
-      listView += 'favcont';
+      listViewTracker += 'c';
+      if (listViewTracker.includes('f')){
+        listView = 'favcont';
+      } else {
+        listView = 'cont';
+      }
     }
+
     loadMapCards(listView);
   })
   //LIST VIEW map population end
@@ -277,16 +301,6 @@ $(document).ready(function() {
     //hide the form
     hideEditForm(true);
   });
-
-  //favourites button start
-  $('.noFav').on('click', function(event) {
-    addFavourite();
-  });
-
-  $('.yesFav').on('click', function(event) {
-    addFavourite();
-  });
-  //favourites button end
 
   //  add_point
   $('div.map_container').click(function() {

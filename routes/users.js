@@ -142,5 +142,25 @@ module.exports = (db, database) => {
       });
   });
 
+  //add map to favourites
+  router.post("/:id/favs", (req, res) => {
+    const userId = req.params.id;
+    const mapId = req.body.mapId;
+    database.addFav(userId, mapId, db)
+      .then((result) => {
+        res.send(result)
+      });
+  });
+
+  //remove map from favourites
+  router.post("/:id/favs", (req, res) => {
+    const userId = req.params.id;
+    const mapId = req.body.mapId;
+    database.removeFav(userId, mapId, db)
+      .then((result) => {
+        res.send(result)
+      });
+  });
+
   return router;
 };

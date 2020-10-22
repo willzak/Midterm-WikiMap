@@ -326,7 +326,7 @@ exports.getMapList = getMapList;
  * @param {Integer} map_id
  * @return an insert command to the favourites table
  */
-const addFav = function(user_id, map_id) {
+const addFav = function(user_id, map_id, pool) {
   let queryString = `
   INSERT INTO favourites (user_id, map_id)
   VALUES ($1, $2)

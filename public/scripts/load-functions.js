@@ -121,6 +121,7 @@ const loadMap = function (mapData) {
   let changed = false;
 
   currentMap = mapData;
+  $(".map_intro input").val(mapData.id)
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + user.name);
