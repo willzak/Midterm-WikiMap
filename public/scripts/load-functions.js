@@ -237,9 +237,11 @@ const renderMaps = function (data) {
 const addFavourite = function() {
   const mapId = $('#fav-map').val();
   const userId = $('#fav-user').val();
+  const liked = $('#liked').val();
   let data = {
     mapId,
-    userId
+    userId,
+    liked
   }
 
   if ($('#addFavs').hasClass('noFav')) {
@@ -249,8 +251,8 @@ const addFavourite = function() {
       data,
       dataType: "json"
     }).then(res => {
-      $('#addFavs').empty();
       $('#addFavs').removeClass('noFav').addClass('yesFav');
+      $('#liked').val('yes');
       $('#addFavs').html("<button type='submit' name='favs-btn'>Remove From Favourites</button>");
       console.log('liked!', res);
     })
@@ -261,8 +263,8 @@ const addFavourite = function() {
       data,
       dataType: "json"
     }).then(res => {
-      $('#addFavs').empty();
       $('#addFavs').removeClass('yesFav').addClass('noFav');
+      $('#addFavs').val('no');
       $('#addFavs').html("<button type='submit' name='favs-btn'>Add To Favourites</button>");
       console.log('unliked!', res);
     })

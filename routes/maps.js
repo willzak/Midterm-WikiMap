@@ -61,7 +61,7 @@ module.exports = (db, database) => {
 
   //get favourites of maps
   router.get("/favs/:userId", (req, res) => {
-    const userId = 1;
+    const userId = req.session.id;
     console.log('user id ', userId);
 
     database.getFavs(userId)
@@ -107,28 +107,26 @@ module.exports = (db, database) => {
     }
   });
 
-  //add map to favs
+  //add or remove map from favs
   router.post("/favs/:mapId", (req, res) => {
     const userId = req.body.userId;
     const mapId = req.body.mapId;
+    const liked = req.body.liked;
 
-    database.addFav(userId, mapId)
-      .then((result) => {
-        console.log('ADDED users post req: ', result)
-        res.send(result)
-      });
-  })
-
-    //remove map to favs
-    router.post("/favs/:mapId", (req, res) => {
-      const userId = req.params.id;
-      const mapId = req.session.id;
+    if (liked === 'yes') {
       database.removeFav(userId, mapId, db)
         .then((result) => {
           console.log('REMOVED users post req: ', result)
           res.send(result)
         });
-    })
+    } else if (liked === 'no') {
+      database.addFav(userId, mapId)
+        .then((result) => {
+          console.log('ADDED users post req: ', result)
+          res.send(result)
+        });
+    }
+  })
 
   return router;
 };
