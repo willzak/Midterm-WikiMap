@@ -232,14 +232,16 @@ const renderMaps = function (data) {
   }
 };
 
-const addFav = function() {
+const addFavourite = function() {
   $('#addFavs').empty();
   $('#addFavs').removeClass('noFav');
+  $('#addFavs').addClass('yesFav');
   $('#addFavs').append('Remove From Favourites');
 };
 
-const removeFav = function() {
+const removeFavourite = function() {
   $('#addFavs').empty();
+  $('#addFavs').removeClass('yesFav');
   $('#addFavs').addClass('noFav');
   $('#addFavs').append('Add to Favourites');
 };

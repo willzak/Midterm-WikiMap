@@ -233,14 +233,15 @@ $(document).ready(function() {
 
   //START map_view listeners
 
-  $('#addFav').on('click', function(event) {
-    event.preventDefault();
-    if ($('#addFav').hasClass('noFav')) {
-      addFav();
-    } else {
-      removeFav();
-    }
-  })
+  //favourites button start
+  $('.noFav').on('click', function(event) {
+    addFavourite();
+  });
+
+  $('.yesFav').on('click', function(event) {
+    removeFavourite();
+  });
+  //favourites button end
 
   //  edit_map
   $('button.edit_map').click(function() {

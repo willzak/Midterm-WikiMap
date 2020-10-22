@@ -76,7 +76,7 @@ module.exports = (db, database) => {
       });
   });
 
-  router.get("/favs/:id", (req, res) => {
+  router.get("/:id/favs", (req, res) => {
     const userId = req.params.id;
     if (!userId) {
       res.send({message: 'not logged in'});
@@ -141,10 +141,6 @@ module.exports = (db, database) => {
         res.send(e);
       });
   });
-
-  router.post("/favs/:id", (req, res) => {
-    console.log('WHAT IS REQ?', req.body);
-  })
 
   return router;
 };
