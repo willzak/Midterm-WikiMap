@@ -1,9 +1,5 @@
 // Initialize google maps API
 const initMap = function() {
-  $("#map_script").attr(
-    "src",
-    `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
-  );
 
   map = new google.maps.Map(document.getElementById("test_map"), {
     center: { lat: 52.627849747795025, lng: -4416.512126890331 },
@@ -58,7 +54,6 @@ const loadMap = function(mapData) {
     currentMap.markers[marker].setMap(null);
   }
   currentMap.markers = [];
-
   currentMap = mapData;
   console.log(currentMap);
   //const creator_name;
@@ -81,10 +76,14 @@ const loadMap = function(mapData) {
     currentMap.markers = [];
     loadPoints(currentMap.id);
     $(".save").hide();
-    });
-
-
-
+    if (favs.includes(currentMap.id)) {
+      currentMap.fav = true;
+      $('#favourite').prop('checked', true);
+    } else {
+      currentMap.fav = false;
+      $('#favourite').removeProp("checked");
+    }
+  });
 };
 
 

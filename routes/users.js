@@ -88,7 +88,11 @@ module.exports = (db, database) => {
     login(email, password)
       .then(user => {
         req.session.userId = user.id;
-        res.send({user, map: process.env.MAP_API_KEY});
+        return database.getFavs(user);
+      })
+      .then(data => {
+        data['map'] = process.env.MAP_API_KEY;
+        res.send(data);
       })
       .catch(e => {
         console.log('ERROR: ', e);
@@ -111,7 +115,11 @@ module.exports = (db, database) => {
     database.addUser(newUser)
       .then(user => {
         req.session.userId = user.id;
-        res.send({user, map: process.env.MAP_API_KEY});
+        return database.getFavs(user);
+      })
+      .then(data => {
+        data['map'] = process.env.MAP_API_KEY;
+        res.send(data);
       })
       .catch(e => {
         console.log('ERROR: ', e);

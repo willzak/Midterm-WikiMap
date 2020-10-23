@@ -29,16 +29,16 @@ module.exports = (db, database) => {
   router.get("/points", (req, res) => {
     const id = req.query.id;
     database.getPointsByMap(id)
-    .then(data=>{
-      data.latitude = parseFloat(data.latitude);
-      data.longitude = parseFloat(data.longitude);
-      res.send(data)}
-    )
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
-    });
+      .then(data=>{
+        data.latitude = parseFloat(data.latitude);
+        data.longitude = parseFloat(data.longitude);
+        res.send(data)}
+      )
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
 
 
   });
@@ -46,20 +46,36 @@ module.exports = (db, database) => {
   router.get("/points/:id", (req, res) => {
     const id = req.params.id;
     database.getPointsById(id)
-    .then(data=>{
-      data.latitude = parseFloat(data.latitude);
-      data.longitude = parseFloat(data.longitude);
-      res.send(data)}
-    )
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: err.message });
-    });
+      .then(data=>{
+        data.latitude = parseFloat(data.latitude);
+        data.longitude = parseFloat(data.longitude);
+        res.send(data)}
+      )
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
 
 
   });
 
+  //get favourites of maps
+  router.get("/favs/", (req, res) => {
+    const userId = req.session.id;
+    console.log('user id ', userId);
+
+    database.getFavs(userId)
+      .then(data => {
+        const favs = data;
+        res.json({ favs });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
 
   //loads map by map_id
   router.get("/:id", (req, res) => {
@@ -74,25 +90,6 @@ module.exports = (db, database) => {
           .json({ error: err.message });
       });
   });
-
-  //get favourites of maps
-  router.get("/favs/:userId", (req, res) => {
-    const userId = req.session.id;
-    console.log('user id ', userId);
-
-    database.getFavs(userId)
-      .then(data => {
-        const favs = data
-        res.json({ favs });
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
-  });
-
-
 
   //route to add point
   router.post("/add_point", (req, res) => {
@@ -118,6 +115,27 @@ module.exports = (db, database) => {
     res.json(point);
   });
 
+  //add or remove map from favs
+  router.post("/favs/:mapId", (req, res) => {
+    const userId = req.body.userId;
+    const mapId = req.body.mapId;
+    const liked = req.body.liked;
+    if (liked === 'true') {
+      console.log("****************maps true", liked);
+      database.removeFav(userId, mapId)
+        .then((result) => {
+          console.log('REMOVED users post req: ', result);
+          res.send(result);
+        });
+    } else {
+      console.log("****************maps false", liked);
+      database.addFav(userId, mapId)
+        .then((result) => {
+          console.log('ADDED users post req: ', result);
+          res.send(result);
+        });
+    }
+  });
 
   //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
@@ -137,27 +155,6 @@ module.exports = (db, database) => {
         });
     }
   });
-
-  //add or remove map from favs
-  router.post("/favs/:mapId", (req, res) => {
-    const userId = req.body.userId;
-    const mapId = req.body.mapId;
-    const liked = req.body.liked;
-
-    if (liked === 'yes') {
-      database.removeFav(userId, mapId, db)
-        .then((result) => {
-          console.log('REMOVED users post req: ', result)
-          res.send(result)
-        });
-    } else {
-      database.addFav(userId, mapId)
-        .then((result) => {
-          console.log('ADDED users post req: ', result)
-          res.send(result)
-        });
-    }
-  })
 
   return router;
 };
