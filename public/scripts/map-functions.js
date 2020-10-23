@@ -55,8 +55,8 @@ const loadMap = function(mapData) {
     currentMap.markers[marker].setMap(null);
   }
   currentMap.markers = [];
-
   currentMap = mapData;
+
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
   $(".map_intro h6").text("Created by " + currentMap.owner_id);
@@ -69,6 +69,13 @@ const loadMap = function(mapData) {
   currentMap.markers = [];
   loadPoints(currentMap.id);
   $(".save").hide();
+  if (favs.includes(currentMap.id)) {
+    currentMap.fav = true;
+    $('#favourite').prop('checked', true);
+  } else {
+    currentMap.fav = false;
+    $('#favourite').removeProp("checked");
+  }
 };
 
 

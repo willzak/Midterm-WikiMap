@@ -1,6 +1,7 @@
 //START Client side global variables
 let user = {};
 let mapKey = 0;
+let favs = [];
 let currentView;
 let logIn = false;
 const defaultMap = {
@@ -97,6 +98,7 @@ $(document).ready(function() {
     }).then((response) => {
       user = response.user;
       mapKey = response.map;
+      favs = response.favs;
       login(user);
       logIn = true;
       $inputs.each(function() {
@@ -148,6 +150,7 @@ $(document).ready(function() {
       //log the user in
       user = response.user;
       mapKey = response.map;
+      favs = response.favs;
       login(user);
       loadMapCards(listView, pageSize, 0);
       //clear the form
@@ -218,7 +221,7 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function(view, limit, offset) {
     $(function() {
-      $('#addFavs').show();
+      $('#favourite').show();
       $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
       .then (function(res) {
         $('.map-list').empty();
@@ -232,18 +235,9 @@ $(document).ready(function() {
 
   //favourites button start
 
-  $('#addFavs').on('click', function(event) {
+  $('#favourite').on('change', function(event) {
     event.preventDefault();
-
-    const mapId = user.id;
-    const userId = currentMap.id;
-    const liked = $('#liked').val();
-    let data = {
-      mapId,
-      userId,
-      liked
-    }
-    addFavourite(data);
+    toggleFavourite();
   });
   //favourites button end
 

@@ -368,14 +368,23 @@ exports.getMapList = getMapList;
  * Get the user ids of someone who has favourited a map
  * @param {Integer} user_id
  */
-const getFavs = function(userId) {
+const getFavs = function(user) {
+  let output = {user};
+  let userId = user.id;
   let queryString = `
-  SELECT * FROM favourites
+  SELECT map_id FROM favourites
   WHERE user_id = $1;
   `;
 
   return pool.query(queryString, [userId])
-    .then(res => res.rows)
+    .then(res => {
+      let favs = res.rows;
+      for (let i = 0; i < favs.length; i++) {
+        favs[i] = favs[i].map_id;
+      }
+      output['favs'] = favs;
+      return output;
+    })
     .catch(err => console.log(err));
 };
 exports.getFavs = getFavs;
@@ -393,7 +402,8 @@ const addFav = function(userId, mapId) {
   RETURNING *;
   `;
   let values = [userId, mapId];
-
+  console.log("*******************");
+  console.log(queryString, values);
   return pool.query(queryString, values)
     .then(res => res.rows)
     .catch(err => console.log(err));
@@ -408,7 +418,7 @@ exports.addFav = addFav;
  */
 const removeFav = function(userId, mapId) {
   let queryString = `
-  DELETE FROM favourites (user_id, map_id)
+  DELETE FROM favourites
   WHERE user_id = $1 AND map_id = $2
   RETURNING *;
   `;
