@@ -151,9 +151,12 @@ const editMap = function(map, pool) {
     .then(res => map.id)
     .catch(err => console.log(err));
 };
-
 exports.editMap = editMap;
 
+/**
+ * addPoint - create a new point
+ * @param {*} point object with point data
+ */
 const addPoint = function(point) {
   return pool.query( `
   INSERT INTO points (creator_id, map_id, title, description, image, longitude, latitude)
@@ -162,9 +165,13 @@ const addPoint = function(point) {
     .then(res => res.row)
     .catch(err => console.log(err));
 };
-
 exports.addPoint = addPoint;
 
+/**
+ * editPoint - update points
+ * @param {*} point point data
+ * @param {*} id id of the point to update
+ */
 const editPoint = function(point, id) {
   return pool.query( `
   UPDATE points
@@ -174,7 +181,6 @@ const editPoint = function(point, id) {
       image = $4,
       longitude = $5,
       latitude = $6
-
   WHERE id = $7
   `,[point.map_id, point.title, point.text, point.image, point.lng, point.lat, id])
     .then(res => res.row)
@@ -183,10 +189,13 @@ const editPoint = function(point, id) {
 
 exports.editPoint = editPoint;
 
+/**
+ * deletePoint - delete points
+ * @param {*} id the point id to delete
+ */
 const deletePoint = function(id) {
   return pool.query( `
   DELETE FROM points
-
   WHERE id = $1
   `,[id])
     .then(res => res.row)
@@ -404,7 +413,7 @@ const addFav = function(userId, mapId) {
   return pool.query(queryString, values)
     .then(res => res.rows)
     .catch(err => console.log(err));
-}
+};
 exports.addFav = addFav;
 
 /**
@@ -424,5 +433,5 @@ const removeFav = function(userId, mapId) {
   return pool.query(queryString, values)
     .then(res => res.rows)
     .catch(err => console.log(err));
-}
+};
 exports.removeFav = removeFav;

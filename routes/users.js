@@ -43,7 +43,6 @@ module.exports = (db, database) => {
       res.send({message: "not logged in"});
       return;
     }
-
     database.getUserWithId(userId, db)
       .then(user => {
         if (!user) {
@@ -62,7 +61,6 @@ module.exports = (db, database) => {
       res.send({message: "not logged in"});
       return;
     }
-
     db.query(`SELECT * FROM users
     WHERE id = ${userId};`)
       .then(data => {
@@ -100,10 +98,8 @@ module.exports = (db, database) => {
       });
   });
 
-
   router.post('/logout', (req, res) => {
     req.session = null;
-
     res.redirect('/');
   });
 
@@ -134,6 +130,5 @@ module.exports = (db, database) => {
         res.send(e);
       });
   });
-
   return router;
 };

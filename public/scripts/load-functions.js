@@ -26,7 +26,7 @@ const login = function(user) {
   loggedIn(true);
   defaultMap.owner_id = user.id;
   initMap();
-  $('#fav-user').val(user.id)
+  $('#fav-user').val(user.id);
 };
 
 //On list view - to load an indvidual map card

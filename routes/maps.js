@@ -39,8 +39,6 @@ module.exports = (db, database) => {
           .status(500)
           .json({ error: err.message });
       });
-
-
   });
 
   router.get("/points/:id", (req, res) => {
@@ -56,15 +54,11 @@ module.exports = (db, database) => {
           .status(500)
           .json({ error: err.message });
       });
-
-
   });
 
   //get favourites of maps
   router.get("/favs/", (req, res) => {
     const userId = req.session.id;
-    console.log('user id ', userId);
-
     database.getFavs(userId)
       .then(data => {
         const favs = data;
@@ -96,21 +90,17 @@ module.exports = (db, database) => {
     let point = req.body;
     point.user_id = req.session.userId;
     const id = parseInt(point.id);
-
     if (id === 0) {
       database.addPoint(point);
     } else {
       database.editPoint(point, id);
     }
-
     res.json(point);
   });
 
   router.post("/points/delete", (req, res) => {
     let point = req.body;
     const id = parseInt(point.id);
-
-
     database.deletePoint(id);
     res.json(point);
   });
@@ -137,7 +127,6 @@ module.exports = (db, database) => {
   router.post("/:id", (req, res) => {
     const point = req.body.point;
     const id = parseInt(req.params.id);
-
     if (id === 0) {
       const map = req.body;
       database.addMap(map,db)
