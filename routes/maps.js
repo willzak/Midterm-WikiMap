@@ -93,11 +93,11 @@ module.exports = (db, database) => {
 
   //route to add point
   router.post("/add_point", (req, res) => {
-    point = req.body;
+    let point = req.body;
     point.user_id = req.session.userId;
     const id = parseInt(point.id);
 
-    if(id === 0){
+    if (id === 0) {
       database.addPoint(point);
     } else {
       database.editPoint(point, id);
@@ -107,7 +107,7 @@ module.exports = (db, database) => {
   });
 
   router.post("/points/delete", (req, res) => {
-    point = req.body;
+    let point = req.body;
     const id = parseInt(point.id);
 
 
@@ -121,17 +121,13 @@ module.exports = (db, database) => {
     const mapId = req.body.mapId;
     const liked = req.body.liked;
     if (liked === 'true') {
-      console.log("****************maps true", liked);
       database.removeFav(userId, mapId)
         .then((result) => {
-          console.log('REMOVED users post req: ', result);
           res.send(result);
         });
     } else {
-      console.log("****************maps false", liked);
       database.addFav(userId, mapId)
         .then((result) => {
-          console.log('ADDED users post req: ', result);
           res.send(result);
         });
     }
@@ -139,9 +135,7 @@ module.exports = (db, database) => {
 
   //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
-    console.log('im in serverside: ', req);
     const point = req.body.point;
-    console.log(point);
     const id = parseInt(req.params.id);
 
     if (id === 0) {
