@@ -24,8 +24,9 @@ const initMap = function() {
   });
 
   //Listener for clicks to add markers
-  if (mapClickable) {
-    map.addListener("click", (e) => {
+
+  map.addListener("click", (e) => {
+    if(mapClickable){
       mapClickable = false;
       //marker.setMap(null);
       const marker = new google.maps.Marker({
@@ -40,8 +41,10 @@ const initMap = function() {
       $('#cancel_add_point').click(function() {
         marker.setMap(null);
       });
+    };
     });
-  }
+
+
 
 
 };
