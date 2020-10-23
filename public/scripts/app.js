@@ -35,7 +35,6 @@ $(document).ready(function() {
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
-    $("#addFavs").hide();
     hideEditForm(false);
     currentView = setView('map', currentView);
     if ($(".navbar-menu").hasClass("is-active")) {
@@ -337,6 +336,7 @@ $(document).ready(function() {
     // get the form data
     let $inputs = $('div.edit_map > form :input');
     let values = {};
+
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
