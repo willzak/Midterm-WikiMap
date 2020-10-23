@@ -378,6 +378,7 @@ $(document).ready(function() {
     $('.map_container').slideDown();
     $("#point-form")[0].reset();
     loadMap(currentMap);
+    mapClickable = true;
     hidePointForm(true);
   });
 
