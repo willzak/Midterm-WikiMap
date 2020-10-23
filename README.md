@@ -1,6 +1,4 @@
-WikiMap
-=========
-# 🗺 WikiMap
+🗺 WikiMap
 
 ## 📝 Project Overview
 
@@ -65,5 +63,9 @@ The application is used to highlight knowledge of:
 - Example of adding points to map and changing map
 
 !["GIF of points in action"](https://media.giphy.com/media/CY4SFuX0c4GCDoGcmi/giphy.gif)
+
+- Example of creating a new map with new points
+
+!["GIF of new map in action"](https://media.giphy.com/media/dd5veB9XcpaF7TrCL0/giphy.gif)
 
 
