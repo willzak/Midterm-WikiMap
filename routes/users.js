@@ -23,7 +23,7 @@ app.use(cookieSession({
 
 
 module.exports = (db, database) => {
-  router.get("/", (req, res) => { //All users. Dont need??
+  router.get("/", (req, res) => {
     db.query(`SELECT * FROM users;`)
       .then(data => {
         const users = data.rows;
@@ -77,7 +77,7 @@ module.exports = (db, database) => {
   });
 
   const login =  function(email, password) {
-    return database.getUserWithEmail(email) //Change
+    return database.getUserWithEmail(email)
       .then(user => {
         return user;
       });
@@ -102,11 +102,8 @@ module.exports = (db, database) => {
 
 
   router.post('/logout', (req, res) => {
-    console.log('session: ', req.session);
     req.session = null;
-    console.log('session after: ', req.session);
 
-    console.log('USER HAS LOGGED OUT');
     res.redirect('/');
   });
 
