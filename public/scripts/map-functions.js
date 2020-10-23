@@ -47,6 +47,8 @@ const initMap = function() {
 
 const loadMap = function(mapData) {
   //clear old points from currentMaps
+  hidePointForm(true);
+  mapClickable = true;
   if (!currentMap.markers) {
     currentMap.markers = [];
   }
@@ -55,6 +57,7 @@ const loadMap = function(mapData) {
     $("#favourite_btn").show();
   } else {
     hideEditForm(false);
+
     $("#favourite_btn").hide();
   };
 
@@ -92,6 +95,7 @@ const loadMap = function(mapData) {
       }
     });
   } else {
+    initMap();
     const creatorName = user.name;
     $(".map_intro h2").text(mapData.name);
     $(".map_intro p").text(mapData.description);
