@@ -85,10 +85,11 @@ const editUser = function(newData) {
   UPDATE users
   SET ${changes}
   WHERE id = ${newData.id}
+  RETURNING *;
   `;
   return pool.query(queryString, values)
     .then(res => {
-      return;
+      return res.rows[0];
     })
     .catch(err => console.log(err));
 };

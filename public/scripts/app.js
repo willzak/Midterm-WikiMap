@@ -213,7 +213,9 @@ $(document).ready(function() {
       url: "/api/users/profile",
       data: values
     }).then((response) => {
-      user = response.user;
+
+      user = response;
+      loadProfile(response);
     });
   });
   //END profile_reg_view listeners

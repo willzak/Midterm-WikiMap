@@ -130,8 +130,8 @@ module.exports = (db, database) => {
   router.post("/profile", (req, res) => {
     const newUserData = req.body;
     database.editUser(newUserData)
-      .then(()=> {
-        res.send({success: true});
+      .then((user)=> {
+        res.send(user);
       }).catch(e => {
         console.log('ERROR: ', e);
         res.send(e);
