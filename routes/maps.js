@@ -141,6 +141,7 @@ module.exports = (db, database) => {
   router.post("/:id", (req, res) => {
     console.log('im in serverside: ', req);
     const point = req.body.point;
+    console.log(point);
     const id = parseInt(req.params.id);
 
     if (id === 0) {

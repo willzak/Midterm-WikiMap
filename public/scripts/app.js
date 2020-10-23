@@ -388,20 +388,29 @@ $(document).ready(function() {
     currentMap.latitude = center.lat();
     currentMap.longitude = center.lng();
     currentMap.zoom = zoom;
+    let saveMap = {}
+    for (const key in currentMap) {
+      if (key !== 'markers') {
+        saveMap[key] = currentMap[key];
+      }
+    }
+    console.log(saveMap);
 
 
     $.ajax({
       method: "POST",
       url: `/api/maps/${currentMap.id}`,
-      data: currentMap,
-      dataType: 'application/JSON'
-    }).then((response) => {
-      // if (currentMap.id === response.id) {
-      //   return;
-      // }
-      console.log('im here: ', response.id);
-      currentMap.id = response.id;
-    });
+      data: saveMap
+    })
+      .then((response) => {
+        if (currentMap.id === response.id) {
+          return;
+        }
+        currentMap.id = response.id;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     $(this).hide();
   });
