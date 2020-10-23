@@ -1,16 +1,22 @@
 <!-- view a list of maps -->
 <main class='list_view'>
   <!-- profile-bar: shows active user and filter options -->
-  <section class='profile-bar profile_title'>
+  <section class='profile-bar profile_title has-background-primary-light'>
     <!-- profile-container only visible on large screens -->
     <div class='profile-container'>
       <img class='profile-pic' src=''>
       <h2 class="is-size-3">user name</h2>
     </div>
     <!-- selections-container: buttons to filter results -->
-    <div class='selections-container'>
-      <button class='selection-box' id='fav'>Favourites</button>
-      <button class='selection-box' id='cont'>Contributions</button>
+    <div class='selections-container pt-5'>
+      <div class="field">
+        <input id="fav" type="checkbox" name="fav" class="switch is-rounded is-rtl is-medium">
+        <label for="fav">Favourites</label>
+      </div>
+      <div class="field">
+        <input id="cont" type="checkbox" name="fav" class="switch is-rounded is-rtl is-medium">
+        <label for="cont">Contributions</label>
+      </div>
     </div>
   </section>
   <!-- second column on large screens -->

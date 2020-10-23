@@ -1,6 +1,7 @@
 // See: https://sass-lang.com/
 @charset "utf-8";
 @import "../node_modules/bulma/bulma.sass";
+@import '../node_modules/bulma-switch/src/sass/index.sass';
 //override bulma variables here
 $navbar-item-hover-background-color: $primary;
 $navbar-item-hover-color: hsl(0, 0%, 29%);
@@ -276,8 +277,8 @@ $borderRadius: 10px;
 .profile-bar {
   display: flex;
   flex-direction: column;
-  background-color: #cccccc;
   border-radius: $borderRadius;
+  border: 2px solid black;
   margin-top: 15px;
 }
 
@@ -353,7 +354,7 @@ $borderRadius: 10px;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    padding: 10vh;
+    padding: 3rem;
     margin: 0;
   }
 
