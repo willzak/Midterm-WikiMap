@@ -54,6 +54,7 @@ $(document).ready(function() {
   });
   $('#logout_btn').click(function() {
     logIn = false;
+
     if ($(".navbar-menu").hasClass("is-active")) {
       $(".navbar-burger").toggleClass("is-active");
       $(".navbar-menu").toggleClass("is-active");
