@@ -70,6 +70,7 @@ $(document).ready(function() {
       $(".navbar-burger").toggleClass("is-active");
       $(".navbar-menu").toggleClass("is-active");
     }
+    initMap();
     hidePointForm(true);
     loadMapCards(listView, pageSize, 0);
   });
