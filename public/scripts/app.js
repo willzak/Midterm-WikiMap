@@ -352,7 +352,6 @@ $(document).ready(function() {
       longitude: map.getCenter().lng(),
       zoom: map.getZoom()
     };
-    loadMap(saveMap);
 
     //make the POST to the server
     $.ajax({
@@ -360,10 +359,12 @@ $(document).ready(function() {
       url: `/api/maps/${currentMap.id}`,
       data: saveMap
     }).then((response) => {
-      if (currentMap.id === response.id) {
+      if (saveMap.id === response.id) {
+        loadMap(saveMap);
         return;
       }
-      currentMap.id = response.id;
+      saveMap.id = response.id;
+      loadMap(saveMap);
     });
 
     //hide the form

@@ -244,7 +244,7 @@ const toggleFavourite = function() {
         //set as not a favourite
         currentMap.fav = false;
         //set the switch to show not favourite
-        $('#favourite').removeProp("checked");
+        $('#favourite').prop('checked', false);
         //remove it from the list of favourites
         favs = favs.filter(function(value) {
           return value !== currentMap.id;
