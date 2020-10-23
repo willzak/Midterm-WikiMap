@@ -60,18 +60,31 @@ const loadMap = function(mapData) {
   currentMap.markers = [];
 
   currentMap = mapData;
-  $(".map_intro h2").text(mapData.name);
-  $(".map_intro p").text(mapData.description);
-  $(".map_intro h6").text("Created by " + currentMap.owner_id);
-  map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
-  map.setZoom(mapData.zoom);
+  console.log(currentMap);
+  //const creator_name;
+  $.ajax({
+    method: "GET",
+    url: `/api/users/${mapData.owner_id}`,
 
-  for (let marker in currentMap.markers) {
-    currentMap.markers[marker].setMap(null);
-  }
-  currentMap.markers = [];
-  loadPoints(currentMap.id);
-  $(".save").hide();
+  }).then(res => {
+    console.log('response: ', res.user[0].name);
+    const creator_name = res.user[0].name;
+    $(".map_intro h2").text(mapData.name);
+    $(".map_intro p").text(mapData.description);
+    $(".map_intro h6").text("Created by " + creator_name);
+    map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
+    map.setZoom(mapData.zoom);
+
+    for (let marker in currentMap.markers) {
+      currentMap.markers[marker].setMap(null);
+    }
+    currentMap.markers = [];
+    loadPoints(currentMap.id);
+    $(".save").hide();
+    });
+
+
+
 };
 
 
