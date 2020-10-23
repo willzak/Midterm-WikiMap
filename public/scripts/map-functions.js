@@ -16,7 +16,7 @@ const initMap = function() {
   });
   //Listener for clicks to add markers
   map.addListener("click", (e) => {
-    if(mapClickable){
+    if(mapClickable) {
       mapClickable = false;
       //marker.setMap(null);
       const marker = new google.maps.Marker({
@@ -27,17 +27,13 @@ const initMap = function() {
       $(".form_div input[name=lat]").val(e.latLng.lat);
       $(".form_div  input[name=lng]").val(e.latLng.lng);
       $(".form_div  input[name=id]").val(0);
-
       $('#cancel_add_point').click(function() {
         marker.setMap(null);
       });
     };
-    });
-
-
-
-
+  });
 };
+
 //Load individual map info to populate onto map.
 const loadMap = function(mapData) {
   //clear old points from currentMaps
@@ -176,7 +172,6 @@ const loadPoints = function(id) {
             content: contentString,
           });
 
-
           //listener for edit and delete point
           google.maps.event.addListener(infowindow, 'domready', function() {
             hidePointForm(true);
@@ -191,17 +186,17 @@ const loadPoints = function(id) {
                 url: `/api/maps/points/${point_id}`,
 
                 dataType: "json",
-              }).then(res2 => {
-
-              $(".form_div input[name=title]").val(res2[0].title);
-              $(".form_div  textarea[name=text]").val(res2[0].description);
-              $(".form_div  input[name=image]").val(res2[0].image);
-              $(".form_div input[name=lat]").val(res2[0].latitude);
-              $(".form_div  input[name=lng]").val(res2[0].longitude);
-              $(".form_div  input[name=id]").val(point_id);
               })
+                .then(res2 => {
+                  $(".form_div input[name=title]").val(res2[0].title);
+                  $(".form_div  textarea[name=text]").val(res2[0].description);
+                  $(".form_div  input[name=image]").val(res2[0].image);
+                  $(".form_div input[name=lat]").val(res2[0].latitude);
+                  $(".form_div  input[name=lng]").val(res2[0].longitude);
+                  $(".form_div  input[name=id]").val(point_id);
+                });
               infowindow.close(map, currentMap.markers[point]);
-            })
+            });
 
             $('.delete-point').click(function() {
               const id = $(this).siblings('.point-id').text();
@@ -210,17 +205,18 @@ const loadPoints = function(id) {
                 url: `/api/maps/points/delete`,
                 data: {id},
                 dataType: "json",
-              }).then(res => {
-                //reload map after delete
-
-                currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
-                currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
-                currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
-                currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
-                initMap();
-                loadMap(currentMap);
-
               })
+                .then(res => {
+                  //reload map after delete
+
+                  currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
+                  currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
+                  currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
+                  currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
+                  initMap();
+                  loadMap(currentMap);
+
+                });
             });
 
           });
@@ -235,9 +231,9 @@ const loadPoints = function(id) {
 
 //Helper function to get marker object given point id.
 const markerSearch = function(map, id) {
-  for(let index in map.points){
-    if(map.points[index].id === id){
+  for (let index in map.points) {
+    if (map.points[index].id === id) {
       return index;
     }
   }
-}
+};
