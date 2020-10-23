@@ -88,7 +88,7 @@ const loadMap = function(mapData) {
   currentMap = mapData;
   $(".map_intro h2").text(mapData.name);
   $(".map_intro p").text(mapData.description);
-  $(".map_intro h6").text("Created by " + user.name);
+  $(".map_intro h6").text("Created by " + mapData.owner_id);
   map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
   map.setZoom(mapData.zoom);
 

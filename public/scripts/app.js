@@ -5,6 +5,7 @@ let currentView;
 let logIn = false;
 const defaultMap = {
   id: 0,
+  owner_id: user.id,
   name: 'New Map',
   description: 'Please enter a title and description for your new map bellow.  When you are done, hit save to continue.',
   latitude: 52.627849747795025,
@@ -17,8 +18,9 @@ const defaultMap = {
 let currentMap = {};
 let map;
 let mapClickable = true;
-let listView = 'none';
-let listCounter = 0;
+let listView = 'all';
+let listFav = false;
+let listCont = false;
 
 const pageSize = 20;
 let pageStart = 1;
@@ -26,9 +28,6 @@ let pageEnd = pageStart + pageSize - 1;
 //END Client side global variables
 
 $(document).ready(function() {
-
-  //loadMapCards(listView);
-
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map', 'list'];
   currentView = setDefaultUI(views);
@@ -38,7 +37,6 @@ $(document).ready(function() {
     loadMap(defaultMap);
     hideEditForm(false);
     currentView = setView('map', currentView);
-    console.log("**********************")
     if ($(".navbar-menu").hasClass("is-active")) {
       $(".navbar-burger").toggleClass("is-active");
       $(".navbar-menu").toggleClass("is-active");
@@ -217,47 +215,66 @@ $(document).ready(function() {
   //END profile_reg_view listeners
 
   //LIST VIEW map population start
-  const loadMapCards = function(listView, limit, offset) {
+  const loadMapCards = function(view, limit, offset) {
     $(function() {
-      $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
-      .then (function(res) {
-        $('.map-list').empty();
-        if(res.maps.length < pageSize) {
-          $('.next-page-button').prop('disabled', true);
-        }
-        renderMaps(res.maps);
-      })
-    })
-  }
+      $.ajax(`http://localhost:8080/api/maps/list/${view}-${limit}-${offset}`, { method: 'GET' })
+        .then (function(res) {
+          $('.map-list').empty();
+          if(res.maps.length < pageSize) {
+            $('.next-page-button').prop('disabled', true);
+          }
+          renderMaps(res.maps);
+        });
+    });
+  };
 
 
 
   //Change View of list
-  $('#fav').on('click', function(event) {
+  $('#fav').on('change', function(event) {
     event.preventDefault();
-    listView = 'favs';
-    if (listCounter === 0) {
-      listCounter += 1;
-      listView = 'favs';
+    listView = 'all';
+    if (listFav) {
+      if (listCont) {
+        listView = 'cont';
+      }
+      listFav = false;
+      $('#fav').removeProp("checked");
     } else {
-      listCounter = 0;
-      listView = 'favcont';
+      if (listCont) {
+        listView = 'favcont';
+      } else {
+        listView = 'fav';
+      }
+      listFav = true;
+      $('#fav').prop('checked', true);
     }
     loadMapCards(listView, pageSize, 0);
-  })
+  });
 
-  $('#cont').on('click', function(event) {
+  $('#cont').on('change', function(event) {
     event.preventDefault();
-    listView = '';
-    if (listCounter === 0) {
-      listCounter += 1;;
-      listView = 'cont';
+    console.log(listView, listCont, listFav);
+    listView = 'all';
+    if (listCont) {
+      if (listFav) {
+        listView = 'fav';
+      }
+      listCont = false;
+      $('#cont').removeProp("checked");
     } else {
-      listCounter = 0;
-      listView += 'favcont';
+      if (listFav) {
+        listView = 'favcont';
+      } else {
+        listView = 'cont';
+      }
+      $("#cont").prop('checked', true);
+      console.log("cont checked", $('#cont').prop('checked'));
+      listCont = true;
     }
+    console.log(listView, listCont);
     loadMapCards(listView, pageSize, 0);
-  })
+  });
   //LIST VIEW map population end
 
   //START LIST VIEW listeners
@@ -276,7 +293,7 @@ $(document).ready(function() {
     currentView = setView('map', currentView);
   });
 
-  $('.next-page-button').on('click', function(){
+  $('.next-page-button').on('click', function() {
     console.log('next!');
     pageStart += pageSize;
     pageEnd = pageStart + pageSize - 1;
@@ -284,19 +301,19 @@ $(document).ready(function() {
     console.log('End: ', pageEnd);
     $('.previous-page-button').prop('disabled', false);
     loadMapCards(listView, pageSize, pageStart - 1);
-  })
+  });
 
-  $('.previous-page-button').on('click', function(){
+  $('.previous-page-button').on('click', function() {
     console.log('previous!');
     pageStart -= pageSize;
     pageEnd = pageStart + pageSize - 1;
     console.log('Start: ', pageStart);
     console.log('End: ', pageEnd);
-    if(pageStart === 1){
+    if (pageStart === 1) {
       $('.previous-page-button').prop('disabled', true);
     }
     loadMapCards(listView, pageSize, pageStart - 1);
-  })
+  });
 
 
   //END LIST VIEW listeners
@@ -324,7 +341,7 @@ $(document).ready(function() {
     let saveMap = {
       id: currentMap.id,
       name: values.name,
-      owner_id: user.id,
+      owner_id: currentMap.owner_id,
       description: values.description,
       latitude: map.getCenter().lat(),
       longitude: map.getCenter().lng(),
