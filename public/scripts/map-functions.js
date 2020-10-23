@@ -50,10 +50,12 @@ const loadMap = function(mapData) {
   if (!currentMap.markers) {
     currentMap.markers = [];
   }
-  if(mapData.id !== 0){
+  if(mapData.id !== 0) {
     hideEditForm(true);
+    $("#favourite_btn").show();
   } else {
     hideEditForm(false);
+    $("#favourite_btn").hide();
   };
 
   for (let marker in currentMap.markers) {
@@ -63,16 +65,40 @@ const loadMap = function(mapData) {
   currentMap = mapData;
   console.log(currentMap);
   //const creator_name;
-  $.ajax({
-    method: "GET",
-    url: `/api/users/${mapData.owner_id}`,
+  if (mapData.id !== 0) {
+    $.ajax({
+      method: "GET",
+      url: `/api/users/${mapData.owner_id}`,
+    }).then(res => {
+      console.log('response: ', res.user[0].name);
+      const creatorName = res.user[0].name;
+      $(".map_intro h2").text(mapData.name);
+      $(".map_intro p").text(mapData.description);
+      $(".map_intro h6").text("Created by " + creatorName);
+      map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
+      map.setZoom(mapData.zoom);
 
-  }).then(res => {
-    console.log('response: ', res.user[0].name);
-    const creator_name = res.user[0].name;
+      for (let marker in currentMap.markers) {
+        currentMap.markers[marker].setMap(null);
+      }
+      currentMap.markers = [];
+      loadPoints(currentMap.id);
+      $(".save").hide();
+      if (favs.includes(currentMap.id)) {
+        currentMap.fav = true;
+        $('#favourite').prop('checked', true);
+        console.log("true = ", $('#favourite').prop('checked'));
+      } else {
+        currentMap.fav = false;
+        $('#favourite').prop("checked", false);
+        console.log("false = ", $('#favourite').prop('checked'));
+      }
+    });
+  } else {
+    const creatorName = user.name;
     $(".map_intro h2").text(mapData.name);
     $(".map_intro p").text(mapData.description);
-    $(".map_intro h6").text("Created by " + creator_name);
+    $(".map_intro h6").text("Created by " + creatorName);
     map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
     map.setZoom(mapData.zoom);
 
@@ -85,11 +111,13 @@ const loadMap = function(mapData) {
     if (favs.includes(currentMap.id)) {
       currentMap.fav = true;
       $('#favourite').prop('checked', true);
+      console.log("true = ", $('#favourite').prop('checked'));
     } else {
       currentMap.fav = false;
-      $('#favourite').removeProp("checked");
+      $('#favourite').prop("checked", false);
+      console.log("false = ", $('#favourite').prop('checked'));
     }
-  });
+  }
 };
 
 
