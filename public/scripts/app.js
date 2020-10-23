@@ -31,8 +31,10 @@ $(document).ready(function() {
   //Initial setup hides all but the first view in views
   const views = ['login_reg', 'profile', 'map', 'list'];
   currentView = setDefaultUI(views);
-
-  //START nav bar listeners
+  /**************************
+   * START nav bar listeners
+   **************************/
+  //
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
     hideEditForm(false);
@@ -83,7 +85,9 @@ $(document).ready(function() {
   });
   //END nav bar listeners
 
-  //START login_reg_view listeners
+  /*********************************
+   * START login_reg_view listeners
+   *********************************/
   $('#login').submit(event => {
     event.preventDefault();
     let $inputs = $('#login :input');
@@ -160,7 +164,9 @@ $(document).ready(function() {
   });
   //END login_reg_view listeners
 
-  //START profile_view listeners
+  /**********************************
+   * START profile_view listeners
+   **********************************/
   $('#cancel_profile_update').click(function() {
     currentView = setView('list', currentView);
     loadProfile(user);
@@ -219,30 +225,25 @@ $(document).ready(function() {
   });
   //END profile_reg_view listeners
 
-  //LIST VIEW map population start
+  /************************************
+   * START list_view loading list
+   ************************************/
+  //
   const loadMapCards = function(view, limit, offset) {
     $(function() {
       $('#favourite').show();
       $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
-      .then (function(res) {
-        $('.map-list').empty();
-        if(res.maps.length < pageSize) {
-          $('.next-page-button').prop('disabled', true);
-        }
-        renderMaps(res.maps);
-      })
-    })
+        .then (function(res) {
+          $('.map-list').empty();
+          if(res.maps.length < pageSize) {
+            $('.next-page-button').prop('disabled', true);
+          }
+          renderMaps(res.maps);
+        });
+    });
   };
 
-  //favourites button start
-
-  $('#favourite').on('change', function(event) {
-    event.preventDefault();
-    toggleFavourite();
-  });
-  //favourites button end
-
-  //Change View of list
+  //Change the filters of listed maps
   $('#fav').on('change', function(event) {
     event.preventDefault();
     listView = 'all';
@@ -284,9 +285,12 @@ $(document).ready(function() {
     }
     loadMapCards(listView, pageSize, 0);
   });
-  //LIST VIEW map population end
+  //END list_view loading list
 
-  //START LIST VIEW listeners
+  /*****************************
+   * START LIST VIEW listeners
+   *****************************/
+  //
   $('.map-list').on('mouseenter', '.map-container', function(e) {
     $.ajax({
       method: "GET",
@@ -316,11 +320,16 @@ $(document).ready(function() {
     }
     loadMapCards(listView, pageSize, pageStart - 1);
   });
-
-
   //END LIST VIEW listeners
 
-  //START map_view listeners
+  /*****************************
+   * START map_view listeners
+   *****************************/
+  //favourite button
+  $('#favourite').on('change', function(event) {
+    event.preventDefault();
+    toggleFavourite();
+  });
 
   //  edit_map
   $('button.edit_map').click(function() {
@@ -370,10 +379,7 @@ $(document).ready(function() {
     hideEditForm(true);
   });
 
-  //  add_point
-  // $('div.map_container').click(function() {
-  //   hidePointForm(false);
-  // });
+  //cancel adding point
   $('#cancel_add_point').click(function() {
     $('.map_container').slideDown();
     $("#point-form")[0].reset();
@@ -382,10 +388,10 @@ $(document).ready(function() {
     hidePointForm(true);
   });
 
+  // save a current point
   $('.bar button.save').click(function() {
     let center = map.getCenter();
     let zoom = map.getZoom();
-    console.log('save position: ', currentMap);
     currentMap.latitude = center.lat();
     currentMap.longitude = center.lng();
     currentMap.zoom = zoom;
@@ -395,8 +401,6 @@ $(document).ready(function() {
         saveMap[key] = currentMap[key];
       }
     }
-    console.log(saveMap);
-
 
     $.ajax({
       method: "POST",
@@ -416,6 +420,7 @@ $(document).ready(function() {
     $(this).hide();
   });
 
+  //submit form data
   $("#point-form").submit((event) => {
     event.preventDefault();
     mapClickable = true;
@@ -424,9 +429,6 @@ $(document).ready(function() {
     $inputs.each(function() {
       values[this.name] = $(this).val();
     });
-
-    //prevents double submission of the form
-    //$(this).find(":submit").attr("disabled", "disabled");
 
     $.ajax({
       method: "POST",
@@ -451,3 +453,4 @@ $(document).ready(function() {
 
   //END map_view listeners
 });
+//end document ready function
