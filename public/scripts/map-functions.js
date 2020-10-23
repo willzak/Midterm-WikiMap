@@ -58,7 +58,6 @@ const loadMap = function(mapData) {
     currentMap.markers[marker].setMap(null);
   }
   currentMap.markers = [];
-
   currentMap = mapData;
   console.log(currentMap);
   //const creator_name;
@@ -81,10 +80,14 @@ const loadMap = function(mapData) {
     currentMap.markers = [];
     loadPoints(currentMap.id);
     $(".save").hide();
-    });
-
-
-
+    if (favs.includes(currentMap.id)) {
+      currentMap.fav = true;
+      $('#favourite').prop('checked', true);
+    } else {
+      currentMap.fav = false;
+      $('#favourite').removeProp("checked");
+    }
+  });
 };
 
 

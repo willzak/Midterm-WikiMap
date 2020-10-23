@@ -8,11 +8,15 @@
 
       <div>
         <h6 class="is-size-7">Created By USER</h6> <!--Change to include which user-->
+        <div class="field">
+          <input id="favourite" type="checkbox" name="fav" class="switch is-rounded is-outlined is-danger is-rtl is-medium">
+          <label for="favourite">Favourite</label>
+        </div>
         <button class="edit_map button is-link is-outlined">Edit</button>
-        <form action='/api/maps/favs/:userId' method='POST' id='addFavs' class='noFav'>
+        <!-- <form action='/api/maps/favs/:userId' method='POST' id='addFavs' class='noFav'>
           <input hidden type='text' name='liked' id='liked' value='no'>
           <button type='button' name='favs-btn' class='button is-success is-outlined'>Add To Favourites</button>
-        </form>
+        </form> -->
       </div>
     </div>
     <div class="median">
