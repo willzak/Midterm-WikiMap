@@ -168,7 +168,7 @@ const loadPoints = function(id) {
 
               $.ajax({
                 method: "GET",
-                url: `/api/maps/points/${currentPoint.creator_id}`,
+                url: `/api/maps/points/${point_id}`,
 
                 dataType: "json",
               }).then(res2 => {
