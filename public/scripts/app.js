@@ -35,6 +35,7 @@ $(document).ready(function() {
   //START nav bar listeners
   $('.new_map_btn').click(function() {
     loadMap(defaultMap);
+    $("#addFavs").hide();
     hideEditForm(false);
     currentView = setView('map', currentView);
     if ($(".navbar-menu").hasClass("is-active")) {
@@ -59,7 +60,7 @@ $(document).ready(function() {
     $.ajax({
       method: "POST",
       url: "/api/users/logout"
-    }).then(res => console.log(res));
+    }).then(res => res);
   });
   $('#home_btn').click(function() {
     currentView = setView('list', currentView);
@@ -217,18 +218,34 @@ $(document).ready(function() {
   //LIST VIEW map population start
   const loadMapCards = function(view, limit, offset) {
     $(function() {
-      $.ajax(`http://localhost:8080/api/maps/list/${view}-${limit}-${offset}`, { method: 'GET' })
-        .then (function(res) {
-          $('.map-list').empty();
-          if(res.maps.length < pageSize) {
-            $('.next-page-button').prop('disabled', true);
-          }
-          renderMaps(res.maps);
-        });
-    });
+      $('#addFavs').show();
+      $.ajax(`http://localhost:8080/api/maps/list/${listView}-${limit}-${offset}`, { method: 'GET' })
+      .then (function(res) {
+        $('.map-list').empty();
+        if(res.maps.length < pageSize) {
+          $('.next-page-button').prop('disabled', true);
+        }
+        renderMaps(res.maps);
+      })
+    })
   };
 
+  //favourites button start
 
+  $('#addFavs').on('click', function(event) {
+    event.preventDefault();
+
+    const mapId = user.id;
+    const userId = currentMap.id;
+    const liked = $('#liked').val();
+    let data = {
+      mapId,
+      userId,
+      liked
+    }
+    addFavourite(data);
+  });
+  //favourites button end
 
   //Change View of list
   $('#fav').on('change', function(event) {
@@ -279,7 +296,6 @@ $(document).ready(function() {
 
   //START LIST VIEW listeners
   $('.map-list').on('mouseenter', '.map-container', function(e) {
-    //console.log('HOVER: ',$(this).children('div').children('.map-id').text() );
     $.ajax({
       method: "GET",
       url: `/api/maps/${$(this).children('div').children('.map-id').text()}`,
@@ -294,21 +310,15 @@ $(document).ready(function() {
   });
 
   $('.next-page-button').on('click', function() {
-    console.log('next!');
     pageStart += pageSize;
     pageEnd = pageStart + pageSize - 1;
-    console.log('Start: ', pageStart);
-    console.log('End: ', pageEnd);
     $('.previous-page-button').prop('disabled', false);
     loadMapCards(listView, pageSize, pageStart - 1);
   });
 
   $('.previous-page-button').on('click', function() {
-    console.log('previous!');
     pageStart -= pageSize;
     pageEnd = pageStart + pageSize - 1;
-    console.log('Start: ', pageStart);
-    console.log('End: ', pageEnd);
     if (pageStart === 1) {
       $('.previous-page-button').prop('disabled', true);
     }
@@ -323,6 +333,7 @@ $(document).ready(function() {
   //  edit_map
   $('button.edit_map').click(function() {
     hideEditForm(false);
+    $('#addFavs').hide();
   });
   $('#cancel_edit_map').click(function() {
     hideEditForm(true);
@@ -399,7 +410,6 @@ $(document).ready(function() {
   });
 
   $("#point-form").submit((event) => {
-    console.log('submit triggerd');
     event.preventDefault();
     mapClickable = true;
     let $inputs = $("#point-form :input");

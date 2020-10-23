@@ -7,6 +7,7 @@
 
 const e = require('express');
 const express = require('express');
+const { Pool } = require('pg');
 const router  = express.Router();
 
 module.exports = (db, database) => {
@@ -31,7 +32,6 @@ module.exports = (db, database) => {
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
-      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -49,7 +49,6 @@ module.exports = (db, database) => {
     .then(data=>{
       data.latitude = parseFloat(data.latitude);
       data.longitude = parseFloat(data.longitude);
-      console.log('data: ', data);
       res.send(data)}
     )
     .catch(err => {
@@ -76,6 +75,23 @@ module.exports = (db, database) => {
       });
   });
 
+  //get favourites of maps
+  router.get("/favs/:userId", (req, res) => {
+    const userId = req.session.id;
+    console.log('user id ', userId);
+
+    database.getFavs(userId)
+      .then(data => {
+        const favs = data
+        res.json({ favs });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
 
 
   //route to add point
@@ -83,13 +99,10 @@ module.exports = (db, database) => {
     point = req.body;
     point.user_id = req.session.userId;
     const id = parseInt(point.id);
-    console.log('point id in submit: ', id);
-    console.log('point??? : ', point);
+
     if(id === 0){
-      console.log('im here!!!');
       database.addPoint(point);
     } else {
-      console.log('editing point:', point);
       database.editPoint(point, id);
     }
 
@@ -99,7 +112,6 @@ module.exports = (db, database) => {
   router.post("/points/delete", (req, res) => {
     point = req.body;
     const id = parseInt(point.id);
-    console.log('point id in delete: ', id);
 
 
     database.deletePoint(id);
@@ -125,6 +137,27 @@ module.exports = (db, database) => {
         });
     }
   });
+
+  //add or remove map from favs
+  router.post("/favs/:mapId", (req, res) => {
+    const userId = req.body.userId;
+    const mapId = req.body.mapId;
+    const liked = req.body.liked;
+
+    if (liked === 'yes') {
+      database.removeFav(userId, mapId, db)
+        .then((result) => {
+          console.log('REMOVED users post req: ', result)
+          res.send(result)
+        });
+    } else {
+      database.addFav(userId, mapId)
+        .then((result) => {
+          console.log('ADDED users post req: ', result)
+          res.send(result)
+        });
+    }
+  })
 
   return router;
 };

@@ -5,9 +5,14 @@
     <div class="map_intro">
       <h2 class="is-size-4">New Map</h2>
       <p>Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description </p>
+
       <div>
         <h6 class="is-size-7">Created By USER</h6> <!--Change to include which user-->
         <button class="edit_map button is-link is-outlined">Edit</button>
+        <form action='/api/maps/favs/:userId' method='POST' id='addFavs' class='noFav'>
+          <input hidden type='text' name='liked' id='liked' value='no'>
+          <button type='button' name='favs-btn' class='button is-success is-outlined'>Add To Favourites</button>
+        </form>
       </div>
     </div>
     <div class="median">
@@ -56,13 +61,11 @@
                 <input type="text" name="image" placeholder="Image URL">
               </span>
               <!--shows latlng of point (can remove) -->
-              <span>
-                <label for="lat">Latitude</label>
-                <input type="text" name="lat" placeholder="latitude">
+              <span hidden>
+                <input type = "hidden" type="text" name="lat" placeholder="latitude">
               </span>
-              <span>
-                <label for="lng">Longitude</label>
-                <input type="text" name="lng" placeholder="longitude">
+              <span hidden>
+                <input type = "hidden" type="text" name="lng" placeholder="longitude">
               </span>
               <span hidden>
                 <input type="hidden" name="id">
