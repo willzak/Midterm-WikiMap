@@ -1,4 +1,4 @@
-🗺 WikiMap
+# 🗺 WikiMap
 
 ## 📝 Project Overview
 
