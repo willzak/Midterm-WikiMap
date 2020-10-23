@@ -64,6 +64,6 @@ The application is used to highlight knowledge of:
 
 - Example of adding points to map and changing map
 
-!["GIF of points in action"]()
+!["GIF of points in action"](https://media.giphy.com/media/CY4SFuX0c4GCDoGcmi/giphy.gif)
 
 
