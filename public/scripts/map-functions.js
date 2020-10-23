@@ -24,8 +24,9 @@ const initMap = function() {
   });
 
   //Listener for clicks to add markers
-  if (mapClickable) {
-    map.addListener("click", (e) => {
+
+  map.addListener("click", (e) => {
+    if(mapClickable){
       mapClickable = false;
       //marker.setMap(null);
       const marker = new google.maps.Marker({
@@ -40,8 +41,10 @@ const initMap = function() {
       $('#cancel_add_point').click(function() {
         marker.setMap(null);
       });
+    };
     });
-  }
+
+
 
 
 };
@@ -56,26 +59,35 @@ const loadMap = function(mapData) {
   }
   currentMap.markers = [];
   currentMap = mapData;
+  console.log(currentMap);
+  //const creator_name;
+  $.ajax({
+    method: "GET",
+    url: `/api/users/${mapData.owner_id}`,
 
-  $(".map_intro h2").text(mapData.name);
-  $(".map_intro p").text(mapData.description);
-  $(".map_intro h6").text("Created by " + currentMap.owner_id);
-  map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
-  map.setZoom(mapData.zoom);
+  }).then(res => {
+    console.log('response: ', res.user[0].name);
+    const creator_name = res.user[0].name;
+    $(".map_intro h2").text(mapData.name);
+    $(".map_intro p").text(mapData.description);
+    $(".map_intro h6").text("Created by " + creator_name);
+    map.setCenter({ lat: parseFloat(mapData.latitude), lng: parseFloat(mapData.longitude) });
+    map.setZoom(mapData.zoom);
 
-  for (let marker in currentMap.markers) {
-    currentMap.markers[marker].setMap(null);
-  }
-  currentMap.markers = [];
-  loadPoints(currentMap.id);
-  $(".save").hide();
-  if (favs.includes(currentMap.id)) {
-    currentMap.fav = true;
-    $('#favourite').prop('checked', true);
-  } else {
-    currentMap.fav = false;
-    $('#favourite').removeProp("checked");
-  }
+    for (let marker in currentMap.markers) {
+      currentMap.markers[marker].setMap(null);
+    }
+    currentMap.markers = [];
+    loadPoints(currentMap.id);
+    $(".save").hide();
+    if (favs.includes(currentMap.id)) {
+      currentMap.fav = true;
+      $('#favourite').prop('checked', true);
+    } else {
+      currentMap.fav = false;
+      $('#favourite').removeProp("checked");
+    }
+  });
 };
 
 
