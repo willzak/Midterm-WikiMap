@@ -205,7 +205,6 @@ const createMapCard = function(mapInfo, key) {
 
 //Creates static screenshot of map
 const createImage = function(mapInfo, key) {
-
   return  `https://maps.googleapis.com/maps/api/staticmap?center=${mapInfo.latitude},${mapInfo.longitude}&zoom=${mapInfo.zoom}&size=600x300&maptype=roadmap&key=${key}`;
 };
 
