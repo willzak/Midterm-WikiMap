@@ -403,8 +403,6 @@ const addFav = function(userId, mapId) {
   RETURNING *;
   `;
   let values = [userId, mapId];
-  console.log("*******************");
-  console.log(queryString, values);
   return pool.query(queryString, values)
     .then(res => res.rows)
     .catch(err => console.log(err));

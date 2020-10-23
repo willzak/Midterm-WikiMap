@@ -266,7 +266,6 @@ $(document).ready(function() {
 
   $('#cont').on('change', function(event) {
     event.preventDefault();
-    console.log(listView, listCont, listFav);
     listView = 'all';
     if (listCont) {
       if (listFav) {
@@ -281,10 +280,8 @@ $(document).ready(function() {
         listView = 'cont';
       }
       $("#cont").prop('checked', true);
-      console.log("cont checked", $('#cont').prop('checked'));
       listCont = true;
     }
-    console.log(listView, listCont);
     loadMapCards(listView, pageSize, 0);
   });
   //LIST VIEW map population end
@@ -387,19 +384,22 @@ $(document).ready(function() {
   $('.bar button.save').click(function() {
     let center = map.getCenter();
     let zoom = map.getZoom();
-
+    console.log('save position: ', currentMap);
     currentMap.latitude = center.lat();
     currentMap.longitude = center.lng();
     currentMap.zoom = zoom;
 
+
     $.ajax({
       method: "POST",
       url: `/api/maps/${currentMap.id}`,
-      data: currentMap
+      data: currentMap,
+      dataType: 'application/JSON'
     }).then((response) => {
-      if (currentMap.id === response.id) {
-        return;
-      }
+      // if (currentMap.id === response.id) {
+      //   return;
+      // }
+      console.log('im here: ', response.id);
       currentMap.id = response.id;
     });
 

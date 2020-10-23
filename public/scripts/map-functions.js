@@ -63,8 +63,7 @@ const loadMap = function(mapData) {
   }
   currentMap.markers = [];
   currentMap = mapData;
-  console.log(currentMap);
-  //const creator_name;
+
   if (mapData.id !== 0) {
     $.ajax({
       method: "GET",
@@ -87,11 +86,9 @@ const loadMap = function(mapData) {
       if (favs.includes(currentMap.id)) {
         currentMap.fav = true;
         $('#favourite').prop('checked', true);
-        console.log("true = ", $('#favourite').prop('checked'));
       } else {
         currentMap.fav = false;
         $('#favourite').prop("checked", false);
-        console.log("false = ", $('#favourite').prop('checked'));
       }
     });
   } else {
@@ -111,11 +108,9 @@ const loadMap = function(mapData) {
     if (favs.includes(currentMap.id)) {
       currentMap.fav = true;
       $('#favourite').prop('checked', true);
-      console.log("true = ", $('#favourite').prop('checked'));
     } else {
       currentMap.fav = false;
       $('#favourite').prop("checked", false);
-      console.log("false = ", $('#favourite').prop('checked'));
     }
   }
 };
@@ -223,7 +218,6 @@ const loadPoints = function(id) {
 
                 currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
                 currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
-                //currentMap.markers[markerSearch(currentMap, parseInt(id))].visible = false;
                 currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
                 currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
                 initMap();
