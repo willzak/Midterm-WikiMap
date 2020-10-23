@@ -1,9 +1,5 @@
 // Initialize google maps API
 const initMap = function() {
-  $("#map_script").attr(
-    "src",
-    `"https://maps.googleapis.com/maps/api/js?key=${mapKey}&callback=initMap&libraries=&v=weekly`
-  );
 
   map = new google.maps.Map(document.getElementById("test_map"), {
     center: { lat: 52.627849747795025, lng: -4416.512126890331 },

@@ -1,6 +1,5 @@
 //START Client side global variables
 let user = {};
-let mapKey = 0;
 let favs = [];
 let currentView;
 let logIn = false;
@@ -99,7 +98,6 @@ $(document).ready(function() {
       data: values
     }).then((response) => {
       user = response.user;
-      mapKey = response.map;
       favs = response.favs;
       login(user);
       logIn = true;
@@ -151,7 +149,6 @@ $(document).ready(function() {
 
       //log the user in
       user = response.user;
-      mapKey = response.map;
       favs = response.favs;
       login(user);
       loadMapCards(listView, pageSize, 0);

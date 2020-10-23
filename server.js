@@ -55,7 +55,10 @@ app.use("/api/maps", mapsRoutes(db, database));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index");
+  const map = process.env.MAP_API_KEY;
+  console.log("***************************************", map);
+  const templateVar = { map };
+  res.render("index", templateVar);
 });
 
 app.listen(PORT, () => {

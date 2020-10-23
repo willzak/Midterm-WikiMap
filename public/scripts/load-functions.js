@@ -186,7 +186,7 @@ const login = function(user) {
 
 //On list view - to load an indvidual map card
 const createMapCard = function(mapInfo, key) {
-  const image = createImage(mapInfo, key);
+  const image = createImage(mapInfo, mapK);
 
   let $map = $(`
   <div class='map-container'>
@@ -216,7 +216,7 @@ const renderMaps = function(data) {
   });
 
   for (let mapInfo of data) {
-    let output = createMapCard(mapInfo, mapKey);
+    let output = createMapCard(mapInfo);
     $(".map-list").append(output);
   }
 };
