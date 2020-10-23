@@ -96,6 +96,16 @@ module.exports = (db, database) => {
       });
   });
 
+
+  router.post('/logout', (req, res) => {
+    console.log('session: ', req.session);
+    req.session = null;
+    console.log('session after: ', req.session);
+
+    console.log('USER HAS LOGGED OUT');
+    res.redirect('/');
+  });
+
   router.post('/register', (req, res) => {
     const newUser = req.body;
     database.addUser(newUser)

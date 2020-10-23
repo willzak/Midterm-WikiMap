@@ -298,7 +298,7 @@ const getMapList = function(restriction, userID) {
   let values = [params[1], params[2]];
 
   //query string for maps favourited by user
-  if (params[0] === 'favs') {
+  if (params[0] === 'fav') {
     queryString = `SELECT maps.*, users.name as owner_name
     FROM users JOIN favourites ON user_id = users.id
     JOIN maps ON maps.id = favourites.map_id
@@ -356,7 +356,6 @@ const getMapList = function(restriction, userID) {
     LIMIT $1 OFFSET $2`;
     values.push(userID);
   }
-
   return pool.query(queryString, values)
     .then(res => {
       return res.rows;
