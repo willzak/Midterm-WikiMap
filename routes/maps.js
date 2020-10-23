@@ -139,9 +139,11 @@ module.exports = (db, database) => {
 
   //adds new map or edits existing map based on map_id is null or not
   router.post("/:id", (req, res) => {
+    console.log('im in serverside: ', req);
     const point = req.body.point;
     console.log(point);
     const id = parseInt(req.params.id);
+
     if (id === 0) {
       const map = req.body;
       database.addMap(map,db)

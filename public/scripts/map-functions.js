@@ -47,6 +47,8 @@ const initMap = function() {
 
 const loadMap = function(mapData) {
   //clear old points from currentMaps
+  hidePointForm(true);
+  mapClickable = true;
   if (!currentMap.markers) {
     currentMap.markers = [];
   }
@@ -55,6 +57,7 @@ const loadMap = function(mapData) {
     $("#favourite_btn").show();
   } else {
     hideEditForm(false);
+
     $("#favourite_btn").hide();
   };
 
@@ -63,8 +66,7 @@ const loadMap = function(mapData) {
   }
   currentMap.markers = [];
   currentMap = mapData;
-  console.log(currentMap);
-  //const creator_name;
+
   if (mapData.id !== 0) {
     $.ajax({
       method: "GET",
@@ -87,14 +89,13 @@ const loadMap = function(mapData) {
       if (favs.includes(currentMap.id)) {
         currentMap.fav = true;
         $('#favourite').prop('checked', true);
-        console.log("true = ", $('#favourite').prop('checked'));
       } else {
         currentMap.fav = false;
         $('#favourite').prop("checked", false);
-        console.log("false = ", $('#favourite').prop('checked'));
       }
     });
   } else {
+    initMap();
     const creatorName = user.name;
     $(".map_intro h2").text(mapData.name);
     $(".map_intro p").text(mapData.description);
@@ -111,11 +112,9 @@ const loadMap = function(mapData) {
     if (favs.includes(currentMap.id)) {
       currentMap.fav = true;
       $('#favourite').prop('checked', true);
-      console.log("true = ", $('#favourite').prop('checked'));
     } else {
       currentMap.fav = false;
       $('#favourite').prop("checked", false);
-      console.log("false = ", $('#favourite').prop('checked'));
     }
   }
 };
@@ -223,7 +222,6 @@ const loadPoints = function(id) {
 
                 currentMap.markers[markerSearch(currentMap, parseInt(id))].setMap(null);
                 currentMap.markers[markerSearch(currentMap, parseInt(id))] = null;
-                //currentMap.markers[markerSearch(currentMap, parseInt(id))].visible = false;
                 currentMap.markers.splice(markerSearch(currentMap, parseInt(id)));
                 currentMap.points.splice(markerSearch(currentMap, parseInt(id)));
                 initMap();

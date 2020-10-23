@@ -56,7 +56,6 @@ app.use("/api/maps", mapsRoutes(db, database));
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
   const map = process.env.MAP_API_KEY;
-  console.log("***************************************", map);
   const templateVar = { map };
   res.render("index", templateVar);
 });
