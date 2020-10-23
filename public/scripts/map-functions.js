@@ -50,6 +50,12 @@ const loadMap = function(mapData) {
   if (!currentMap.markers) {
     currentMap.markers = [];
   }
+  if(mapData.id !== 0){
+    hideEditForm(true);
+  } else {
+    hideEditForm(false);
+  };
+
   for (let marker in currentMap.markers) {
     currentMap.markers[marker].setMap(null);
   }
