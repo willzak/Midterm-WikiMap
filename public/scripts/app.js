@@ -391,7 +391,7 @@ $(document).ready(function() {
     currentMap.latitude = center.lat();
     currentMap.longitude = center.lng();
     currentMap.zoom = zoom;
-    let saveMap = {}
+    let saveMap = {};
     for (const key in currentMap) {
       if (key !== 'markers') {
         saveMap[key] = currentMap[key];
