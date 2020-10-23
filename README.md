@@ -14,6 +14,7 @@ The application is used to highlight knowledge of:
     - SASS CSS preprocessor
     - PostgreSQL and pg for DBMC
     - git for version control
+    - Responsive Design
 
 ## ✅ Getting Started
 
@@ -59,6 +60,10 @@ The application is used to highlight knowledge of:
 
 - Example of the list view functionalities 
 
-!["GIF of tweet in action"](https://gph.is/g/E36bqGd)
+!["GIF of list view in action"](https://media.giphy.com/media/0mDc3ZidJU0pFivuoz/giphy.gif)
+
+- Example of adding points to map and changing map
+
+!["GIF of points in action"]()
 
 
