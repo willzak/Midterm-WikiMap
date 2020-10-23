@@ -1,3 +1,4 @@
+//Loads the profile page
 const loadProfile = function(user) {
   // fill in the title block
   if (user.profile_photo) {
@@ -18,6 +19,7 @@ const loadProfile = function(user) {
   $(".profile_update input[name=confirm_password]").val(user.password);
 };
 
+//Loads the view after log-in and fills in user info
 const login = function(user) {
   loadProfile(user);
   currentView = setView("list", currentView);
@@ -62,13 +64,14 @@ const renderMaps = function(data) {
     $(".map-list").append(output);
   }
 };
-
+//Load favourite button in map view.
 const loadFavButton = function() {
   $('#addFavs').empty();
   $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='no'>",
     "<button type='button' name='favs-btn'>Add To Favourites</button>");
 };
 
+//Toggles favourite switch and makes request to change in database.
 const toggleFavourite = function() {
   let data = {
     mapId: currentMap.id,
@@ -104,8 +107,8 @@ const toggleFavourite = function() {
     });
 
 };
+//Makes request to add favourites to database
 const addFavourite = function(data) {
-
   if ($('#addFavs').hasClass('noFav')) {
     $.ajax({
       method: "POST",
@@ -118,7 +121,6 @@ const addFavourite = function(data) {
         $('#addFavs').removeClass('noFav').addClass('yesFav');
         $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='yes'>")
         $('#addFavs').html("<button type='submit' name='favs-btn' class='button is-danger is-outlined'>Remove From Favourites</button>");
-        console.log('liked!', res);
       });
   } else {
     $.ajax({
@@ -132,7 +134,6 @@ const addFavourite = function(data) {
         $('#addFavs').removeClass('yesFav').addClass('noFav');
         $('#addFavs').html("<input hidden type='text' name='liked' id='liked' value='no'>")
         $('#addFavs').html("<button type='submit' name='favs-btn' class='button is-success is-outlined'>Add To Favourites</button>");
-        console.log('unliked!', res);
       });
   }
 };

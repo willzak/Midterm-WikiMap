@@ -1,26 +1,20 @@
 // Initialize google maps API
 const initMap = function() {
-
   map = new google.maps.Map(document.getElementById("test_map"), {
     center: { lat: 52.627849747795025, lng: -4416.512126890331 },
     zoom: 3,
   });
-
   //let marker = new google.maps.Marker({ map: null });
   $(".save").hide();
-
   //listner for zoom change
   map.addListener("zoom_changed", function() {
     $(".save").show();
   });
-
   //listner for center change
   map.addListener("center_changed", function() {
     $(".save").show();
   });
-
   //Listener for clicks to add markers
-
   map.addListener("click", (e) => {
     if(mapClickable){
       mapClickable = false;
@@ -44,7 +38,7 @@ const initMap = function() {
 
 
 };
-
+//Load individual map info to populate onto map.
 const loadMap = function(mapData) {
   //clear old points from currentMaps
   hidePointForm(true);
@@ -66,13 +60,12 @@ const loadMap = function(mapData) {
   }
   currentMap.markers = [];
   currentMap = mapData;
-
+  //If currentmap is not new, populate map info
   if (mapData.id !== 0) {
     $.ajax({
       method: "GET",
       url: `/api/users/${mapData.owner_id}`,
     }).then(res => {
-      console.log('response: ', res.user[0].name);
       const creatorName = res.user[0].name;
       $(".map_intro h2").text(mapData.name);
       $(".map_intro p").text(mapData.description);
@@ -119,7 +112,7 @@ const loadMap = function(mapData) {
   }
 };
 
-
+//Get all points for map and populate onto map
 const loadPoints = function(id) {
   //Request to get points data given map id
   const values = { id };
@@ -240,6 +233,7 @@ const loadPoints = function(id) {
   });
 };
 
+//Helper function to get marker object given point id.
 const markerSearch = function(map, id) {
   for(let index in map.points){
     if(map.points[index].id === id){
