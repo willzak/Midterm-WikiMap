@@ -148,8 +148,7 @@ const editMap = function(map, pool) {
   WHERE id = $6
   `;
   return pool.query(queryString ,[map.name, map.description, map.longitude, map.latitude, map.zoom, map.id])
-    .then(res => map.id
-      )
+    .then(res => map.id)
     .catch(err => console.log(err));
 };
 
@@ -287,7 +286,6 @@ exports.getCenterOfMap = getCenterOfMap;
  * @return query object to specified route
  */
 const getMapList = function(restriction, userID) {
-  //restrictions format = "<all||favs||cont||contfavs>-<limit>-<offset>"
   let params = restriction.split('-');
   //query string for all maps
   let queryString = `
